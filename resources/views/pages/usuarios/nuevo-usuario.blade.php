@@ -81,33 +81,6 @@
                         <option value="Administrador">Administrador</option>
                         <option value="Empleado">Empleado</option>
                     </select>
-                    <div class="permisos-section">
-                        <p>Seleccionar Permisos</p>
-                        <span class="permisos-container">
-                            <label>
-                                <input type="checkbox" name="opcion[]" value="Ver" class="permiso-checkbox">
-                                Ver
-                            </label>
-                            <label>
-                                <input type="checkbox" name="opcion[]" value="Modificar" class="permiso-checkbox">
-                                Modificar
-                            </label>
-
-                            <label>
-                                <input type="checkbox" name="opcion[]" value="Todos" id="todosCheckbox">
-                                Todos
-                            </label>
-                            <label>
-                                <input type="checkbox" name="opcion[]" value="Crear" class="permiso-checkbox">
-                                Crear
-                            </label>
-                            <label>
-                                <input type="checkbox" name="opcion[]" value="Eliminar" class="permiso-checkbox">
-                                Eliminar
-                            </label>
-                        </span>
-                    </div>
-
 
                     <input type="text" name="Nombre_Usuario" placeholder="Nombre de usuario">
                     <input type="password" name="Contrasenia" placeholder="Contraseñá ">

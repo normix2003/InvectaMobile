@@ -5,8 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\empleados;
 use App\Models\usuarios;
 use App\Models\roles;
-use App\Models\permisos;
-use App\Models\detallesroles;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 
 class UsuariosController
@@ -60,6 +59,7 @@ class UsuariosController
 
         if ($idRol) {
             $usuario['ID_Rol'] = $idRol;
+            $usuario['Contrasenia'] = Hash::make($usuario['Contrasenia']);
             $usuario = usuarios::create($usuario);
             if ($usuario) {
                 $empleado['ID_Usuarios'] = $usuario->idUsuarios;
