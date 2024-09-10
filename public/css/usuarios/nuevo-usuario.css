@@ -1,0 +1,96 @@
+.nuevo-usuario-container {
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    align-items: center;
+    margin: 35px;
+}
+.nuevo-usuario-input {
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+}
+input::placeholder {
+    color: #5e5d5d;
+}
+.nuevo-usuario-input input,
+select {
+    margin-bottom: 9px; /* Ajusta el espacio entre los inputs */
+    padding: 8px;
+    padding-left: 15px;
+    background: #d9d9d9;
+    border-radius: 4px;
+    border: none;
+}
+
+select:focus {
+    border-color: #1e72c5; /* Color del borde cuando el <select> está en foco */
+}
+select:enabled {
+    color: #0f0f0f;
+    font: normal;
+}
+select option:checked {
+    color: white;
+    background-color: #06325e;
+}
+.nuevo-usaurio-input input:last-child {
+    margin-bottom: 0;
+}
+.permisos-section {
+    background: #d9d9d9;
+    margin-bottom: 8px;
+    padding: 1px 20px;
+    border-radius: 8px;
+}
+.permisos-section p {
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.permisos-container {
+    display: grid;
+    border-radius: 8px;
+    grid-template-columns: repeat(3, 1fr); /* Crea 2 columnas de igual ancho */
+    width: 400px; /* Ajusta el ancho general del contenedor */
+}
+
+.btn-crear {
+    font-weight: bold;
+    font-size: 1rem;
+    margin-top: 20px;
+    padding: 5px 30px;
+    border-radius: 8px;
+    color: white;
+    background-color: #0290c9;
+    border: none;
+}
+.btn-crear:hover {
+    background-color: #87cafa;
+}
+.btn-crear:active {
+    transform: scale(0.95);
+}
+.btn-container-regresar {
+    position: absolute;
+    bottom: 90px;
+    left: 35px;
+    margin-left: 20px;
+}
+.btn-regresar {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #003459;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: transform 0.1s ease, background-color 0.3s ease;
+    cursor: pointer;
+}
+.btn-regresar:active {
+    transform: scale(0.95);
+}
+.btn-container-regresar :hover {
+    background: #90ccf7;
+}

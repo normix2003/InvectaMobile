@@ -1,0 +1,77 @@
+.usuario-container {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: start;
+    margin: auto;
+    margin-top: 35px;
+    width: 80%;
+}
+.btn-container-nuevo {
+    margin-bottom: 50px;
+}
+.btn-container-rol {
+    position: absolute;
+    right: 145px;
+}
+.btn-container-regresar {
+    position: absolute;
+    bottom: 90px;
+    left: 30px;
+    margin-left: 20px;
+}
+
+.btn-nuevo-usuario {
+    display: inline-block;
+    padding: 10px;
+    background: #003459;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: transform 0.1s ease, background-color 0.3s ease;
+    cursor: pointer;
+}
+
+.btn-nuevo-usuario:active {
+    transform: scale(0.95);
+}
+.btn-container-nuevo :hover {
+    background: #90ccf7;
+}
+.btn-nuevo-rol {
+    display: inline-block;
+    padding: 10px;
+    background: #003459;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: transform 0.1s ease, background-color 0.3s ease;
+    cursor: pointer;
+}
+
+.btn-nuevo-rol:active {
+    transform: scale(0.95);
+}
+.btn-container-rol :hover {
+    background: #90ccf7;
+}
+
+.btn-regresar {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #003459;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: transform 0.1s ease, background-color 0.3s ease;
+    cursor: pointer;
+}
+.btn-regresar:active {
+    transform: scale(0.95);
+}
+.btn-container-regresar :hover {
+    background: #90ccf7;
+}
