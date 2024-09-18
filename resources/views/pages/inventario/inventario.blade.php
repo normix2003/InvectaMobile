@@ -35,6 +35,10 @@
             <h2 class="header-subtitle">InvectaMobile</h2>
             <div class="header-divider"></div>
             <h1 class="header-title">Inventario</h1>
+            <form action="{{route('login.logout')}}" method="post">
+                @csrf
+                <button id="btncerrar" type="submit" class="btn">Cerrar session</button>
+            </form>
         </div>
     </header>
     <main>
@@ -49,61 +53,47 @@
                 <table class="table table-striped  ">
                     <thead class="table-dark">
                         <tr>
+                            <th scope="col"></th>
                             <th scope="col">CODIGO</th>
-                            <th scope="col">MODELO</th>
+                            <th scope="col">NOMBRE</th>
                             <th scope="col">MARCA</th>
-                            <th scope="col">STOCK INICIAL</th>
-                            <th scope="col">ENTRADAS</th>
-                            <th scope="col">SALIDAS</th>
-                            <th scope="col">TOTAL</th>
-                            <th scope="col">FECHA</th>
+                            <th scope="col">CATEGORIA</th>
+                            <th scope="col">STOCK ACTUAL</th>
+                            <th scope="col">PRECIO</th>
                             <th scope="col"></th>
                             <th scope="col"></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="table-rows">
-                            <td scope="row">0000000</td>
-                            <td>Modelo</td>
-                            <td>Marca</td>
-                            <td>0</td>
-                            <td>0</td>
-                            <td>0</td>
-                            <td>0</td>
-                            <td>10/5/2024</td>
-                            <td>
-                                <a class="btn-stock" href="{{route('stock')}}">
-                                    + Stock
-                                </a>
-                            </td>
-                            <td>
-                                <button type="submit" class="">
-                                    Eliminar
-                                </button>
-
-                            </td>
-                        </tr>
-                        <tr class="table-rows">
-                            <td scope="row">0000000</td>
-                            <td>Modelo</td>
-                            <td>Marca</td>
-                            <td>0</td>
-                            <td>0</td>
-                            <td>0</td>
-                            <td>0</td>
-                            <td>10/5/2024</td>
-                            <td>
-                                <a class="btn-stock" href="{{route('stock')}}">
-                                    + Stock
-                                </a>
-                            </td>
-                            <td>
-                                <button type="submit" class="">
-                                    Eliminar
-                                </button>
-
-                            </td>
-                        </tr>
+                        @foreach ($inventario as $producto)
+                            <tr class="table-rows">
+                                <td></td>
+                                <td scope="row">{{$producto->idProductos}}</td>
+                                <td>{{$producto->Nombre_Producto}}</td>
+                                <td>{{$producto->marca->Nombre_Marca}}</td>
+                                <td>{{$producto->categoria->Nombre_Categoria}}</td>
+                                <td>{{$producto->Cantidad}}</td>
+                                <td>{{$producto->Precio}}</td>
+                                <td>
+                                    <form action="{{route('stock', ['idProductos' => $producto->idProductos])}}"
+                                        method="get">
+                                        @csrf
+                                        <button class="btn-stock" type="submit">
+                                            + Stock
+                                        </button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <form action="{{route('inventario.destroy', $producto->idProductos)}}" method="post">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="">
+                                            Eliminar
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>

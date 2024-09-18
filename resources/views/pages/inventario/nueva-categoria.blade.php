@@ -11,7 +11,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
     <link rel="stylesheet" href="{{ asset('css/app.css') }}" />
-    <link rel="stylesheet" href="{{ asset('css/login.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/inventario/nueva-categoria.css') }}" />
+
 </head>
 
 <body>
@@ -33,32 +34,28 @@
             </i>
             <h2 class="header-subtitle">InvectaMobile</h2>
             <div class="header-divider"></div>
-            <h1 class="header-title">Crear Administrador</h1>
+            <h1 class="header-title">Nuevo Categoria</h1>
         </div>
     </header>
     <main>
-        <form action="{{route('login.crearAdmin')}}" method="post">
-            <div class="login-container">
-                <div class="title-container">
-                    <h1 class="title">Bienvenido a InvectaMobile </h1>
-                    <p class="subtitle">Por favor cree un usuario</p>
-                </div>
+        <form action="{{route('categoria.store')}}" method="post">
+            <div class="nuevo-rol-container">
+                <h1 class="title">Ingrese los datos de la nueva categoria</h1>
 
-                <div class="login-input">
+                <div class="nuevo-rol-input">
                     @csrf
-                    <input type="text" name="Apellidos" placeholder="Apellidos">
-                    <input type="text" name="Nombre_Empleado" placeholder="Nombres">
-                    <input type="tel" name="Telefono" placeholder="Numero de celular">
-                    <input type="text" name="DUI" placeholder="DUI">
-                    <input type="email" name="Email" placeholder="Correo electronico">
-                    <input type="text" name="Nombre_Usuario" placeholder="Nombre de usuario">
-                    <input type="password" name="Contrasenia" placeholder="Contraseñá ">
+                    <input type="text" name="Nombre_Categoria" placeholder="Categoria">
+                    <input type="text" name="Descripcion" placeholder="Descripcion">
                 </div>
-                <button class="btn-login" type="submit">Crear</button>
-        </form>
+                <button class="btn-crear" type="submit">Crear</button>
 
-        </div>
+            </div>
         </form>
+        <span class="btn-container-regresar">
+            <a class="btn-regresar" href="{{route('nuevo-producto')}}">
+                Regresar
+            </a>
+        </span>
     </main>
     <footer>
         <!-- place footer here -->

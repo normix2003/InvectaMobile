@@ -76,3 +76,97 @@ select option:checked {
 .btn-container-regresar :hover {
     background: #90ccf7;
 }
+.marca-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    text-align: center;
+    width: 445px;
+}
+.marca-container select {
+    margin-bottom: 15px; /* Ajusta el espacio entre los inputs */
+    padding: 8px;
+    width: 100%;
+    padding-left: 15px;
+    background: #d9d9d9;
+    border-radius: 4px;
+    border: none;
+}
+.marca-container select:enabled {
+    color: #5e5d5d;
+    font: normal;
+}
+.marca-container option:checked {
+    color: white;
+    background-color: #06325e;
+}
+
+.btn-marca {
+    display: relative;
+    padding: 5px 12px;
+    margin-top: -15px;
+    font-size: 16px;
+    background: #003459;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: transform 0.1s ease, background-color 0.3s ease;
+    cursor: pointer;
+    line-height: 1.5;
+}
+.btn-marca:active {
+    transform: scale(0.95);
+}
+.btn-marca:hover {
+    background: #90ccf7;
+}
+.categoria-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    text-align: center;
+    width: 445px;
+}
+.categoria-container select {
+    margin-bottom: 15px; /* Ajusta el espacio entre los inputs */
+    padding: 8px;
+    width: 100%;
+    padding-left: 15px;
+    background: #d9d9d9;
+    border-radius: 4px;
+    border: none;
+}
+.categoria-container select:enabled {
+    color: #5e5d5d;
+    font: normal;
+}
+.categoria-container option:checked {
+    color: white;
+    background-color: #06325e;
+}
+
+.btn-categoria {
+    display: relative;
+    padding: 5px 12px;
+    margin-top: -15px;
+    font-size: 16px;
+    background: #003459;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: transform 0.1s ease, background-color 0.3s ease;
+    cursor: pointer;
+    line-height: 1.5;
+}
+.btn-categoria:active {
+    transform: scale(0.95);
+}
+.btn-categoria:hover {
+    background: #90ccf7;
+}

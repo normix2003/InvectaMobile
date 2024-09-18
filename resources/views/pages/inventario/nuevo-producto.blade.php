@@ -37,23 +37,38 @@
         </div>
     </header>
     <main>
-        <form action="">
+        <form action="{{route('nuevo-producto.store')}}" method="post">
             <div class="nuevo-producto-container">
+
                 <div class="nuevo-producto-input">
-                    <input type="text" placeholder="Modelo">
-                    <select id="marca" name="marca">
-                        <option value="marca" disabled selected>Marca</option>
-                        <option value="chrome">Google Chrome</option>
-                        <option value="firefox">Mozilla Firefox</option>
-                        <option value="edge">Microsoft Edge</option>
-                        <option value="safari">Safari</option>
-                        <option value="opera">Opera</option>
-                    </select>
-                    <input type="text" placeholder="CPU">
-                    <input type="text" placeholder="RAM">
-                    <input type="text" placeholder="Almacenamiento">
-                    <input type="text" placeholder="Precio">
-                    <input type="number" placeholder="Stock inicial">
+                    @csrf
+                    <input type="text" name="Nombre_Producto" placeholder="Nombre Producto">
+                    <div class="marca-container">
+                        <select id="marca" name="Nombre_Marca">
+                            <option value="" disabled selected>Marca</option>
+                            @foreach ($marcas as $marca)
+                                <option value="{{$marca->Nombre_Marca}}">{{$marca->Nombre_Marca}}</option>
+                            @endforeach
+                        </select>
+                        <a class="btn-marca" href="{{route('inventario.marca')}}">
+                            +
+                        </a>
+                    </div>
+                    <div class="categoria-container">
+                        <select id="categoria" name="Nombre_Categoria">
+                            <option value="" disabled selected>Categoria</option>
+                            @foreach ($categorias as $categoria)
+                                <option value="{{$categoria->Nombre_Categoria}}">{{$categoria->Nombre_Categoria}}</option>
+                            @endforeach
+                        </select>
+                        <a class="btn-categoria" href="{{route('inventario.categoria')}}">
+                            +
+                        </a>
+                    </div>
+
+                    <input type="text" name="Descripcion" placeholder="Descripcion">
+                    <input type="text" name="Precio" placeholder="Precio">
+                    <input type="number" name="Cantidad" placeholder="Stock inicial">
                 </div>
                 <button class="btn-crear" type="submit">Crear</button>
             </div>
@@ -63,6 +78,7 @@
                 Regresar
             </a>
         </span>
+
     </main>
     <footer>
         <!-- place footer here -->

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Models\empleados;
 use App\Models\usuarios;
 use App\Models\roles;
 use App\Models\permisos;
@@ -50,7 +51,14 @@ class LoginController
         $admin['Contrasenia'] = Hash::make($admin['Contrasenia']);
         $admin['ID_Rol'] = $adminRole->idRoles;
         //dd($admin);
-        usuarios::create($admin);
+        $adminEmpleado = $request->only(['Nombre_Empleado', 'Apellidos', 'Email', 'Telefono', 'DUI']);
+        $usuario = usuarios::create($admin);
+        if ($usuario) {
+            $adminEmpleado['ID_Usuarios'] = $usuario->idUsuarios;
+            empleados::create($adminEmpleado);
+
+        }
+
 
 
         return redirect()->route('login')->withErrors(['login_error' => 'Credenciales incorrectas']);
@@ -66,13 +74,10 @@ class LoginController
                 'password' => $credentials['Contrasenia']
             ])
         ) {
-            // Si la autenticación es exitosa, redirige al home
-            $user = Auth::user(); // Obtén el usuario autenticado
-            session(['user' => $user]);
             return redirect()->route('home');
         } else {
             // Si la autenticación falla, redirige al login con un error
-            return back()->withErrors(['login_error' => 'Credenciales incorrectas']);
+            return back()->withErrors(provider: ['login_error' => 'Credenciales incorrectas']);
         }
     }
     public function logout()

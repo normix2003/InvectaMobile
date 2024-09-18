@@ -35,7 +35,8 @@ class UsuariosController
     }
     public function nuevoUsuario()
     {
-        return view('pages.usuarios.nuevo-usuario');
+        $roles = roles::all();
+        return view('pages.usuarios.nuevo-usuario', ['roles' => $roles]);
     }
     public function detalleUsuario($idEmpleados)
     {

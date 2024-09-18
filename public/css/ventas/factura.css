@@ -5,7 +5,7 @@
     justify-content: start;
     margin: auto;
     margin-top: 35px;
-    width: 75%;
+    width: 80%;
 }
 .info-container {
     display: flex;
@@ -17,11 +17,9 @@
     gap: 85px;
 }
 .info-client-container {
-    display: flex;
-    flex-direction: row;
-    align-items: start;
-    justify-content: start;
-    gap: 25px;
+    position: absolute;
+    bottom: 90px;
+    right: 50px;
 }
 .input-cliente {
     padding: 8px;
@@ -49,7 +47,8 @@
 .btn-finalizar:hover {
     background: #90ccf7;
 }
-.buscar-container {
+.buscar-container,
+form {
     display: flex;
     flex-direction: row;
     align-items: start;
@@ -61,7 +60,7 @@
     padding-left: 15px;
     background: #d9d9d9;
     border-radius: 4px;
-    width: 200px;
+    width: 300px;
     border: none;
 }
 
@@ -75,12 +74,32 @@
     border-radius: 8px;
     transition: transform 0.1s ease, background-color 0.3s ease;
     cursor: pointer;
+    border: none;
 }
 
 .btn-buscar:active {
     transform: scale(0.95);
 }
 .btn-buscar:hover {
+    background: #90ccf7;
+}
+.btn-nuevo-cliente {
+    display: inline-block;
+    padding: 8px 20px;
+    background: #003459;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: transform 0.1s ease, background-color 0.3s ease;
+    cursor: pointer;
+    border: none;
+}
+
+.btn-nuevo-cliente:active {
+    transform: scale(0.95);
+}
+.btn-nuevo-cliente:hover {
     background: #90ccf7;
 }
 .btn-container-regresar {

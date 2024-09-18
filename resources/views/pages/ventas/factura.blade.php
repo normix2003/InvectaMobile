@@ -40,54 +40,78 @@
     <main>
         <div class="inventario-container ">
             <div class="info-container">
-
                 <div class="buscar-container">
-                    <input type="text" class="input-buscar" placeholder="DUI del cliente">
-                    <btn class="btn-buscar">
-                        Buscar
-                    </btn>
+                    <form action="{{route('buscar-cliente')}}" method="GET">
+                        @csrf
+                        <input type="text" class="input-buscar" name="duiCliente" value="{{ request('duiCliente') }}"
+                            placeholder="DUI del cliente">
+                        <button class="btn-buscar" type="submit">
+                            Buscar
+                        </button>
+                    </form>
+                    <a class="btn-nuevo-cliente" href="{{route('nuevo-cliente')}}">
+                        Nuevo Cliente
+                    </a>
                 </div>
-                <div class="info-client-container">
-                    <input type="text" class="input-cliente" placeholder="Nombre del cliente">
-                    <btn class="btn-finalizar">
-                        Aceptar y Finalizar
-                    </btn>
-                </div>
+            </div>
+            <div class="cliente">
+                @if ($cliente)
+                    <p>Cliente: {{ $cliente->Nombres . ' ' . $cliente->Apellidos }}</p>
+
+                @else
+                    <p>No se ha encontrado el cliente</p>
+                @endif
             </div>
 
             <div class="table-responsive w-100">
                 <table class="table table-striped  ">
                     <thead class="table-dark">
                         <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">PRODUCTO</th>
-                            <th scope="col">CANTIDAD</th>
-                            <th scope="col">PRECIO</th>
-                            <th scope="col">TOTAL</th>
+                            <th scope="col" class="text-center">PRODUCTO</th>
+                            <th scope="col" class="text-center">CANTIDAD</th>
+                            <th scope="col" class="text-center">PRECIO</th>
+                            <th scope="col" class="text-center">TOTAL</th>
+                            <th scope="col" class="text-center"></th>
                         </tr>
                     </thead>
                     <tbody>
+                        @foreach ($productos as $producto)
+                            <tr class="table-rows">
+                                <td class="px-3 text-center" scope="row">{{$producto['Nombre_Producto']}}</td>
+                                <td class="px-3 text-center">{{$producto['Cantidad']}}</td>
+                                <td class="px-3 text-center">${{$producto['Precio']}}</td>
+                                <td class="px-3 text-center">${{$producto['Total']}}</td>
+                                <td class="px-3 text-center"></td>
+                            </tr>
+
+                        @endforeach
+
                         <tr class="table-rows">
-                            <td scope="row">11111</td>
-                            <td>Nombre del producto</td>
-                            <td>1</td>
-                            <td>00.00</td>
-                            <td>00.00</td>
-                        </tr>
-                        <tr class="table-rows">
-                            <td scope="row"></td>
-                            <td></td>
-                            <td></td>
-                            <td>Total:</td>
-                            <td>00.00</td>
+                            <td scope="row" class="px-3 text-center"></td>
+                            <td class="px-3 text-center"></td>
+                            <td class="px-3 text-center"></td>
+                            <td class="px-3 text-center">Total Venta:</td>
+                            <td class="px-3 text-center">${{$total}}</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
             <span class="btn-container-regresar">
-                <a class="btn-regresar" href="{{route('home')}}">
+                <a class="btn-regresar" href="{{route('ventas')}}">
                     Regresar
                 </a>
+            </span>
+            <span class="info-client-container">
+                <form action="{{route('finalizar-venta')}}" method="POST">
+                    @csrf
+                    <input type="hidden" name="idCliente" value="{{ $cliente['idClientes'] }}">
+                    <input type="hidden" name="total" value="{{$total}}">
+                    <input type="hidden" name="productos" value="{{json_encode($productos)}}">
+                    <button class="btn-finalizar" type="submit">
+                        Finalizar Venta
+                    </button>
+                </form>
+
             </span>
         </div>
     </main>

@@ -36,6 +36,10 @@
             <h2 class="header-subtitle">InvectaMobile</h2>
             <div class="header-divider"></div>
             <h1 class="header-title">Usuarios</h1>
+            <form action="{{route('login.logout')}}" method="post">
+                @csrf
+                <button id="btncerrar" type="submit" class="btn">Cerrar session</button>
+            </form>
         </div>
     </header>
     <main>

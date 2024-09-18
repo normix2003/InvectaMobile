@@ -37,11 +37,13 @@
         </div>
     </header>
     <main>
-        <form action="">
+        <form action="{{route('stock.update', ['idProductos' => $idProductos])}}" method="post">
             <div class="stock-container">
                 <h1 class="title">Ingrese la cantidad que desee aumentar de Stock</h1>
                 <div class="stock-input">
-                    <input type="number" placeholder="Cantidad  ">
+                    @csrf
+                    @method('PUT')
+                    <input type="number" name="Cantidad" placeholder="Cantidad  ">
                 </div>
                 <button class="btn-aumentar" type="submit">Aumentar</button>
             </div>

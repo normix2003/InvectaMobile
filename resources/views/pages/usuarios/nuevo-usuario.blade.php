@@ -12,36 +12,7 @@
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
     <link rel="stylesheet" href="{{ asset('css/app.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/usuarios/nuevo-usuario.css') }}" />
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const todosCheckbox = document.getElementById('todosCheckbox');
-            const checkboxes = document.querySelectorAll('.permiso-checkbox');
 
-            // Función para desmarcar todas las opciones excepto "Todos"
-            todosCheckbox.addEventListener('change', function () {
-                if (todosCheckbox.checked) {
-                    checkboxes.forEach(function (checkbox) {
-                        checkbox.checked = false;
-                        checkbox.disabled = true; // Deshabilita los otros checkboxes
-                    });
-                } else {
-                    checkboxes.forEach(function (checkbox) {
-                        checkbox.disabled = false; // Habilita los otros checkboxes cuando "Todos" se desmarca
-                    });
-                }
-            });
-
-            // Función para desmarcar "Todos" si cualquier otro checkbox es marcado
-            checkboxes.forEach(function (checkbox) {
-                checkbox.addEventListener('change', function () {
-                    if (checkbox.checked) {
-                        todosCheckbox.checked = false;
-                        todosCheckbox.disabled = false; // Habilita "Todos" si otro checkbox es marcado
-                    }
-                });
-            });
-        });
-    </script>
 </head>
 
 <body>
@@ -64,6 +35,7 @@
             <h2 class="header-subtitle">InvectaMobile</h2>
             <div class="header-divider"></div>
             <h1 class="header-title">Nuevo Usuario</h1>
+
         </div>
     </header>
     <main>
@@ -78,8 +50,9 @@
                     <input type="email" name="Email" placeholder="Correo electronico">
                     <select id="rol" name="Nombre">
                         <option value="" disabled selected>Seleccionar Rol</option>
-                        <option value="Administrador">Administrador</option>
-                        <option value="Empleado">Empleado</option>
+                        @foreach ($roles as $rol)
+                            <option value="{{$rol->Nombre}}">{{$rol->Nombre}}</option>
+                        @endforeach
                     </select>
 
                     <input type="text" name="Nombre_Usuario" placeholder="Nombre de usuario">
