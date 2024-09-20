@@ -11,114 +11,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
     <link rel="stylesheet" href="{{ asset('css/app.css') }}" />
-    <link rel="stylesheet" href="{{ asset('css/ventas/ventas.css') }}" />
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            document.querySelectorAll('.btn-add').forEach(button => {
-                button.addEventListener('click', function () {
-
-                    const productId = this.getAttribute('data-id');
-                    const row = this.closest('tr');
-                    const nombreProducto = row.querySelector('td:nth-child(1)').textContent;
-                    const precioProducto = row.querySelector('td:nth-child(6)').textContent;
-
-                    let producto = {
-                        id: productId,
-                        nombre: nombreProducto,
-                        precio: precioProducto,
-                        cantidad: 1
-                    }
-
-                    let productos = JSON.parse(localStorage.getItem('productos')) || [];
-                    productos.push(producto);
-                    localStorage.setItem('productos', JSON.stringify(productos));
-                    location.reload();
-                });
-            });
-        });
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const lista = document.getElementById('productos-lista');
-            let productos = JSON.parse(localStorage.getItem('productos')) || [];
-
-            if (productos.length === 0) {
-                lista.innerHTML = `
-                <tr>
-                    <td colspan="4" class="text-center">No hay productos en la lista</td>
-                </tr>
-                `;
-            }
-            productos.forEach((producto, index) => {
-                const row = document.createElement('tr');
-                row.innerHTML = ` 
-                <tr class="table-rows">
-                <td class="px-3 text-center">${producto.nombre}</td>
-                <td class="px-3 text-center"><input type="number" name="Cantidad" id="cantidad" data-index=${index} class="cantidad-input" value="${producto.cantidad}" min="1"></td>
-                <td class="px-3 text-center">${producto.precio}</td>
-                <td class="px-3 text-center"><button type="button" class="btn-delete" data-index=${index}">x</button></td>
-                </tr>
-            `;
-                lista.appendChild(row);
-            });
-        });
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            document.querySelectorAll('.btn-delete').forEach(button => {
-                button.addEventListener('click', function () {
-
-                    const index = this.getAttribute('data-index');
-                    let productos = JSON.parse(localStorage.getItem('productos')) || [];
-                    productos.splice(index, 1);
-                    localStorage.setItem('productos', JSON.stringify(productos));
-                    location.reload();
-                });
-            });
-        });
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const form = document.getElementById('finalizar-form');
-            const productosData = document.getElementById('productos-data');
-            const cantidad = document.getElementById('cantidad');
-            form.addEventListener('submit', function () {
-                let productos = JSON.parse(localStorage.getItem('productos')) || [];
-                productosData.value = JSON.stringify(productos);
-                //localStorage.removeItem('productos');
-            });
-        });
-
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            document.querySelectorAll('.cantidad-input').forEach(cantidad => {
-                cantidad.addEventListener('change', function () {
-                    const index = this.getAttribute('data-index');
-
-                    // Obtener la lista de productos del localStorage
-                    let productos = JSON.parse(localStorage.getItem('productos')) || [];
-
-                    // Actualizar solo la cantidad del producto en el índice correcto
-                    productos[index].cantidad = this.value;
-
-                    // Guardar la lista actualizada en el localStorage
-                    localStorage.setItem('productos', JSON.stringify(productos));
-
-                });
-            });
-        });
-
-    </script>
-    <script>
-        // Ocultar el mensaje flash después de 5 segundos
-        setTimeout(function () {
-            var flashMessage = document.getElementById('flash-message');
-            if (flashMessage) {
-                flashMessage.style.display = 'none';
-            }
-        }, 5000); // 5000 ms = 5 segundos
-    </script>
+    <link rel="stylesheet" href="{{ asset('css/inventario/inventario.css') }}" />
 
 </head>
 
@@ -141,8 +34,7 @@
             </i>
             <h2 class="header-subtitle">InvectaMobile</h2>
             <div class="header-divider"></div>
-            <h1 class="header-title">Ventas</h1>
-
+            <h1 class="header-title">Detalles Ventas</h1>
             <form action="{{route('login.logout')}}" method="post">
                 @csrf
                 <button id="btncerrar" type="submit" class="btn">Cerrar session</button>
@@ -150,101 +42,33 @@
         </div>
     </header>
     <main>
-        @if (session('status'))
-            <div class="alert alert-success">
-                {{ session('status') }}
-            </div>
-        @endif
         <div class="inventario-container ">
-            <span class="ver-ventas-container">
-                <a class="btn-ver-ventas" href="{{route('ver-ventas')}}">Ver Ventas</a>
-            </span>
-            <form action="{{route('buscar-producto')}}" method="GET">
-                <div class="buscar-container">
-                    @csrf
-                    <input type="text" name="Data" value="{{ request('Data') }}" class=" input-buscar"
-                        placeholder="Buscar producto">
-                    <button type="submit" class="btn-buscar">
-                        Buscar
-                    </button>
-                </div>
-            </form>
-
-            <div class="table-container">
-
-                <h1 class="table-title">Productos Encontrados</h1>
-                <div id="ventas" class="table-responsive">
-                    <table class="table table-striped  ">
-                        <thead class="table-dark">
-                            <tr>
-
-                                <th scope="col" class="text-center">PRODUCTO</th>
-                                <th scope="col" class="text-center">MARCA</th>
-                                <th scope="col" class="text-center">CATEGORIA</th>
-                                <th scope="col" class="text-center">DESCRIPCION</th>
-                                <th scope="col" class="text-center">STOCK</th>
-                                <th scope="col" class="text-center">PRECIO</th>
-                                <th scope="col" class="text-center"></th>
+            <div class="table-responsive w-100">
+                <table class="table table-striped  ">
+                    <thead class="table-dark">
+                        <tr>
+                            <th scope="col">PRODUCTO</th>
+                            <th scope="col">CANTIDAD</th>
+                            <th scope="col">TOTAL</th>
+                            <th scope="col">CLIENTE</th>
+                            <th scope="col">FECHA</th>
+                            <th scope="col">EMPLEADO</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($ventas as $venta)
+                            <tr class="table-rows">
+                                <td scope="row">{{$venta->producto->Nombre_Producto}}</td>
+                                <td>{{$venta->Cantidad}}</td>
+                                <td>{{$venta->Subtotal}}</td>
+                                <td>{{$venta->venta->cliente->Nombres}}</td>
+                                <td>{{$venta->venta->Fecha}}</td>
+                                <td>{{$venta->venta->empleado->Nombre_Empleado}}</td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            @if (isset($productos) && !empty($productos))
-
-                                @foreach ($productos as $producto)
-                                    <tr class="table-rows">
-                                        <td class="px-3 text-center" scope="row">{{$producto->Nombre_Producto}}</td>
-                                        <td class="px-3 text-center"> {{$producto->marca->Nombre_Marca}}</td>
-                                        <td class="px-3 text-center">{{$producto->categoria->Nombre_Categoria}}</td>
-                                        <td class="px-3 text-center">{{$producto->Descripcion}}</td>
-                                        <td class="px-3 text-center">{{$producto->Cantidad}}</td>
-                                        <td class="px-3 text-center">{{$producto->Precio}}</td>
-                                        <td class="px-3 text-center">
-                                            <button type="button" class="btn-add" data-id="{{ $producto->idProductos }}">
-                                                +
-                                            </button>
-
-                                        </td>
-                                    </tr>
-
-                                @endforeach
-                            @else
-                                <tr>
-                                    <td class="text-center" colspan="7">No hay productos encontrados.</td>
-                                </tr>
-                            @endif
-
-
-                        </tbody>
-                    </table>
-                </div>
-                <h1 class="table-title">Productos Agregados</h1>
-                <div id="productos" class="table-responsive ">
-                    <table class="table table-striped  ">
-                        <thead class="table-dark">
-                            <tr>
-
-                                <th scope="col" class="text-center">PRODUCTO</th>
-                                <th scope="col" class="text-center">CANTIDAD</th>
-                                <th scope="col" class="text-center">PRECIO</th>
-                                <th scope="col" class="text-center"></th>
-                            </tr>
-                        </thead>
-                        <tbody id="productos-lista">
-
-                        </tbody>
-                    </table>
-                </div>
-
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
-            <form id="finalizar-form" action="{{route('factura')}}" method="POST">
-                @csrf
-                <input type="hidden" name="productos" id="productos-data" value="">
-                <span class="btn-container-finalizar">
-                    <button class="btn-finalizar" type="submit">
-                        Siguiente
-                    </button />
-                </span>
-            </form>
             <span class="btn-container-regresar">
                 <a class="btn-regresar" href="{{route('home')}}">
                     Regresar

@@ -22,6 +22,7 @@ Route::middleware(['auth', 'checkAdministrador'])->group(function () {
     Route::post('/nuevo-rol', [RolesController::class, 'store'])->name('roles.store');
 
     Route::delete('/inventario/{idProductos}', [InventarioController::class, 'destroy'])->name('inventario.destroy');
+    Route::get('/detalles-ventas', [VentasController::class, 'detallesVentas'])->name('ver-ventas');
 });
 
 
@@ -38,7 +39,8 @@ Route::middleware(['auth', 'checkPermisos:Ver'])->group(function () {
 });
 
 Route::middleware(['auth', 'checkPermisos:Ver,Crear'])->group(function () {
-    Route::post('/factura', [VentasController::class, 'factura'])->name('factura');
+
+    Route::post('/nueva-factura', [VentasController::class, 'factura'])->name('factura');
     Route::get('buscar-cliente', [VentasController::class, 'buscarCliente'])->name('buscar-cliente');
     Route::get('/nuevo-cliente', [VentasController::class, 'nuevoCliente'])->name('nuevo-cliente');
     Route::post('/nuevo-cliente', [VentasController::class, 'clienteStore'])->name('cliente.store');

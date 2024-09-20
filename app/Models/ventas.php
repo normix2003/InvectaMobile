@@ -15,4 +15,13 @@ class ventas extends Model
     protected $fillable = ['ID_Cliente', 'ID_Empleado', 'Fecha', 'Total'];
     public $timestamps = false;
 
+    public function cliente()
+    {
+        return $this->belongsTo(clientes::class, 'ID_Cliente', 'idClientes');
+    }
+    public function empleado()
+    {
+        return $this->belongsTo(empleados::class, 'ID_Empleado', 'idEmpleados');
+    }
+
 }

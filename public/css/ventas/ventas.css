@@ -122,3 +122,27 @@ main {
 .btn-container-finalizar :hover {
     background: #90ccf7;
 }
+
+.ver-ventas-container {
+    position: absolute;
+    right: 160px;
+}
+.btn-ver-ventas {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #003459;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 8px;
+    border: none;
+    transition: transform 0.1s ease, background-color 0.3s ease;
+    cursor: pointer;
+}
+
+.btn-ver-ventas:active {
+    transform: scale(0.95);
+}
+.ver-ventas-container :hover {
+    background: #90ccf7;
+}

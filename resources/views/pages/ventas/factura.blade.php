@@ -12,7 +12,15 @@
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
     <link rel="stylesheet" href="{{ asset('css/app.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/ventas/factura.css') }}" />
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('fin-venta');
+            form.addEventListener('submit', function () {
+                localStorage.removeItem('productos');
+            });
+        });
 
+    </script>
 </head>
 
 <body>
@@ -102,12 +110,15 @@
                 </a>
             </span>
             <span class="info-client-container">
-                <form action="{{route('finalizar-venta')}}" method="POST">
+                <form id="fin-venta" action="{{route('finalizar-venta')}}" method="POST">
                     @csrf
-                    <input type="hidden" name="idCliente" value="{{ $cliente['idClientes'] }}">
-                    <input type="hidden" name="total" value="{{$total}}">
-                    <input type="hidden" name="productos" value="{{json_encode($productos)}}">
-                    <button class="btn-finalizar" type="submit">
+                    @if($cliente)
+                        <input type="hidden" name="idCliente" value="{{ $cliente['idClientes'] }}">
+                        <input type="hidden" name="total" value="{{$total}}">
+                        <input type="hidden" name="productos" value="{{json_encode($productos)}}">
+                    @endif
+
+                    <button id="finalizar" class="btn-finalizar" type="submit">
                         Finalizar Venta
                     </button>
                 </form>

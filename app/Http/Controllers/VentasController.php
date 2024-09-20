@@ -46,6 +46,7 @@ class VentasController
     public function factura(Request $request)
     {
         $productosSeleccionados = $request->input('productos');
+        //dd($productosSeleccionados);
         $productosSeleccionados = json_decode($productosSeleccionados, true);
 
         $totalVenta = 0;
@@ -60,13 +61,13 @@ class VentasController
             ];
             $totalVenta += $producto['precio'] * $producto['cantidad'];
         }
-        session()->forget('productosBuscados');
 
+        session()->forget('productosBuscados');
         session()->put('productosTotales', $productosTotales);
         session()->put('total', $totalVenta);
-        $cliente = session('cliente', []);
+        //$cliente = session('cliente', []);
 
-        return view('pages.ventas.factura', ['productos' => $productosTotales, 'total' => $totalVenta, 'cliente' => $cliente]);
+        return view('pages.ventas.factura', ['productos' => $productosTotales, 'total' => $totalVenta, 'cliente' => []]);
     }
     public function nuevoCliente()
     {
@@ -111,6 +112,7 @@ class VentasController
         ]);
 
         foreach ($productos as $producto) {
+
             detallesventas::create([
                 'ID_Venta' => $ventas->idVentas,
                 'ID_Productos' => $producto['idProductos'],
@@ -118,7 +120,11 @@ class VentasController
                 'Precio_Unitario' => $producto['Precio'],
                 'Subtotal' => $producto['Total']
             ]);
+            $productoUpdate = producto::find($producto['idProductos']);
+            $productoUpdate->Stock = $productoUpdate->Stock - $producto['Cantidad'];
+            $productoUpdate->save();
         }
+        session()->flash('status', 'Venta realizada exitosamente.');
 
         return redirect()->route('ventas');
 
@@ -136,5 +142,13 @@ class VentasController
         session()->put('cliente', $cliente);
         return view('pages.ventas.factura', ['productos' => $productosTotales, 'total' => $totalVenta, 'cliente' => $cliente]);
 
+    }
+
+    public function detallesVentas()
+    {
+        $ventas = detallesventas::with(['producto', 'venta.empleado', 'venta.cliente'])->get();
+
+        //dd($ventas);
+        return view('pages.ventas.detalles-ventas', ['ventas' => $ventas]);
     }
 }

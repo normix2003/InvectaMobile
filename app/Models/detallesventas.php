@@ -13,4 +13,15 @@ class detallesventas extends Model
     public $incrementing = true;
     protected $fillable = ['ID_Venta', 'ID_Productos', 'Cantidad', 'Precio_Unitario', 'Subtotal'];
     public $timestamps = false;
+
+    public function producto()
+    {
+        return $this->belongsTo(producto::class, 'ID_Productos', 'idProductos');
+    }
+
+    public function venta()
+    {
+        return $this->belongsTo(ventas::class, 'ID_Venta', 'idVentas');
+    }
+
 }
