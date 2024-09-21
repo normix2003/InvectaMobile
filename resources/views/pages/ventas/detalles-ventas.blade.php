@@ -11,9 +11,12 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
     <link rel="stylesheet" href="{{ asset('css/app.css') }}" />
-    <link rel="stylesheet" href="{{ asset('css/inventario/inventario.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/ventas/detalles-ventas.css') }}" />
 
 </head>
+<script>
+
+</script>
 
 <body>
     <header>
@@ -35,14 +38,25 @@
             <h2 class="header-subtitle">InvectaMobile</h2>
             <div class="header-divider"></div>
             <h1 class="header-title">Detalles Ventas</h1>
-            <form action="{{route('login.logout')}}" method="post">
-                @csrf
-                <button id="btncerrar" type="submit" class="btn">Cerrar session</button>
-            </form>
         </div>
     </header>
     <main>
         <div class="inventario-container ">
+            <div class="tiempo-container">
+                <form action="{{route('ver-ventas')}}" method="GET">
+                    <select name="tiempo" class="tiempo-seleccionado" aria-label="Default select example">
+                        <option value="Dia">Hoy</option>
+                        <option value="Semana">7 Dias</option>
+                        <option value="Mes">1 Mes</option>
+                        <option value="Trimestre">3 Meses</option>
+                        <option value="Anio">1 Año</option>
+                        <option value="Todo">Todo</option>
+                    </select>
+                    <button type="submit" class="btn-tiempo">Buscar</button>
+                </form>
+
+            </div>
+
             <div class="table-responsive w-100">
                 <table class="table table-striped  ">
                     <thead class="table-dark">

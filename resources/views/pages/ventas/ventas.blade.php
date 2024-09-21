@@ -156,9 +156,11 @@
             </div>
         @endif
         <div class="inventario-container ">
-            <span class="ver-ventas-container">
-                <a class="btn-ver-ventas" href="{{route('ver-ventas')}}">Ver Ventas</a>
-            </span>
+            @if (Auth::user() && Auth::user()->rol->Nombre == 'Administrador')
+                <span class="ver-ventas-container">
+                    <a class="btn-ver-ventas" href="{{route('ver-ventas')}}">Ver Ventas</a>
+                </span>
+            @endif
             <form action="{{route('buscar-producto')}}" method="GET">
                 <div class="buscar-container">
                     @csrf

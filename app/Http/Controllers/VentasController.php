@@ -121,7 +121,7 @@ class VentasController
                 'Subtotal' => $producto['Total']
             ]);
             $productoUpdate = producto::find($producto['idProductos']);
-            $productoUpdate->Stock = $productoUpdate->Stock - $producto['Cantidad'];
+            $productoUpdate->Cantidad = $productoUpdate->Cantidad - $producto['Cantidad'];
             $productoUpdate->save();
         }
         session()->flash('status', 'Venta realizada exitosamente.');
@@ -144,10 +144,51 @@ class VentasController
 
     }
 
-    public function detallesVentas()
+    public function detallesVentas(Request $request)
     {
-        $ventas = detallesventas::with(['producto', 'venta.empleado', 'venta.cliente'])->get();
+        $tiempo = $request->query('tiempo') ?? 'Dia';
+        switch ($tiempo) {
+            case 'Dia':
+                $ventas = detallesventas::with(['producto', 'venta.empleado', 'venta.cliente'])
+                    ->whereHas('venta', function ($query) {
+                        $query->whereDate('Fecha', date('Y-m-d'));
+                    })
+                    ->get();
+                break;
+            case 'Semana':
+                $ventas = detallesventas::with(['producto', 'venta.empleado', 'venta.cliente'])
+                    ->whereHas('venta', function ($query) {
+                        $query->whereBetween('Fecha', [date('Y-m-d', strtotime('-7 days')), date('Y-m-d')]);
+                    })
+                    ->get();
+                break;
+            case 'Mes':
+                $ventas = detallesventas::with(['producto', 'venta.empleado', 'venta.cliente'])
+                    ->whereHas('venta', function ($query) {
+                        $query->whereMonth('Fecha', date('m'));
+                    })
+                    ->get();
+                break;
 
+            case 'Trimestre':
+                $ventas = detallesventas::with(['producto', 'venta.empleado', 'venta.cliente'])
+                    ->whereHas('venta', function ($query) {
+                        $query->whereBetween('Fecha', [date('Y-m-d', strtotime('-3 months')), date('Y-m-d')]);
+                    })
+                    ->get();
+                break;
+            case 'Anio':
+                $ventas = detallesventas::with(['producto', 'venta.empleado', 'venta.cliente'])
+                    ->whereHas('venta', function ($query) {
+                        $query->whereYear('Fecha', date('Y'));
+                    })
+                    ->get();
+                break;
+            default:
+                $ventas = detallesventas::with(['producto', 'venta.empleado', 'venta.cliente'])
+                    ->get();
+                break;
+        }
         //dd($ventas);
         return view('pages.ventas.detalles-ventas', ['ventas' => $ventas]);
     }
