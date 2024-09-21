@@ -1,0 +1,96 @@
+.title-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+.title {
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: #003459;
+    margin-bottom: 10px;
+}
+.subtitle {
+    font-size: 1.05rem;
+    font-weight: bold;
+    color: #003459;
+}
+.login-container {
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    align-items: center;
+    margin: 40px;
+    gap: 20px;
+}
+.login-input {
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+}
+input::placeholder {
+    color: #5e5d5d;
+}
+.login-input input,
+select {
+    margin-bottom: 8px; /* Ajusta el espacio entre los inputs */
+    padding: 8px;
+    padding-left: 15px;
+    background: #d9d9d9;
+    border-radius: 4px;
+    border: none;
+}
+
+select:focus {
+    border-color: #1e72c5; /* Color del borde cuando el <select> está en foco */
+}
+select:enabled {
+    color: #5e5d5d;
+    font: normal;
+}
+select option:checked {
+    color: white;
+    background-color: #06325e;
+}
+.nuevo-usaurio-input input:last-child {
+    margin-bottom: 0;
+}
+.btn-container-regresar {
+    position: absolute;
+    bottom: 90px;
+    left: 35px;
+    margin-left: 20px;
+}
+.btn-regresar {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #003459;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: transform 0.1s ease, background-color 0.3s ease;
+    cursor: pointer;
+}
+.btn-regresar:active {
+    transform: scale(0.95);
+}
+.btn-container-regresar :hover {
+    background: #90ccf7;
+}
+.btn-login {
+    font-weight: bold;
+    font-size: 1rem;
+    padding: 5px 30px;
+    border-radius: 8px;
+    color: white;
+    background-color: #0290c9;
+    border: none;
+}
+.btn-login:hover {
+    background-color: #87cafa;
+}
+.btn-login:active {
+    transform: scale(0.95);
+}
