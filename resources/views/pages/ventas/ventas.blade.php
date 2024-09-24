@@ -238,7 +238,7 @@
                 </div>
 
             </div>
-            <form id="finalizar-form" action="{{route('factura')}}" method="POST">
+            <form id="finalizar-form" action="{{route('nueva-factura')}}" method="POST">
                 @csrf
                 <input type="hidden" name="productos" id="productos-data" value="">
                 <span class="btn-container-finalizar">

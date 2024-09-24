@@ -39,8 +39,8 @@ Route::middleware(['auth', 'checkPermisos:Ver'])->group(function () {
 });
 
 Route::middleware(['auth', 'checkPermisos:Ver,Crear'])->group(function () {
-
-    Route::post('/nueva-factura', [VentasController::class, 'factura'])->name('factura');
+    Route::get('/nueva-factura', [VentasController::class, 'indexFactura'])->name('factura');
+    Route::post('/nueva-factura', [VentasController::class, 'factura'])->name('nueva-factura');
     Route::get('buscar-cliente', [VentasController::class, 'buscarCliente'])->name('buscar-cliente');
     Route::get('/nuevo-cliente', [VentasController::class, 'nuevoCliente'])->name('nuevo-cliente');
     Route::post('/nuevo-cliente', [VentasController::class, 'clienteStore'])->name('cliente.store');

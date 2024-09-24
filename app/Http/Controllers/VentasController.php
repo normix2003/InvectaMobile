@@ -40,6 +40,14 @@ class VentasController
         return redirect()->route('ventas');
         //return view('pages.ventas.ventas', ['productos' => $producto]);
     }
+
+    public function indexFactura()
+    {
+        $productosTotales = session('productosTotales', []);
+        $totalVenta = session('total', 0);
+        $cliente = session('cliente', []);
+        return view('pages.ventas.factura', ['productos' => $productosTotales, 'total' => $totalVenta, 'cliente' => $cliente]);
+    }
     /**
      * Show the form for creating a new resource.
      */
