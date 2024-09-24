@@ -58,7 +58,6 @@
                         </span>
                     </span>
                     <p><strong>Nombre de usuario:</strong> {{ $empleado->usuario->Nombre_Usuario }}</p>
-                    <p><strong>Contraseña:</strong> {{ $empleado->usuario->Contrasenia }}</p>
 
                 </div>
             </div>

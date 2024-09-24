@@ -67,13 +67,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class=" table-rows">
-                            <td scope="row">{{$admin->idUsuarios}}</td>
-                            <td>{{$admin->Nombre_Usuario}}</td>
-                            <td>{{$admin->rol->Nombre}}</td>
-                            <td></td>
-                            <td></td>
-                        </tr>
                         @foreach ($empleados as $empleado)
                             <tr class=" table-rows">
                                 <td scope="row">{{$empleado->idEmpleados}}</td>
