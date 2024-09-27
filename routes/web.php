@@ -1,6 +1,10 @@
 <?php
 
+use App\Http\Controllers\CategoriaController;
+use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\FacturaController;
 use App\Http\Controllers\InventarioController;
+use App\Http\Controllers\MarcaController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\VentasController;
 use Illuminate\Support\Facades\Route;
@@ -11,6 +15,7 @@ Route::middleware(['auth', 'checkAdministrador'])->group(function () {
 
     Route::get('/nuevo-usuario', [UsuariosController::class, 'nuevoUsuario'])->name('nuevo-usuario');
     Route::post('/nuevo-usuario', [UsuariosController::class, 'store'])->name('usuario.store');
+
     Route::get('/usuarios', [UsuariosController::class, 'index'])->name('usuarios');
     Route::delete('/usuarios/{idEmpleados}', [UsuariosController::class, 'destroy'])->name('usuario.destroy');
     Route::get('/detalle-usuario/{idEmpleados}', [UsuariosController::class, 'detalleUsuario'])->name('detalle-usuario');
@@ -27,6 +32,7 @@ Route::middleware(['auth', 'checkAdministrador'])->group(function () {
 
 
 Route::middleware(['auth', 'checkPermisos:Ver'])->group(function () {
+
     Route::get('/home', function () {
         return view('pages.home');
     })->name('home');
@@ -39,11 +45,14 @@ Route::middleware(['auth', 'checkPermisos:Ver'])->group(function () {
 });
 
 Route::middleware(['auth', 'checkPermisos:Ver,Crear'])->group(function () {
-    Route::get('/nueva-factura', [VentasController::class, 'indexFactura'])->name('factura');
-    Route::post('/nueva-factura', [VentasController::class, 'factura'])->name('nueva-factura');
-    Route::get('buscar-cliente', [VentasController::class, 'buscarCliente'])->name('buscar-cliente');
-    Route::get('/nuevo-cliente', [VentasController::class, 'nuevoCliente'])->name('nuevo-cliente');
-    Route::post('/nuevo-cliente', [VentasController::class, 'clienteStore'])->name('cliente.store');
+
+    Route::get('/nueva-factura', [FacturaController::class, 'index'])->name('factura');
+    Route::post('/nueva-factura', [FacturaController::class, 'nuevaFactura'])->name('nueva-factura');
+
+    Route::get('buscar-cliente', [ClienteController::class, 'buscarCliente'])->name('buscar-cliente');
+    Route::get('/nuevo-cliente', [ClienteController::class, 'index'])->name('nuevo-cliente');
+    Route::post('/nuevo-cliente', [ClienteController::class, 'store'])->name('cliente.store');
+
     Route::post('/finalizar-venta', [VentasController::class, 'finalizarVenta'])->name('finalizar-venta');
 });
 
@@ -52,11 +61,11 @@ Route::middleware(['auth', 'checkPermisos:Crear,Modificar'])->group(function () 
     Route::get('/nuevo-producto', [InventarioController::class, 'nuevoProducto'])->name('nuevo-producto');
     Route::post('/nuevo-producto', [InventarioController::class, 'store'])->name('nuevo-producto.store');
 
-    Route::get('/nueva-marca', [InventarioController::class, 'nuevaMarca'])->name('inventario.marca');
-    Route::post('/nueva-marca', [InventarioController::class, 'storeMarca'])->name('marca.store');
+    Route::get('/nueva-marca', [MarcaController::class, 'index'])->name('inventario.marca');
+    Route::post('/nueva-marca', [MarcaController::class, 'store'])->name('marca.store');
 
-    Route::get('/nueva-categoria', [InventarioController::class, 'nuevaCategoria'])->name('inventario.categoria');
-    Route::post('/nueva-categoria', [InventarioController::class, 'storeCategoria'])->name('categoria.store');
+    Route::get('/nueva-categoria', [CategoriaController::class, 'index'])->name('inventario.categoria');
+    Route::post('/nueva-categoria', [CategoriaController::class, 'store'])->name('categoria.store');
 
 });
 Route::middleware(['auth', 'checkPermisos:Modificar'])->group(function () {
@@ -67,15 +76,10 @@ Route::middleware(['auth', 'checkPermisos:Modificar'])->group(function () {
 
 });
 
-
-
-
 Route::middleware(['auth'])->group(function () {
     Route::post('/logout', [LoginController::class, 'logout'])->name('login.logout');
 });
 
-//Route::get('/', [MarcaController::class, 'index']);
-//Route::post('/', [MarcaController::class, 'store']);
 Route::get('/', [LoginController::class, 'index'])->name('login');
 Route::post('/crear-admin', [LoginController::class, 'crearAdmin'])->name('login.crearAdmin');
 Route::post('/', [LoginController::class, 'login'])->name('login.login');

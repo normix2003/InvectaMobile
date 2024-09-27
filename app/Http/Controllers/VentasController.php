@@ -5,28 +5,28 @@ namespace App\Http\Controllers;
 use App\Models\detallesventas;
 use App\Models\empleados;
 use App\Models\producto;
-use App\Models\clientes;
 use App\Models\ventas;
 use Auth;
 use Illuminate\Http\Request;
 
 class VentasController
 {
-    /**
-     * Display a listing of the resource.
-     */
+    //Funcion para mostrar la vista de ventas
     public function index()
     {
+        //Obtener los productos buscados en la sesion
         $productos = session('productosBuscados', []);
-
+        //Retornar la vista de ventas con los productos
         return view('pages.ventas.ventas', ['productos' => $productos]);
     }
 
+    //Funcion para buscar un producto
     public function buscarProducto(Request $request)
     {
-
+        //Obtener el dato a buscar (Nombre del producto, Nombre de la marca o Nombre de la categoria)
         $data = $request->input('Data');
-        //dd($data);
+
+        //Buscar un producto por el nombre del producto, nombre de la marca o nombre de la categoria
         $producto = producto::with(['marca', 'categoria'])
             ->where('Nombre_Producto', 'like', '%' . $data . '%')
             ->orWhereHas('marca', function ($q) use ($data) {
@@ -36,82 +36,33 @@ class VentasController
                 $q->where('Nombre_Categoria', 'like', '%' . $data . '%');
             })
             ->get();
+
+        //Guardar los productos buscados en la sesion
         session()->put('productosBuscados', $producto);
+
+        //Redireccionar a la vista de ventas
         return redirect()->route('ventas');
-        //return view('pages.ventas.ventas', ['productos' => $producto]);
     }
 
-    public function indexFactura()
-    {
-        $productosTotales = session('productosTotales', []);
-        $totalVenta = session('total', 0);
-        $cliente = session('cliente', []);
-        return view('pages.ventas.factura', ['productos' => $productosTotales, 'total' => $totalVenta, 'cliente' => $cliente]);
-    }
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function factura(Request $request)
-    {
-        $productosSeleccionados = $request->input('productos');
-        //dd($productosSeleccionados);
-        $productosSeleccionados = json_decode($productosSeleccionados, true);
-
-        $totalVenta = 0;
-        $productosTotales = [];
-        foreach ($productosSeleccionados as $producto) {
-            $productosTotales[] = [
-                'idProductos' => $producto['id'],
-                'Nombre_Producto' => $producto['nombre'],
-                'Cantidad' => $producto['cantidad'],
-                'Precio' => $producto['precio'],
-                'Total' => number_format((float) ($producto['cantidad'] * $producto['precio']), 2)
-            ];
-            $totalVenta += $producto['precio'] * $producto['cantidad'];
-        }
-
-        session()->forget('productosBuscados');
-        session()->put('productosTotales', $productosTotales);
-        session()->put('total', $totalVenta);
-        //$cliente = session('cliente', []);
-
-        return view('pages.ventas.factura', ['productos' => $productosTotales, 'total' => $totalVenta, 'cliente' => []]);
-    }
-    public function nuevoCliente()
-    {
-        return view('pages.ventas.nuevo-cliente');
-    }
-    public function clienteStore(Request $request)
-    {
-        $clienteData = $request->only('Nombres', 'Apellidos', 'DUI', 'Telefono', 'Email');
-        $cliente = clientes::create($clienteData);
-        $productosTotales = session('productosTotales', []);
-        $totalVenta = session('total', 0);
-
-        session(['cliente' => $cliente]);
-
-        return view('pages.ventas.factura', ['productos' => $productosTotales, 'total' => $totalVenta, 'cliente' => $cliente]);
-    }
-    /**
-     * Store a newly created resource in storage.
-     */
+    //Funcion para finalizar una venta
     public function finalizarVenta(Request $request)
     {
+        //Obtener el id del cliente, los productos y el total de la venta
         $cliente = $request->input('idCliente');
         $productosTotales = $request->input('productos');
         $productos = json_decode($productosTotales, true);
         $totalVenta = $request->input('total');
 
-        //dd($cliente, $productosTotales, $totalVenta);
+        //Obtener el usuario logueado que es el empleado que realiza la venta
         $usuario = Auth::user();
-
-        //dd($usuario->idUsuarios);
         $empleado = empleados::where('ID_Usuarios', $usuario->idUsuarios)->first();
-        //dd($empleado);
+
+        //Si el empleado existe se obtiene su id
         if ($empleado) {
             $idEmpleado = $empleado->idEmpleados;
         }
-        //dd($empleado);
+
+        //Crear una venta
         $ventas = ventas::create([
             'ID_Cliente' => $cliente,
             'ID_Empleado' => $idEmpleado,
@@ -119,6 +70,7 @@ class VentasController
             'Total' => $totalVenta
         ]);
 
+        //Crear los detalles de la venta
         foreach ($productos as $producto) {
 
             detallesventas::create([
@@ -128,35 +80,27 @@ class VentasController
                 'Precio_Unitario' => $producto['Precio'],
                 'Subtotal' => $producto['Total']
             ]);
+            //Actualizar la cantidad de productos en la base de datos
             $productoUpdate = producto::find($producto['idProductos']);
             $productoUpdate->Cantidad = $productoUpdate->Cantidad - $producto['Cantidad'];
             $productoUpdate->save();
         }
+        //Mensaje de exito
         session()->flash('status', 'Venta realizada exitosamente.');
-
+        //Redireccionar a la vista de ventas
         return redirect()->route('ventas');
 
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function buscarCliente(Request $request)
-    {
-        $duiCliente = $request->input('duiCliente');
-        $cliente = clientes::where('DUI', $duiCliente)->first();
-        $productosTotales = session('productosTotales', []);
-        $totalVenta = session('total', 0);
-        session()->put('cliente', $cliente);
-        return view('pages.ventas.factura', ['productos' => $productosTotales, 'total' => $totalVenta, 'cliente' => $cliente]);
-
-    }
-
+    //Funcion para mostrar la vista de ventas realizadas
     public function detallesVentas(Request $request)
     {
+        //Obtener el tiempo de busqueda
         $tiempo = $request->query('tiempo') ?? 'Dia';
+        //Obtener las ventas segun el tiempo de busqueda
         switch ($tiempo) {
             case 'Dia':
+                //Obtener las ventas del dia
                 $ventas = detallesventas::with(['producto', 'venta.empleado', 'venta.cliente'])
                     ->whereHas('venta', function ($query) {
                         $query->whereDate('Fecha', date('Y-m-d'));
@@ -164,6 +108,7 @@ class VentasController
                     ->get();
                 break;
             case 'Semana':
+                //Obtener las ventas de la semana
                 $ventas = detallesventas::with(['producto', 'venta.empleado', 'venta.cliente'])
                     ->whereHas('venta', function ($query) {
                         $query->whereBetween('Fecha', [date('Y-m-d', strtotime('-7 days')), date('Y-m-d')]);
@@ -171,6 +116,7 @@ class VentasController
                     ->get();
                 break;
             case 'Mes':
+                //Obtener las ventas del mes
                 $ventas = detallesventas::with(['producto', 'venta.empleado', 'venta.cliente'])
                     ->whereHas('venta', function ($query) {
                         $query->whereMonth('Fecha', date('m'));
@@ -179,6 +125,7 @@ class VentasController
                 break;
 
             case 'Trimestre':
+                //Obtener las ventas del trimestre
                 $ventas = detallesventas::with(['producto', 'venta.empleado', 'venta.cliente'])
                     ->whereHas('venta', function ($query) {
                         $query->whereBetween('Fecha', [date('Y-m-d', strtotime('-3 months')), date('Y-m-d')]);
@@ -186,6 +133,7 @@ class VentasController
                     ->get();
                 break;
             case 'Anio':
+                //Obtener las ventas del año
                 $ventas = detallesventas::with(['producto', 'venta.empleado', 'venta.cliente'])
                     ->whereHas('venta', function ($query) {
                         $query->whereYear('Fecha', date('Y'));
@@ -193,11 +141,12 @@ class VentasController
                     ->get();
                 break;
             default:
+                //Obtener todas las ventas
                 $ventas = detallesventas::with(['producto', 'venta.empleado', 'venta.cliente'])
                     ->get();
                 break;
         }
-        //dd($ventas);
+        //Retornar la vista de ventas realizadas
         return view('pages.ventas.detalles-ventas', ['ventas' => $ventas]);
     }
 }

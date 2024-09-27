@@ -13,6 +13,7 @@ class usuarios extends Authenticatable
     protected $primaryKey = 'idUsuarios';
     public $incrementing = true;
     protected $fillable = ['Nombre_Usuario', 'Contrasenia', 'ID_Rol'];
+    protected $hidden = ['Contrasenia'];
     public $timestamps = false;
     public function rol()
     {
