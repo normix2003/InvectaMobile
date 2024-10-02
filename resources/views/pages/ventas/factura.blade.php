@@ -2,8 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Title</title>
-    <!-- Required meta tags -->
+    <title>Factura</title> <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
@@ -17,6 +16,10 @@
             const form = document.getElementById('fin-venta');
             form.addEventListener('submit', function () {
                 localStorage.removeItem('productos');
+                setTimeout(() => {
+                    window.location.href = '/ventas';
+                }, 3000);
+
             });
         });
 
@@ -110,13 +113,7 @@
                 </a>
             </span>
             <span class="info-client-container">
-                <form id="fin-venta" action="{{route('finalizar-venta')}}" method="POST">
-                    @csrf
-                    @if($cliente)
-                        <input type="hidden" name="idCliente" value="{{ $cliente['idClientes'] }}">
-                        <input type="hidden" name="total" value="{{$total}}">
-                        <input type="hidden" name="productos" value="{{json_encode($productos)}}">
-                    @endif
+                <form id="fin-venta" action="{{route('factura-pdf')}}" method="GET" target="_blank">
 
                     <button id="finalizar" class="btn-finalizar" type="submit">
                         Finalizar Venta

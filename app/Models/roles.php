@@ -12,7 +12,7 @@ class roles extends Model
     public $incrementing = true;
     protected $table = 'roles';
     public $timestamps = false;
-    protected $fillable = ['Nombre'];
+    protected $fillable = ['Nombre', 'Eliminar'];
     public function detallesroles()
     {
         return $this->hasMany('App\Models\detallesroles', 'ID_Roles', 'idRoles');

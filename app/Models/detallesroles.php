@@ -11,7 +11,7 @@ class detallesroles extends Model
     protected $table = 'detalles_roles';
     protected $primaryKey = 'idDetalles_Roles';
     public $incrementing = true;
-    protected $fillable = ['ID_Roles', 'ID_Permisos'];
+    protected $fillable = ['ID_Roles', 'ID_Permisos', 'Eliminar'];
     public $timestamps = false;
 
     public function rol()

@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Title</title>
+    <title>Stock</title>
     <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -37,13 +37,22 @@
         </div>
     </header>
     <main>
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <form action="{{route('stock.update', ['idProductos' => $idProductos])}}" method="post">
             <div class="stock-container">
                 <h1 class="title">Ingrese la cantidad que desee aumentar de Stock</h1>
                 <div class="stock-input">
                     @csrf
                     @method('PUT')
-                    <input type="number" name="Cantidad" placeholder="Cantidad  ">
+                    <input type="number" name="Cantidad" placeholder="Cantidad" Required min="1">
                 </div>
                 <button class="btn-aumentar" type="submit">Aumentar</button>
             </div>

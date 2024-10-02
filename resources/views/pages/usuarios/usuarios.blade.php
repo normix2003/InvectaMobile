@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Title</title>
+    <title>Usuarios</title>
     <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -43,6 +43,11 @@
         </div>
     </header>
     <main>
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
         <div class="usuario-container ">
             <span class="btn-container-nuevo">
                 <a class="btn-nuevo-usuario" href="{{route('nuevo-usuario')}}">

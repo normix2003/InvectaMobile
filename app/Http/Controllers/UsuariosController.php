@@ -14,7 +14,7 @@ class UsuariosController
     public function index()
     {
         // Obtener todos los empleados con sus usuarios y roles
-        $empleados = empleados::with('usuario.rol')->get();
+        $empleados = empleados::with('usuario.rol')->where('Eliminar', 0)->get();
         // Retornar la vista de usuarios con los empleados 
         return view('pages.usuarios.usuarios', ['empleados' => $empleados]);
     }
@@ -22,8 +22,8 @@ class UsuariosController
     // Función para mostrar la vista de nuevo-usuario con los roles registrados en la base de datos 
     public function nuevoUsuario()
     {
-        // Obtener todos los roles registrados en la base de datos
-        $roles = roles::all();
+        // Obtener todos los roles registrados en la base de datos que no estén eliminados
+        $roles = roles::all()->where('Eliminar', 0);
         // Retornar la vista de nuevo-usuario con los roles
         return view('pages.usuarios.nuevo-usuario', ['roles' => $roles]);
     }
@@ -41,6 +41,27 @@ class UsuariosController
     // Función para almacenar un nuevo usuario en la base de datos
     public function store(Request $request)
     {
+        $request->validate([
+            'Nombre_Empleado' => 'required|string',
+            'Apellidos' => 'required|string',
+            'Email' => 'required|email',
+            'Telefono' => 'required|numeric',
+            'DUI' => 'required|string',
+            'Nombre_Usuario' => 'required|string',
+            'Contrasenia' => 'required|string',
+            'Nombre' => 'required|string',
+        ], [
+            'Nombre_Empleado.required' => 'El campo del nombre del empleado no debe estar vacío.',
+            'Apellidos.required' => 'El campo de los apellidos del empleado no debe estar vacío.',
+            'Email.required' => 'El campo del correo electrónico no debe estar vacío.',
+            'Email.email' => 'El correo electrónico no tiene un formato válido.',
+            'Telefono.required' => 'El campo del teléfono no debe estar vacío.',
+            'Telefono.numeric' => 'El teléfono debe ser un número.',
+            'DUI.required' => 'El campo del DUI no debe estar vacío.',
+            'Nombre_Usuario.required' => 'El campo del nombre de usuario no debe estar vacío.',
+            'Contrasenia.required' => 'El campo de la contraseña no debe estar vacío.',
+            'Nombre.required' => 'El campo del rol no debe estar vacío.',
+        ]);
         // Obtener los datos del empleado, usuario y rol de la vista
         $empleado = $request->only(['Nombre_Empleado', 'Apellidos', 'Email', 'Telefono', 'DUI']);
         $usuario = $request->only(['Nombre_Usuario', 'Contrasenia']);
@@ -60,11 +81,13 @@ class UsuariosController
             $usuario['ID_Rol'] = $idRol;
             // Encriptar la contraseña del usuario
             $usuario['Contrasenia'] = Hash::make($usuario['Contrasenia']);
+            $usuario['Eliminar'] = 0;
             $usuario = usuarios::create($usuario);
             // Verificar si el usuario se creó
             if ($usuario) {
                 // Crear un nuevo empleado con los datos del empleado y el id del usuario
                 $empleado['ID_Usuarios'] = $usuario->idUsuarios;
+                $empleado['Eliminar'] = 0;
                 empleados::create($empleado);
 
             }
@@ -82,14 +105,16 @@ class UsuariosController
         $empleado = empleados::findOrFail($idEmpleados);
         $usuario = usuarios::find($empleado->ID_Usuarios);
 
-        // Verificar si el empleado y el usuario existen
-        if ($empleado && $usuario) {
-            // Eliminar el empleado y el usuario
-            $empleado->delete();
-            $usuario->delete();
+        if (empty($empleado) || empty($usuario)) {
+            return redirect()->route('usuarios')->withErrors(['error' => 'No se encontró el empleado o el usuario especificado.']);
         }
-        // Redireccionar a la vista de usuarios
-        return redirect()->route('usuarios');
+
+        $empleado['Eliminar'] = 1;
+        $usuario['Eliminar'] = 1;
+        $usuario->save();
+        $empleado->save();
+        // Redireccionar a la vista de usuarios con un mensaje de éxito
+        return redirect()->route('usuarios')->with('success', 'Empleado eliminado exitosamente.');
     }
 
 }

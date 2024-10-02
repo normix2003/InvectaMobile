@@ -11,7 +11,7 @@ class producto extends Model
     protected $table = 'productos';
     protected $primaryKey = 'idProductos';
     public $incrementing = true;
-    protected $fillable = ['Nombre_Producto', 'ID_Marca', 'ID_Categoria', 'Descripcion', 'Precio', 'Cantidad'];
+    protected $fillable = ['Nombre_Producto', 'ID_Marca', 'ID_Categoria', 'Descripcion', 'Precio', 'Cantidad', 'Eliminar'];
     public $timestamps = false;
 
     public function marca()

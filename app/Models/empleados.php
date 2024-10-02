@@ -11,7 +11,7 @@ class empleados extends Model
     protected $table = 'empleados';
     protected $primaryKey = 'idEmpleados';
     public $incrementing = true;
-    protected $fillable = ['Nombre_Empleado', 'Apellidos', 'Email', 'Telefono', 'DUI', 'ID_Usuarios'];
+    protected $fillable = ['Nombre_Empleado', 'Apellidos', 'Email', 'Telefono', 'DUI', 'ID_Usuarios', 'Eliminar'];
     public $timestamps = false;
     public function usuario()
     {

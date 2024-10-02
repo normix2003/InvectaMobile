@@ -13,7 +13,7 @@ class InventarioController
     public function index()
     {
         // Se obtienen todos los productos con la relación de marca y categoría
-        $inventario = producto::with(['marca', 'categoria'])->get();
+        $inventario = producto::with(['marca', 'categoria'])->where('Eliminar', 0)->get();
         // Se retorna la vista de inventario con los productos
         return view('pages.inventario.inventario', ['inventario' => $inventario]);
     }
@@ -31,15 +31,42 @@ class InventarioController
     // Función para almacenar un nuevo producto en la base de datos
     public function store(Request $request)
     {
+        $todosVacios = empty($request->input('Nombre_Marca')) &&
+            empty($request->input('Nombre_Categoria')) &&
+            empty($request->input('Nombre_Producto')) &&
+            empty($request->input('Descripcion')) &&
+            empty($request->input('Precio')) &&
+            empty($request->input('Cantidad'));
+
+        // Si todos los campos están vacíos, redirigir con un mensaje general
+        if ($todosVacios) {
+            return redirect()->route('nuevo-producto')->withErrors([
+                'general' => 'Todos los campos son obligatorios y no deben estar vacíos.'
+            ]);
+        }
+
+        $request->validate([
+            'Nombre_Marca' => 'required|string',
+            'Nombre_Categoria' => 'required|string',
+            'Nombre_Producto' => 'required|string',
+            'Descripcion' => 'required|string',
+            'Precio' => 'required|numeric|min:0',
+            'Cantidad' => 'required|integer|min:1',
+        ], [
+            'Nombre_Marca.required' => 'El campo de la marca no debe estar vacío.',
+            'Nombre_Categoria.required' => 'El campo de la categoría no debe estar vacío.',
+            'Nombre_Producto.required' => 'El campo del producto no debe estar vacío.',
+            'Descripcion.required' => 'La descripción no debe estar vacía.',
+            'Precio.required' => 'El precio es obligatorio y debe ser un número.',
+            'Precio.numeric' => 'El precio debe ser un valor numérico.',
+            'Cantidad.required' => 'La cantidad es obligatoria y debe ser un número entero.',
+            'Cantidad.integer' => 'La cantidad debe ser un número entero.',
+            'Cantidad.min' => 'La cantidad debe ser al menos 1.',
+        ]);
         // Se obtiene el nombre de la marca, la categoría y los datos del producto del formulario en la vista
         $marca = $request->input('Nombre_Marca');
         $categoria = $request->input('Nombre_Categoria');
         $producto = $request->only(['Nombre_Producto', 'Descripcion', 'Precio', 'Cantidad']);
-
-        // Si alguno de los campos está vacío, se redirecciona a la vista de nuevo-producto
-        if (empty($marca) || empty($categoria) || empty($producto)) {
-            return redirect()->route('nuevo-producto');
-        }
 
         // Se obtiene el id de la marca y la categoría
         $idMarca = marcas::where('Nombre_Marca', $marca)->first()->idMarcas;
@@ -51,17 +78,21 @@ class InventarioController
             $producto['ID_Categoria'] = $idCategoria;
 
             producto::create($producto);
-            return redirect()->route('inventario');
+            return redirect()->route('inventario')->with('success', 'Producto creado exitosamente.');
         }
 
         // Si no se obtiene el id de la marca y la categoría, se redirecciona a la vista de nuevo-producto
-        return redirect()->route('nuevo-producto');
+        return redirect()->route('nuevo-producto')->withErrors(['error' => 'No se encontró la marca o la categoría especificada.']);
 
     }
 
     // Función para mostrar la vista de stock y el producto en específico
     public function stock($idProductos)
     {
+        if (empty($idProductos)) {
+            // Se redirecciona a la vista de inventario con un mensaje de error
+            return redirect()->route('stock', ['idProductos' => $idProductos])->withErrors('error', 'El id del producto es obligatorio.');
+        }
         // Se obtiene un producto en específico por medio de su idProductos
         $producto = producto::findOrFail($idProductos);
 
@@ -76,39 +107,50 @@ class InventarioController
     // Función para actualizar el stock de un producto en la base de datos
     public function update(Request $request, $idProductos)
     {
+        $request->validate([
+            'Cantidad' => 'required|integer|min:1',
+        ], [
+            'Cantidad.required' => 'La cantidad es obligatoria y debe ser un número entero.',
+            'Cantidad.integer' => 'La cantidad debe ser un número entero.',
+            'Cantidad.min' => 'La cantidad debe ser al menos 1.',
+        ]);
+
         // Se obtiene la cantidad del formulario en la vista
         $stock = $request->input('Cantidad');
-        // Si la cantidad está vacía o es menor o igual a 0, se redirecciona a la vista de stock
-        if (empty($stock) || $stock <= 0) {
-            return redirect()->route('stock', ['idProductos' => $idProductos]);
-        }
-
         // Se obtiene un producto en específico por medio de su idProductos
         $producto = producto::findOrFail($idProductos);
 
         // Si se obtiene el producto, se actualiza el stock
         if (!empty($producto)) {
-
             $cantiadActual = $producto->Cantidad;
             $nuevoStock = $cantiadActual + $stock;
             $producto->Cantidad = $nuevoStock;
             $producto->save();
-
+            return redirect()->route('inventario')->with('success', 'Stock actualizado exitosamente.');
         }
+
         // Se redirecciona a la vista de inventario
-        return redirect()->route('inventario');
+        return redirect()->route('stock', ['idProductos' => $idProductos])->withErrors(['error' => 'No se encontró el producto especificado.']);
     }
 
     // Función para eliminar un producto de la base de datos
     public function destroy($idProductos)
     {
+        if (empty($idProductos)) {
+            // Se redirecciona a la vista de inventario con un mensaje de error
+            return redirect()->route('inventario')->withErrors('error', 'El id del producto es obligatorio.');
+        }
         // Se obtiene un producto en específico por medio de su idProductos
         $producto = producto::findOrFail($idProductos);
         // Si se obtiene el producto, se elimina
-        if ($producto) {
-            $producto->delete();
+        if (empty($producto)) {
+            // Se redirecciona a la vista de inventario con un mensaje de error
+            return redirect()->route('inventario')->withErrors(['error' => 'No se encontró el producto especificado.']);
         }
-        // Se redirecciona a la vista de inventario
-        return redirect()->route('inventario');
+        $producto['Eliminar'] = 1;
+        $producto->save();
+        // Se redirecciona a la vista de inventario con un mensaje de éxito
+        return redirect()->route('inventario')->with('success', 'Producto eliminado exitosamente.');
+
     }
 }

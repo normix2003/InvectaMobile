@@ -8,6 +8,7 @@ use App\Models\producto;
 use App\Models\ventas;
 use Auth;
 use Illuminate\Http\Request;
+use PDF;
 
 class VentasController
 {
@@ -48,10 +49,9 @@ class VentasController
     public function finalizarVenta(Request $request)
     {
         //Obtener el id del cliente, los productos y el total de la venta
-        $cliente = $request->input('idCliente');
-        $productosTotales = $request->input('productos');
-        $productos = json_decode($productosTotales, true);
-        $totalVenta = $request->input('total');
+        $cliente = session('cliente', []);
+        $productos = session('productosTotales', []);
+        $totalVenta = session('total', 0);
 
         //Obtener el usuario logueado que es el empleado que realiza la venta
         $usuario = Auth::user();
@@ -64,7 +64,7 @@ class VentasController
 
         //Crear una venta
         $ventas = ventas::create([
-            'ID_Cliente' => $cliente,
+            'ID_Cliente' => $cliente['idClientes'],
             'ID_Empleado' => $idEmpleado,
             'Fecha' => date('Y-m-d'),
             'Total' => $totalVenta
@@ -86,10 +86,26 @@ class VentasController
             $productoUpdate->save();
         }
         //Mensaje de exito
-        session()->flash('status', 'Venta realizada exitosamente.');
         //Redireccionar a la vista de ventas
-        return redirect()->route('ventas');
+        return redirect()->route('factura-pdf');
 
+    }
+
+    public function facturaPdf(Request $request)
+    {
+        $cliente = session('cliente', []);
+        $productos = session('productosTotales', []);
+        $totalVenta = session('total', 0);
+        $fecha = date('d-m-Y');
+        $usuario = Auth::user();
+        $empleado = empleados::where('ID_Usuarios', $usuario->idUsuarios)->first();
+        //dd($cliente, $productos, $totalVenta);
+        $pdf = PDF::loadView('pages.ventas.reporte', ['cliente' => $cliente, 'productos' => $productos, 'total' => $totalVenta, 'fecha' => $fecha, 'empleado' => $empleado]);
+        //session()->flash('status', 'Venta realizada exitosamente.');
+        //session()->forget('productosTotales');
+        //session()->forget('total');
+        //session()->forget('cliente');
+        return $pdf->stream('Factura' . '-' . $cliente['Nombres'] . '-' . $fecha . '' . '.pdf');
     }
 
     //Funcion para mostrar la vista de ventas realizadas

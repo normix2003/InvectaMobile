@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Title</title>
+    <title>Nuevo Usuario</title>
     <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -39,24 +39,33 @@
         </div>
     </header>
     <main>
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <form action="{{route('usuario.store')}}" method="post">
             <div class="nuevo-usuario-container">
                 <div class="nuevo-usuario-input">
                     @csrf
-                    <input type="text" name="Apellidos" placeholder="Apellidos">
-                    <input type="text" name="Nombre_Empleado" placeholder="Nombres">
-                    <input type="tel" name="Telefono" placeholder="Numero de celular">
-                    <input type="text" name="DUI" placeholder="DUI">
-                    <input type="email" name="Email" placeholder="Correo electronico">
-                    <select id="rol" name="Nombre">
+                    <input type="text" name="Apellidos" placeholder="Apellidos" Required>
+                    <input type="text" name="Nombre_Empleado" placeholder="Nombres" Required>
+                    <input type="tel" name="Telefono" placeholder="Numero de celular" Required>
+                    <input type="text" name="DUI" placeholder="DUI" Required>
+                    <input type="email" name="Email" placeholder="Correo electronico" Required>
+                    <select id="rol" name="Nombre" Required>
                         <option value="" disabled selected>Seleccionar Rol</option>
                         @foreach ($roles as $rol)
                             <option value="{{$rol->Nombre}}">{{$rol->Nombre}}</option>
                         @endforeach
                     </select>
 
-                    <input type="text" name="Nombre_Usuario" placeholder="Nombre de usuario">
-                    <input type="password" name="Contrasenia" placeholder="Contraseñá ">
+                    <input type="text" name="Nombre_Usuario" placeholder="Nombre de usuario" Required>
+                    <input type="password" name="Contrasenia" placeholder="Contraseñá " Required>
 
                 </div>
                 <button class="btn-crear" type="submit">Crear</button>

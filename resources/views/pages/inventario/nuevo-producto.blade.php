@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Title</title>
+    <title>Nuevo Producto</title>
     <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -37,14 +37,24 @@
         </div>
     </header>
     <main>
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <form action="{{route('nuevo-producto.store')}}" method="post">
             <div class="nuevo-producto-container">
 
                 <div class="nuevo-producto-input">
                     @csrf
-                    <input type="text" name="Nombre_Producto" placeholder="Nombre Producto">
+                    <input type="text" name="Nombre_Producto" placeholder="Nombre Producto" Required>
                     <div class="marca-container">
-                        <select id="marca" name="Nombre_Marca">
+                        <select id="marca" name="Nombre_Marca" Required>
                             <option value="" disabled selected>Marca</option>
                             @foreach ($marcas as $marca)
                                 <option value="{{$marca->Nombre_Marca}}">{{$marca->Nombre_Marca}}</option>
@@ -55,7 +65,7 @@
                         </a>
                     </div>
                     <div class="categoria-container">
-                        <select id="categoria" name="Nombre_Categoria">
+                        <select id="categoria" name="Nombre_Categoria" Required>
                             <option value="" disabled selected>Categoria</option>
                             @foreach ($categorias as $categoria)
                                 <option value="{{$categoria->Nombre_Categoria}}">{{$categoria->Nombre_Categoria}}</option>
@@ -66,9 +76,9 @@
                         </a>
                     </div>
 
-                    <input type="text" name="Descripcion" placeholder="Descripcion">
-                    <input type="text" name="Precio" placeholder="Precio">
-                    <input type="number" name="Cantidad" placeholder="Stock inicial">
+                    <input type="text" name="Descripcion" placeholder="Descripcion" Required>
+                    <input type="text" name="Precio" placeholder="Precio" Required>
+                    <input type="number" name="Cantidad" placeholder="Stock inicial" min="1">
                 </div>
                 <button class="btn-crear" type="submit">Crear</button>
             </div>

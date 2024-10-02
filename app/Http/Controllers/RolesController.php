@@ -13,7 +13,7 @@ class RolesController
     public function index()
     {
         //Obtener todos los roles con sus permisos
-        $roles = roles::with('detallesroles.permisos')->get();
+        $roles = roles::with('detallesroles.permisos')->where('Eliminar', 0)->get();
         //Retornar la vista de roles con los roles y permisos
         return view('pages.roles.roles', ['roles' => $roles]);
     }
@@ -39,7 +39,7 @@ class RolesController
         $permisos = $request->input('opcion', []);
 
         //Crear un rol si no existe
-        $rol = roles::firstOrCreate(['Nombre' => $nombreRol]);
+        $rol = roles::firstOrCreate(['Nombre' => $nombreRol, 'Eliminar' => 0]);
 
         //si permisos es un array y contiene el valor 'Todos' se asignan todos los permisos al rol
         if (is_array($permisos) && in_array('Todos', $permisos)) {
@@ -47,7 +47,7 @@ class RolesController
             $permisos = permisos::all();
             //Asignar todos los permisos al rol
             foreach ($permisos as $permiso) {
-                detallesroles::create(['ID_Roles' => $rol->idRoles, 'ID_Permisos' => $permiso->idPermisos]);
+                detallesroles::create(['ID_Roles' => $rol->idRoles, 'ID_Permisos' => $permiso->idPermisos, 'Eliminar' => 0]);
             }
             //Redireccionar a la vista de roles
             return redirect()->route('roles.roles');
@@ -56,7 +56,7 @@ class RolesController
         $idpermisos = permisos::whereIn('Nombre', $permisos)->get()->pluck('idPermisos')->toArray();
         //Asignar los permisos seleccionados al rol
         foreach ($idpermisos as $idPermiso) {
-            detallesroles::create(['ID_Roles' => $rol->idRoles, 'ID_Permisos' => $idPermiso]);
+            detallesroles::create(['ID_Roles' => $rol->idRoles, 'ID_Permisos' => $idPermiso, 'Eliminar' => 0]);
         }
         //Redireccionar a la vista de roles
         return redirect()->route('roles.roles');
@@ -70,15 +70,21 @@ class RolesController
         // Si el rol no esta vacio
         if (!empty($rol)) {
             //Obtener los id de los detalles de roles
-            $detallesRolesIds = detallesroles::where('ID_Roles', $idRoles)->pluck('idDetalles_Roles')->toArray();
+            $detallesRoles = detallesroles::where('ID_Roles', $idRoles)->get();
             //Si los detalles de roles no estan vacios
-            if (!empty($detallesRolesIds)) {
+            if (!empty($detallesRoles)) {
                 //Eliminar los detalles de roles
-                detallesroles::destroy($detallesRolesIds);
-                $rol->delete();
+                foreach ($detallesRoles as $detalleRol) {
+                    $detalleRol['Eliminar'] = 1;
+                    $detalleRol->save();
+                }
+                $rol['Eliminar'] = 1;
+                $rol->save();
             }
+            //Redireccionar a la vista de roles
+            return redirect()->route('roles.roles')->with('success', 'Rol eliminado exitosamente.');
         }
-        //Redireccionar a la vista de roles
-        return redirect()->route('roles.roles');
+        return redirect()->route('roles.roles')->withErrors(['error' => 'No se encontró el rol especificado.']);
+
     }
 }

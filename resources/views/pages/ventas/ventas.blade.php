@@ -2,8 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Title</title>
-    <!-- Required meta tags -->
+    <title>Ventas</title> <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
@@ -109,15 +108,6 @@
             });
         });
 
-    </script>
-    <script>
-        // Ocultar el mensaje flash después de 5 segundos
-        setTimeout(function () {
-            var flashMessage = document.getElementById('flash-message');
-            if (flashMessage) {
-                flashMessage.style.display = 'none';
-            }
-        }, 5000); // 5000 ms = 5 segundos
     </script>
 
 </head>
