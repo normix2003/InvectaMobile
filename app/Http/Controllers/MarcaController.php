@@ -16,16 +16,17 @@ class MarcaController
     //Función para almacenar una nueva marca en la base de datos
     public function store(Request $request)
     {
+        $request->validate([
+            'Nombre_Marca' => 'required|string'
+        ], [
+            'Nombre_Marca.required' => 'El campo de la marca no debe estar vacío.'
+        ]);
         //Se obtiene el nombre de la marca del formulario en la vista
         $marca = $request->input('Nombre_Marca');
-        //Si el campo de la marca está vacío, se redirecciona a la vista de nueva-marca
-        if (empty($marca)) {
-            return redirect()->route('inventario.marca');
-        }
         //Se crea una nueva marca en la base de datos
         marcas::create(['Nombre_Marca' => $marca]);
         //Se redirecciona a la vista de nuevo-producto
-        return redirect()->route('nuevo-producto');
+        return redirect()->route('nuevo-producto')->with('success', 'Marca creada correctamente.');
     }
 
 }

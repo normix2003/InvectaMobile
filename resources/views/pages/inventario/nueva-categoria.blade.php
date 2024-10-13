@@ -36,6 +36,15 @@
             <div class="header-divider"></div>
             <h1 class="header-title">Nuevo Categoria</h1>
         </div>
+        @if ($errors->any())
+            <div class="alert alert-danger" id="alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
     </header>
     <main>
         <form action="{{route('categoria.store')}}" method="post">
@@ -44,8 +53,8 @@
 
                 <div class="nuevo-rol-input">
                     @csrf
-                    <input type="text" name="Nombre_Categoria" placeholder="Categoria">
-                    <input type="text" name="Descripcion" placeholder="Descripcion">
+                    <input type="text" name="Nombre_Categoria" placeholder="Categoria" Required>
+                    <input type="text" name="Descripcion" placeholder="Descripcion" Required>
                 </div>
                 <button class="btn-crear" type="submit">Crear</button>
 

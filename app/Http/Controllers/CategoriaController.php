@@ -17,16 +17,19 @@ class CategoriaController
     //Función para almacenar una nueva categoría en la base de datos
     public function store(Request $request)
     {
+        $request->validate([
+            'Nombre_Categoria' => 'required|string',
+            'Descripcion' => 'required|string'
+        ], [
+            'Nombre_Categoria.required' => 'El campo de la categoría no debe estar vacío.',
+            'Descripcion.required' => 'La descripción no debe estar vacía.'
+        ]);
         //Se obtiene el nombre de la categoría y la descripción del formulario en la vista
         $categoria = $request->only(['Nombre_Categoria', 'Descripcion']);
-        //Si el campo de la categoría está vacío, se redirecciona a la vista de nueva-categoria
-        if (empty($categoria['Nombre_Categoria'])) {
-            return redirect()->route('inventario.categoria');
-        }
         //Se crea una nueva categoría en la base de datos
         categorias::create($categoria);
         //Se redirecciona a la vista de nuevo-producto
-        return redirect()->route('nuevo-producto');
+        return redirect()->route('nuevo-producto')->with('success', 'Categoría creada correctamente.');
     }
 
 }

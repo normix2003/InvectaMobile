@@ -94,7 +94,7 @@
                 </table>
             </div>
             <span class="btn-container-regresar">
-                <a class="btn-regresar" href="{{route('home')}}">
+                <a class="btn-regresar" href="{{route('usuarios')}}">
                     Regresar
                 </a>
             </span>

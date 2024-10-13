@@ -35,6 +35,20 @@
             <div class="header-divider"></div>
             <h1 class="header-title">Nuevo Marca</h1>
         </div>
+        @if ($errors->any())
+            <div class="alert alert-danger" id="alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+        @if (session('success'))
+            <div class="alert alert-success" id="alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
     </header>
     <main>
         <form action="{{route('marca.store')}}" method="post">
@@ -43,7 +57,7 @@
                 <h1 class="title">Ingrese el nombre de la nueva marca</h1>
                 <div class="nuevo-rol-input">
                     @csrf
-                    <input type="text" name="Nombre_Marca" placeholder="Marca">
+                    <input type="text" name="Nombre_Marca" placeholder="Marca" Required>
                 </div>
 
 

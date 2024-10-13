@@ -44,6 +44,11 @@
                 </ul>
             </div>
         @endif
+        @if (session('success'))
+            <div class="alert alert-success" id="alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
     </header>
     <main>
         <form action="{{route('nuevo-producto.store')}}" method="post">
