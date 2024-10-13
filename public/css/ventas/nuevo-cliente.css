@@ -22,8 +22,9 @@ input::placeholder {
 .nuevo-rol-input input,
 select {
     margin-bottom: 20px; /* Ajusta el espacio entre los inputs */
+
     padding: 8px;
-    padding-left: 170px;
+    padding-left: 20px;
     background: #d9d9d9;
     border-radius: 4px;
     border: none;

@@ -12,7 +12,7 @@
 }
 .btn-container-rol {
     position: absolute;
-    right: 145px;
+    left: 300px;
 }
 .btn-container-regresar {
     position: absolute;
@@ -74,4 +74,19 @@
 }
 .btn-container-regresar :hover {
     background: #90ccf7;
+}
+.btn-detalle {
+    background: #0784dd;
+    border: none;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 8px;
+    text-decoration: none;
+}
+.btn-eliminar {
+    background: #a71805;
+    border: none;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 8px;
 }

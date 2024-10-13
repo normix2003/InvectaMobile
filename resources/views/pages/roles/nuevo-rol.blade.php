@@ -67,11 +67,20 @@
         </div>
     </header>
     <main>
+        @if ($errors->any())
+            <div class="alert alert-danger" id="alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <form action="{{route('roles.store')}}" method="post">
             <div class="nuevo-rol-container">
                 <div class="nuevo-rol-input">
                     @csrf
-                    <input type="text" name="Nombre" placeholder="Nombre del rol">
+                    <input type="text" name="Nombre" placeholder="Nombre del rol" Required>
                     <div class="permisos-section">
                         <p>Seleccionar Permisos</p>
                         <span class="permisos-container">

@@ -34,6 +34,15 @@
             <div class="header-divider"></div>
             <h1 class="header-title">Crear Administrador</h1>
         </div>
+        @if ($errors->any())
+            <div class="alert alert-danger" id="alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
     </header>
     <main>
         <form action="{{route('login.crearAdmin')}}" method="post">

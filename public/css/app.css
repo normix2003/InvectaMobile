@@ -58,3 +58,17 @@
     font-size: 1rem; /* Tamaño del texto */
     font-weight: bold;
 }
+#alert-danger {
+    position: absolute;
+    left: 70%;
+    top: 14%;
+}
+#alert-success {
+    position: absolute;
+    width: 300px;
+    left: 69%;
+    top: 14%;
+}
+.text-center {
+    font-weight: 600;
+}

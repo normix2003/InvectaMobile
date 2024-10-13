@@ -37,10 +37,8 @@
             <h1 class="header-title">Nuevo Usuario</h1>
 
         </div>
-    </header>
-    <main>
         @if ($errors->any())
-            <div class="alert alert-danger">
+            <div class="alert alert-danger" id="alert-danger">
                 <ul>
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
@@ -48,6 +46,9 @@
                 </ul>
             </div>
         @endif
+    </header>
+    <main>
+
         <form action="{{route('usuario.store')}}" method="post">
             <div class="nuevo-usuario-container">
                 <div class="nuevo-usuario-input">

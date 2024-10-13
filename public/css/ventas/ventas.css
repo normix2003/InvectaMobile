@@ -58,7 +58,7 @@ main {
 .btn-buscar {
     display: inline-block;
     padding: 8px 20px;
-    background: #003459;
+    background: #1984cf;
     color: white;
     font-weight: bold;
     text-decoration: none;
@@ -125,12 +125,12 @@ main {
 
 .ver-ventas-container {
     position: absolute;
-    right: 160px;
+    left: 690px;
 }
 .btn-ver-ventas {
     display: inline-block;
-    padding: 10px 20px;
-    background: #003459;
+    padding: 8px 15px;
+    background: #2fc452;
     color: white;
     font-weight: bold;
     text-decoration: none;
@@ -144,5 +144,40 @@ main {
     transform: scale(0.95);
 }
 .ver-ventas-container :hover {
-    background: #90ccf7;
+    background: #03f717e3;
+}
+
+#mensaje-vacio {
+    font-weight: bold;
+}
+
+.btn-add {
+    background: #1984cf;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 8px;
+    border: none;
+    transition: transform 0.1s ease, background-color 0.3s ease;
+    cursor: pointer;
+    padding: 3px 10px;
+}
+
+.btn-add:active {
+    transform: scale(0.95);
+}
+
+.btn-delete {
+    background: #a71805;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 8px;
+    border: none;
+    transition: transform 0.1s ease, background-color 0.3s ease;
+    cursor: pointer;
+    padding: 3px 10px;
+}
+.btn-delete:active {
+    transform: scale(0.95);
 }

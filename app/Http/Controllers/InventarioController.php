@@ -76,7 +76,8 @@ class InventarioController
         if ($idMarca && $idCategoria) {
             $producto['ID_Marca'] = $idMarca;
             $producto['ID_Categoria'] = $idCategoria;
-
+            $producto['Precio'] = (float) str_replace(',', '', $producto['Precio']);
+            $producto['Eliminar'] = 0;
             producto::create($producto);
             return redirect()->route('inventario')->with('success', 'Producto creado exitosamente.');
         }

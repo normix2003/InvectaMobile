@@ -34,6 +34,13 @@ class RolesController
     //Funcion para guardar un rol
     public function store(Request $request)
     {
+        $request->validate([
+            'Nombre' => 'required|string',
+            'opcion' => 'required|array'
+        ], [
+            'Nombre.required' => 'El campo de nombre es requerido.',
+            'opcion.required' => 'Se debe seleccionar un permiso para el nuevo rol.'
+        ]);
         //Obtener el nombre del rol y los permisos
         $nombreRol = $request->input('Nombre');
         $permisos = $request->input('opcion', []);
@@ -50,8 +57,9 @@ class RolesController
                 detallesroles::create(['ID_Roles' => $rol->idRoles, 'ID_Permisos' => $permiso->idPermisos, 'Eliminar' => 0]);
             }
             //Redireccionar a la vista de roles
-            return redirect()->route('roles.roles');
+            return redirect()->route('roles.roles')->with('success', 'Rol creado exitosamente.');
         }
+
         //Obtener los id de los permisos seleccionados
         $idpermisos = permisos::whereIn('Nombre', $permisos)->get()->pluck('idPermisos')->toArray();
         //Asignar los permisos seleccionados al rol
@@ -59,7 +67,7 @@ class RolesController
             detallesroles::create(['ID_Roles' => $rol->idRoles, 'ID_Permisos' => $idPermiso, 'Eliminar' => 0]);
         }
         //Redireccionar a la vista de roles
-        return redirect()->route('roles.roles');
+        return redirect()->route('roles.roles')->with('success', 'Rol creado exitosamente.');
     }
 
     //Funcion para eliminar un rol

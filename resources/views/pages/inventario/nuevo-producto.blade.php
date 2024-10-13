@@ -35,10 +35,8 @@
             <div class="header-divider"></div>
             <h1 class="header-title">Nuevo Producto</h1>
         </div>
-    </header>
-    <main>
         @if ($errors->any())
-            <div class="alert alert-danger">
+            <div class="alert alert-danger" id="alert-danger">
                 <ul>
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
@@ -46,7 +44,8 @@
                 </ul>
             </div>
         @endif
-
+    </header>
+    <main>
         <form action="{{route('nuevo-producto.store')}}" method="post">
             <div class="nuevo-producto-container">
 

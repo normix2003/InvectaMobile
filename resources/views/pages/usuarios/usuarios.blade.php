@@ -41,13 +41,13 @@
                 <button id="btncerrar" type="submit" class="btn">Cerrar session</button>
             </form>
         </div>
-    </header>
-    <main>
         @if (session('success'))
-            <div class="alert alert-success">
+            <div class="alert alert-success" id="alert-success">
                 {{ session('success') }}
             </div>
         @endif
+    </header>
+    <main>
         <div class="usuario-container ">
             <span class="btn-container-nuevo">
                 <a class="btn-nuevo-usuario" href="{{route('nuevo-usuario')}}">
@@ -64,30 +64,30 @@
                 <table class="table table-striped  ">
                     <thead class="table-dark">
                         <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">NOMBRE</th>
-                            <th scope="col">ROL</th>
-                            <th scope="col"></th>
-                            <th scope="col"></th>
+                            <th class="text-center" scope="col">ID</th>
+                            <th class="text-center" scope="col">NOMBRE</th>
+                            <th class="text-center" scope="col">ROL</th>
+                            <th class="text-center" scope="col"></th>
+                            <th class="text-center" scope="col"></th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($empleados as $empleado)
                             <tr class=" table-rows">
-                                <td scope="row">{{$empleado->idEmpleados}}</td>
-                                <td>{{$empleado->usuario->Nombre_Usuario}}</td>
-                                <td>{{$empleado->usuario->rol->Nombre}}</td>
-                                <td>
+                                <td class="px-3 text-center" scope="row">{{$empleado->idEmpleados}}</td>
+                                <td class="px-3 text-center">{{$empleado->usuario->Nombre_Usuario}}</td>
+                                <td class="px-3 text-center">{{$empleado->usuario->rol->Nombre}}</td>
+                                <td class="px-3 text-center">
                                     <form action="{{ route('usuario.destroy', $empleado->idEmpleados) }}" method="post">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="">
+                                        <button type="submit" class="btn-eliminar">
                                             Eliminar
                                         </button>
                                     </form>
 
                                 </td>
-                                <td>
+                                <td class="px-3 text-center">
                                     <a class="btn-detalle"
                                         href="{{route('detalle-usuario', ['idEmpleados' => $empleado->idEmpleados])}}">
                                         Detalle

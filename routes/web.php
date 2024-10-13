@@ -53,12 +53,9 @@ Route::middleware(['auth', 'checkPermisos:Ver,Crear'])->group(function () {
     Route::get('/nuevo-cliente', [ClienteController::class, 'index'])->name('nuevo-cliente');
     Route::post('/nuevo-cliente', [ClienteController::class, 'store'])->name('cliente.store');
 
-    Route::post('/finalizar-venta', [VentasController::class, 'finalizarVenta'])->name('finalizar-venta');
+    Route::get('/finalizar-venta', [VentasController::class, 'finalizarVenta'])->name('finalizar-venta');
 
     Route::get('/factura-pdf', [VentasController::class, 'facturaPdf'])->name('factura-pdf');
-    Route::get('/factura-prueba', function () {
-        return view('pages.ventas.reporte');
-    })->name('factura-prueba');
 });
 
 Route::middleware(['auth', 'checkPermisos:Crear,Modificar'])->group(function () {

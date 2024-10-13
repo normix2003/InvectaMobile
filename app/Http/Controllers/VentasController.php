@@ -24,17 +24,26 @@ class VentasController
     //Funcion para buscar un producto
     public function buscarProducto(Request $request)
     {
+        $request->validate([
+            'Data' => 'required|string'
+        ], [
+            'Data.required' => 'El campo de busqueda es requerido.'
+        ]);
+
         //Obtener el dato a buscar (Nombre del producto, Nombre de la marca o Nombre de la categoria)
         $data = $request->input('Data');
 
         //Buscar un producto por el nombre del producto, nombre de la marca o nombre de la categoria
         $producto = producto::with(['marca', 'categoria'])
-            ->where('Nombre_Producto', 'like', '%' . $data . '%')
-            ->orWhereHas('marca', function ($q) use ($data) {
-                $q->where('Nombre_Marca', 'like', '%' . $data . '%');
-            })
-            ->orWhereHas('categoria', function ($q) use ($data) {
-                $q->where('Nombre_Categoria', 'like', '%' . $data . '%');
+            ->where('Eliminar', 0)
+            ->where(function ($query) use ($data) {
+                $query->where('Nombre_Producto', 'like', '%' . $data . '%')
+                    ->orWhereHas('marca', function ($q) use ($data) {
+                        $q->where('Nombre_Marca', 'like', '%' . $data . '%');
+                    })
+                    ->orWhereHas('categoria', function ($q) use ($data) {
+                        $q->where('Nombre_Categoria', 'like', '%' . $data . '%');
+                    });
             })
             ->get();
 
@@ -67,7 +76,7 @@ class VentasController
             'ID_Cliente' => $cliente['idClientes'],
             'ID_Empleado' => $idEmpleado,
             'Fecha' => date('Y-m-d'),
-            'Total' => $totalVenta
+            'Total' => (float) str_replace(',', '', $totalVenta)
         ]);
 
         //Crear los detalles de la venta
@@ -77,22 +86,20 @@ class VentasController
                 'ID_Venta' => $ventas->idVentas,
                 'ID_Productos' => $producto['idProductos'],
                 'Cantidad' => $producto['Cantidad'],
-                'Precio_Unitario' => $producto['Precio'],
-                'Subtotal' => $producto['Total']
+                'Precio_Unitario' => (float) str_replace('.', '', $producto['Precio']),
+                'Subtotal' => (float) str_replace(',', '', $producto['Total'])
             ]);
             //Actualizar la cantidad de productos en la base de datos
             $productoUpdate = producto::find($producto['idProductos']);
             $productoUpdate->Cantidad = $productoUpdate->Cantidad - $producto['Cantidad'];
             $productoUpdate->save();
         }
-        //Mensaje de exito
-        //Redireccionar a la vista de ventas
         return redirect()->route('factura-pdf');
-
     }
 
     public function facturaPdf(Request $request)
     {
+
         $cliente = session('cliente', []);
         $productos = session('productosTotales', []);
         $totalVenta = session('total', 0);
@@ -101,10 +108,10 @@ class VentasController
         $empleado = empleados::where('ID_Usuarios', $usuario->idUsuarios)->first();
         //dd($cliente, $productos, $totalVenta);
         $pdf = PDF::loadView('pages.ventas.reporte', ['cliente' => $cliente, 'productos' => $productos, 'total' => $totalVenta, 'fecha' => $fecha, 'empleado' => $empleado]);
-        //session()->flash('status', 'Venta realizada exitosamente.');
-        //session()->forget('productosTotales');
-        //session()->forget('total');
-        //session()->forget('cliente');
+        session()->flash('status', 'Venta realizada exitosamente.');
+        session()->forget('productosTotales');
+        session()->forget('total');
+        session()->forget('cliente');
         return $pdf->stream('Factura' . '-' . $cliente['Nombres'] . '-' . $fecha . '' . '.pdf');
     }
 

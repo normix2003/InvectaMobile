@@ -35,6 +35,15 @@
             <div class="header-divider"></div>
             <h1 class="header-title">Nuevo Cliente</h1>
         </div>
+        @if ($errors->any())
+            <div class="alert alert-danger" id="alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
     </header>
     <main>
         <form action="{{route('cliente.store')}}" method="post">
@@ -43,11 +52,11 @@
                 <h1 class="title">Ingrese la informacion del nuevo cliente</h1>
                 <div class="nuevo-rol-input">
                     @csrf
-                    <input type="text" name="Nombres" placeholder="Nombres">
-                    <input type="text" name="Apellidos" placeholder="Apellidos">
-                    <input type="email" name="Email" placeholder="Email">
-                    <input type="text" name="Telefono" placeholder="Telefono">
-                    <input type="text" name="DUI" placeholder="DUI">
+                    <input type="text" name="Nombres" placeholder="Nombres" Required>
+                    <input type="text" name="Apellidos" placeholder="Apellidos" Required>
+                    <input type="email" name="Email" placeholder="Email" Required>
+                    <input type="tel" name="Telefono" placeholder="Telefono" Required>
+                    <input type="text" name="DUI" placeholder="DUI" Required>
                 </div>
 
 

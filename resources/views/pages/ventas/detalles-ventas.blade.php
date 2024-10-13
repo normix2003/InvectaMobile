@@ -14,9 +14,6 @@
     <link rel="stylesheet" href="{{ asset('css/ventas/detalles-ventas.css') }}" />
 
 </head>
-<script>
-
-</script>
 
 <body>
     <header>
@@ -84,7 +81,7 @@
                 </table>
             </div>
             <span class="btn-container-regresar">
-                <a class="btn-regresar" href="{{route('home')}}">
+                <a class="btn-regresar" href="{{route('ventas')}}">
                     Regresar
                 </a>
             </span>

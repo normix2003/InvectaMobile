@@ -35,6 +35,22 @@ class ClienteController
     //Función para almacenar un nuevo cliente en la base de datos
     public function store(Request $request)
     {
+        $request->validate([
+            'Nombres' => 'required|string',
+            'Apellidos' => 'required|string',
+            'DUI' => 'required|string',
+            'Telefono' => 'required|numeric',
+            'Email' => 'required|email'
+        ], [
+            'Nombres.required' => 'El campo de nombres es requerido.',
+            'Apellidos.required' => 'El campo de apellidos es requerido.',
+            'DUI.required' => 'El campo de DUI es requerido.',
+            'Telefono.required' => 'El campo del teléfono no debe estar vacío.',
+            'Telefono.numeric' => 'El teléfono debe ser un número.',
+            'Email.required' => 'El campo de correo electrónico es requerido.',
+            'Email.email' => 'El correo electrónico no tiene un formato válido.'
+        ]);
+
         //Se obtienen los datos del cliente del formulario en la vista
         $clienteData = $request->only('Nombres', 'Apellidos', 'DUI', 'Telefono', 'Email');
         //Se crea un nuevo cliente en la base de datos

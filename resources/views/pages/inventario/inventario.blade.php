@@ -40,13 +40,14 @@
                 <button id="btncerrar" type="submit" class="btn">Cerrar session</button>
             </form>
         </div>
-    </header>
-    <main>
         @if (session('success'))
-            <div class="alert alert-success">
+            <div class="alert alert-success" id="alert-success">
                 {{ session('success') }}
             </div>
         @endif
+    </header>
+    <main>
+
         <div class="inventario-container ">
             <span class="btn-container-nuevo">
                 <a class="btn-nuevo-producto" href="{{route('nuevo-producto')}}">
@@ -58,28 +59,27 @@
                 <table class="table table-striped  ">
                     <thead class="table-dark">
                         <tr>
-                            <th scope="col"></th>
-                            <th scope="col">CODIGO</th>
-                            <th scope="col">NOMBRE</th>
-                            <th scope="col">MARCA</th>
-                            <th scope="col">CATEGORIA</th>
-                            <th scope="col">STOCK ACTUAL</th>
-                            <th scope="col">PRECIO</th>
-                            <th scope="col"></th>
-                            <th scope="col"></th>
+                            <th class="text-center" scope="col">CODIGO</th>
+                            <th class="text-center" scope="col">NOMBRE</th>
+                            <th class="text-center" scope="col">MARCA</th>
+                            <th class="text-center" scope="col">CATEGORIA</th>
+                            <th class="text-center" scope="col">STOCK ACTUAL</th>
+                            <th class="text-center" scope="col">PRECIO</th>
+                            <th class="text-center" scope="col"></th>
+                            <th class="text-center" scope="col"></th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($inventario as $producto)
                             <tr class="table-rows">
-                                <td></td>
-                                <td scope="row">{{$producto->idProductos}}</td>
-                                <td>{{$producto->Nombre_Producto}}</td>
-                                <td>{{$producto->marca->Nombre_Marca}}</td>
-                                <td>{{$producto->categoria->Nombre_Categoria}}</td>
-                                <td>{{$producto->Cantidad}}</td>
-                                <td>{{$producto->Precio}}</td>
-                                <td>
+
+                                <td class="px-3 text-center" scope="row">{{$producto->idProductos}}</td>
+                                <td class="px-3 text-center">{{$producto->Nombre_Producto}}</td>
+                                <td class="px-3 text-center">{{$producto->marca->Nombre_Marca}}</td>
+                                <td class="px-3 text-center">{{$producto->categoria->Nombre_Categoria}}</td>
+                                <td class="px-3 text-center">{{$producto->Cantidad}}</td>
+                                <td class="px-3 text-center">{{$producto->Precio}}</td>
+                                <td class="px-3 text-center">
                                     <form action="{{route('stock', ['idProductos' => $producto->idProductos])}}"
                                         method="get">
                                         @csrf
@@ -88,11 +88,11 @@
                                         </button>
                                     </form>
                                 </td>
-                                <td>
+                                <td class="px-3 text-center">
                                     <form action="{{route('inventario.destroy', $producto->idProductos)}}" method="post">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="">
+                                        <button type="submit" class="btn-eliminar">
                                             Eliminar
                                         </button>
                                     </form>

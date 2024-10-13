@@ -37,13 +37,13 @@
             <div class="header-divider"></div>
             <h1 class="header-title">Roles</h1>
         </div>
-    </header>
-    <main>
         @if (session('success'))
-            <div class="alert alert-success">
+            <div class="alert alert-success" id="alert-success">
                 {{ session('success') }}
             </div>
         @endif
+    </header>
+    <main>
         <div class="roles-container ">
             <span class="btn-container-nuevo">
                 <a class="btn-nuevo-rol" href="{{route('roles.nuevo-rol')}}">
@@ -55,32 +55,30 @@
                 <table class="table table-striped  ">
                     <thead class="table-dark">
                         <tr>
-                            <th></th>
-                            <th scope="col">ID</th>
-                            <th scope="col"></th>
-                            <th scope="col">NOMBRE</th>
-                            <th scope="col"></th>
-                            <th scope="col"></th>
+                            <th class="px-3 text-center" scope="col">ID</th>
+                            <th class="px-3 text-center" scope="col"></th>
+                            <th class="px-3 text-center" scope="col">NOMBRE</th>
+                            <th class="px-3 text-center" scope="col"></th>
+                            <th class="px-3 text-center" scope="col"></th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($roles as $rol)
                             <tr class=" table-rows">
-                                <td></td>
-                                <td scope="row">{{$rol->idRoles}}</td>
-                                <td></td>
-                                <td>{{$rol->Nombre}}</td>
-                                <td>
+                                <td class="px-3 text-center" scope="row">{{$rol->idRoles}}</td>
+                                <td class="px-3 text-center"></td>
+                                <td class="px-3 text-center">{{$rol->Nombre}}</td>
+                                <td class="px-3 text-center">
                                     <form action="{{ route('roles.destroy', $rol->idRoles) }}" method="post">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="">
+                                        <button type="submit" class="btn-eliminar">
                                             Eliminar
                                         </button>
                                     </form>
 
                                 </td>
-                                <td>
+                                <td class="px-3 text-center">
                                     <a class="btn-detalle"
                                         href="{{route('roles.detalles-roles', ['idRoles' => $rol->idRoles])}}">
                                         Detalle

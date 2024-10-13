@@ -11,105 +11,6 @@
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
     <link rel="stylesheet" href="{{ asset('css/app.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/ventas/ventas.css') }}" />
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            document.querySelectorAll('.btn-add').forEach(button => {
-                button.addEventListener('click', function () {
-
-                    const productId = this.getAttribute('data-id');
-                    const row = this.closest('tr');
-                    const nombreProducto = row.querySelector('td:nth-child(1)').textContent;
-                    const precioProducto = row.querySelector('td:nth-child(6)').textContent;
-
-                    let producto = {
-                        id: productId,
-                        nombre: nombreProducto,
-                        precio: precioProducto,
-                        cantidad: 1
-                    }
-
-                    let productos = JSON.parse(localStorage.getItem('productos')) || [];
-                    productos.push(producto);
-                    localStorage.setItem('productos', JSON.stringify(productos));
-                    location.reload();
-                });
-            });
-        });
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const lista = document.getElementById('productos-lista');
-            let productos = JSON.parse(localStorage.getItem('productos')) || [];
-
-            if (productos.length === 0) {
-                lista.innerHTML = `
-                <tr>
-                    <td colspan="4" class="text-center">No hay productos en la lista</td>
-                </tr>
-                `;
-            }
-            productos.forEach((producto, index) => {
-                const row = document.createElement('tr');
-                row.innerHTML = ` 
-                <tr class="table-rows">
-                <td class="px-3 text-center">${producto.nombre}</td>
-                <td class="px-3 text-center"><input type="number" name="Cantidad" id="cantidad" data-index=${index} class="cantidad-input" value="${producto.cantidad}" min="1"></td>
-                <td class="px-3 text-center">${producto.precio}</td>
-                <td class="px-3 text-center"><button type="button" class="btn-delete" data-index=${index}">x</button></td>
-                </tr>
-            `;
-                lista.appendChild(row);
-            });
-        });
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            document.querySelectorAll('.btn-delete').forEach(button => {
-                button.addEventListener('click', function () {
-
-                    const index = this.getAttribute('data-index');
-                    let productos = JSON.parse(localStorage.getItem('productos')) || [];
-                    productos.splice(index, 1);
-                    localStorage.setItem('productos', JSON.stringify(productos));
-                    location.reload();
-                });
-            });
-        });
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const form = document.getElementById('finalizar-form');
-            const productosData = document.getElementById('productos-data');
-            const cantidad = document.getElementById('cantidad');
-            form.addEventListener('submit', function () {
-                let productos = JSON.parse(localStorage.getItem('productos')) || [];
-                productosData.value = JSON.stringify(productos);
-                //localStorage.removeItem('productos');
-            });
-        });
-
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            document.querySelectorAll('.cantidad-input').forEach(cantidad => {
-                cantidad.addEventListener('change', function () {
-                    const index = this.getAttribute('data-index');
-
-                    // Obtener la lista de productos del localStorage
-                    let productos = JSON.parse(localStorage.getItem('productos')) || [];
-
-                    // Actualizar solo la cantidad del producto en el índice correcto
-                    productos[index].cantidad = this.value;
-
-                    // Guardar la lista actualizada en el localStorage
-                    localStorage.setItem('productos', JSON.stringify(productos));
-
-                });
-            });
-        });
-
-    </script>
-
 </head>
 
 <body>
@@ -138,13 +39,23 @@
                 <button id="btncerrar" type="submit" class="btn">Cerrar session</button>
             </form>
         </div>
-    </header>
-    <main>
         @if (session('status'))
-            <div class="alert alert-success">
+            <div class="alert alert-success" id="alert-success">
                 {{ session('status') }}
             </div>
         @endif
+        @if ($errors->any())
+            <div class="alert alert-danger" id="alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+    </header>
+    <main>
+
         <div class="inventario-container ">
             @if (Auth::user() && Auth::user()->rol->Nombre == 'Administrador')
                 <span class="ver-ventas-container">
@@ -155,7 +66,7 @@
                 <div class="buscar-container">
                     @csrf
                     <input type="text" name="Data" value="{{ request('Data') }}" class=" input-buscar"
-                        placeholder="Buscar producto">
+                        placeholder="Buscar producto" Required>
                     <button type="submit" class="btn-buscar">
                         Buscar
                     </button>
@@ -180,7 +91,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @if (isset($productos) && !empty($productos))
+                            @if (!empty($productos))
 
                                 @foreach ($productos as $producto)
                                     <tr class="table-rows">
@@ -201,7 +112,9 @@
                                 @endforeach
                             @else
                                 <tr>
-                                    <td class="text-center" colspan="7">No hay productos encontrados.</td>
+                                    <td colspan="7" class="px-3 text-center" scope="row" id="mensaje-vacio">No hay productos
+                                        encontrados.
+                                    </td>
                                 </tr>
                             @endif
 
@@ -232,7 +145,7 @@
                 @csrf
                 <input type="hidden" name="productos" id="productos-data" value="">
                 <span class="btn-container-finalizar">
-                    <button class="btn-finalizar" type="submit">
+                    <button id="btn-fin" class="btn-finalizar" type="submit" style="display: none">
                         Siguiente
                     </button />
                 </span>
@@ -253,6 +166,7 @@
             </div>
         </div>
     </footer>
+    <script src="{{ asset('js/ventas.js') }}?v={{ time() }}"></script>
     <!-- Bootstrap JavaScript Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"

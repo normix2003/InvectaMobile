@@ -67,7 +67,7 @@ form {
 .btn-buscar {
     display: inline-block;
     padding: 8px 20px;
-    background: #003459;
+    background: #1984cf;
     color: white;
     font-weight: bold;
     text-decoration: none;
@@ -125,4 +125,17 @@ form {
 }
 .btn-container-regresar :hover {
     background: #90ccf7;
+}
+
+.cliente-encontrado {
+    color: #1583d1;
+    font-size: large;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+.cliente-noencontrado {
+    color: #a71805;
+    font-size: large;
+    margin-bottom: 20px;
+    font-weight: bold;
 }

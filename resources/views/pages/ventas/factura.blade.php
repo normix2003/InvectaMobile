@@ -47,15 +47,21 @@
             <div class="header-divider"></div>
             <h1 class="header-title">Factura</h1>
         </div>
+        @if (session('success'))
+            <div class="alert alert-success" id="alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
     </header>
     <main>
+
         <div class="inventario-container ">
             <div class="info-container">
                 <div class="buscar-container">
                     <form action="{{route('buscar-cliente')}}" method="GET">
                         @csrf
                         <input type="text" class="input-buscar" name="duiCliente" value="{{ request('duiCliente') }}"
-                            placeholder="DUI del cliente">
+                            placeholder="DUI del cliente" Required>
                         <button class="btn-buscar" type="submit">
                             Buscar
                         </button>
@@ -67,10 +73,10 @@
             </div>
             <div class="cliente">
                 @if ($cliente)
-                    <p>Cliente: {{ $cliente->Nombres . ' ' . $cliente->Apellidos }}</p>
+                    <p class="cliente-encontrado">Cliente: {{ $cliente->Nombres . ' ' . $cliente->Apellidos }}</p>
 
                 @else
-                    <p>No se ha encontrado el cliente</p>
+                    <p class="cliente-noencontrado">No se ha encontrado el cliente</p>
                 @endif
             </div>
 
@@ -113,7 +119,7 @@
                 </a>
             </span>
             <span class="info-client-container">
-                <form id="fin-venta" action="{{route('factura-pdf')}}" method="GET" target="_blank">
+                <form id="fin-venta" action="{{route('finalizar-venta')}}" method="GET" target="_blank">
 
                     <button id="finalizar" class="btn-finalizar" type="submit">
                         Finalizar Venta

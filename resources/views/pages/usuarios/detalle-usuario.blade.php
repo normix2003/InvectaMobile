@@ -39,7 +39,7 @@
     <main>
         <form action="">
             <div class="detalle-usuario-container">
-                <h1 class="title">A continuacion puede ver la informacion del usuario seleccionado</h1>
+                <h2 class="title">A continuacion puede ver la informacion del usuario seleccionado</h2>
                 <div class="detalle-usuario-input">
                     <p><strong>Apellido:</strong> {{ $empleado->Apellidos }}</p>
                     <p><strong>Nombres:</strong> {{ $empleado->Nombre_Empleado}}</p>
