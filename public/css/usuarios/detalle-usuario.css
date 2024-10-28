@@ -122,6 +122,13 @@ select option:checked {
     transition: transform 0.1s ease, background-color 0.3s ease;
     cursor: pointer;
 }
+.btn-actualizar:disabled {
+    background-color: #ccc; /* Cambia el color de fondo */
+    color: #666; /* Cambia el color del texto */
+    cursor: not-allowed; /* Cambia el cursor a "no permitido" */
+    opacity: 0.7; /* Reduce la opacidad para dar un efecto desactivado */
+}
+
 .btn-actualizar:active {
     transform: scale(0.95);
 }

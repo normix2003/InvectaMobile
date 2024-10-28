@@ -18,13 +18,14 @@ Route::middleware(['auth', 'checkAdministrador'])->group(function () {
 
     Route::get('/usuarios', [UsuariosController::class, 'index'])->name('usuarios');
     Route::delete('/usuarios/{idEmpleados}', [UsuariosController::class, 'destroy'])->name('usuario.destroy');
-    Route::post('/usuarios/{idEmpleados}', [UsuariosController::class, 'update'])->name('usuario.update');
+    Route::put('/usuarios/{idEmpleados}', [UsuariosController::class, 'update'])->name('usuario.update');
     Route::get('/detalle-usuario/{idEmpleados}', [UsuariosController::class, 'detalleUsuario'])->name('detalle-usuario');
 
     Route::get('/roles', [RolesController::class, 'index'])->name('roles.roles');
     Route::delete('/roles/{idRoles}', [RolesController::class, 'destroy'])->name('roles.destroy');
     Route::get('/nuevo-rol', [RolesController::class, 'nuevoRol'])->name('roles.nuevo-rol');
     Route::get('/detalle-roles/{idRoles}', [RolesController::class, 'detallesRoles'])->name('roles.detalles-roles');
+    Route::put('/detalle-roles/{idRoles}', [RolesController::class, 'update'])->name('roles.update');
     Route::post('/nuevo-rol', [RolesController::class, 'store'])->name('roles.store');
 
     Route::delete('/inventario/{idProductos}', [InventarioController::class, 'destroy'])->name('inventario.destroy');

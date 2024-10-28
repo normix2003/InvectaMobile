@@ -17,7 +17,7 @@
 
             function habilitarInputs() {
                 // Selecciona todos los inputs dentro del formulario
-                const inputs = document.querySelectorAll('#userForm input, #userForm select');
+                const inputs = document.querySelectorAll('#userForm input, #userForm select, #userForm button');
                 inputs.forEach(input => {
                     if (input.disabled) {
                         input.removeAttribute('disabled');
@@ -60,19 +60,31 @@
         </div>
     </header>
     <main>
+        @if ($errors->any())
+            <div class="alert alert-danger" id="alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <form action="{{route('usuario.update', $empleado->idEmpleados)}}" id="userForm" method="post">
             <div class="detalle-usuario-container">
                 <h2 class="title">A continuacion puede ver la informacion del usuario seleccionado</h2>
                 <div class="detalle-usuario-input">
                     @csrf
-                    <input placeholder="Apellido" value="{{ $empleado->Apellidos }}" name="Apellidos" disabled></input>
-                    <input placeholder="Nombre" value="{{ $empleado->Nombre_Empleado}}" name="Nombre_Empleado"
-                        disabled></input>
+                    @method('PUT')
+                    <input placeholder="Apellido" value="{{ $empleado->Apellidos }}" name="Apellidos" disabled
+                        Required></input>
+                    <input placeholder="Nombre" value="{{ $empleado->Nombre_Empleado}}" name="Nombre_Empleado" disabled
+                        Required></input>
                     <input placeholder="Nombre usuario" value="{{ $empleado->usuario->Nombre_Usuario }}"
-                        name="Nombre_Usuario" disabled></input>
-                    <input placeholder="Telefono" value="{{ $empleado->Telefono }}" name="Telefono" disabled></input>
-                    <input placeholder="DUI" value=" {{ $empleado->DUI }}" name="DUI" disabled></input>
-                    <input placeholder="Email" value="{{ $empleado->Email }}" name="Email" disabled></input>
+                        name="Nombre_Usuario" disabled Required></input>
+                    <input placeholder="Telefono" value="{{ $empleado->Telefono }}" name="Telefono" disabled
+                        Required></input>
+                    <input placeholder="DUI" value=" {{ $empleado->DUI }}" name="DUI" disabled Required></input>
+                    <input placeholder="Email" value="{{ $empleado->Email }}" name="Email" disabled Required></input>
                     <select id="rol" name="Nombre" Required disabled>
                         <option value="" disabled>Seleccionar Rol</option>
                         @foreach ($roles as $rol)
@@ -108,7 +120,7 @@
                     </g>
                 </svg>
             </button>
-            <button class="btn-actualizar" type="submit">Actualizar</button>
+            <button class="btn-actualizar" type="submit" disabled>Actualizar</button>
         </form>
         <span class="btn-container-regresar">
             <a class="btn-regresar" href="{{route('usuarios')}}">

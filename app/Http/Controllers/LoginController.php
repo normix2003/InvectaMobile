@@ -123,7 +123,7 @@ class LoginController
         $roles = 'Administrador';
 
         //Crear el rol en la base de datos si no existe
-        $rol = roles::firstOrCreate(['Nombre' => $roles]);
+        $rol = roles::firstOrCreate(['Nombre' => $roles, ['Eliminar' => 0]]);
         //Si el rol fue creado en este momento, asignarle los permisos
         if ($rol->wasRecentlyCreated) {
             // Asignar permisos al rol
@@ -144,7 +144,8 @@ class LoginController
             //Crear los detalles de los roles con los permisos asignados al rol de administrador si no existen
             detallesroles::firstOrCreate([
                 'ID_Roles' => $roles->idRoles,
-                'ID_Permisos' => $permiso->idPermisos
+                'ID_Permisos' => $permiso->idPermisos,
+                'Eliminar' => 0
             ]);
         }
     }

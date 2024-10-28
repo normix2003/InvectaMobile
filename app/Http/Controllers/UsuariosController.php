@@ -34,7 +34,12 @@ class UsuariosController
     public function detalleUsuario($idEmpleados)
     {
         // Obtener un empleado en específico con su usuario y rol
-        $empleado = empleados::with('usuario.rol.detallesroles.permisos')->find($idEmpleados);
+        $empleado = empleados::with([
+            'usuario.rol.detallesroles' => function ($query) {
+                $query->where('Eliminar', 0); // Filtra registros donde Eliminar es 0 en detallesroles
+            },
+            'usuario.rol.detallesroles.permisos' // Incluye los permisos relacionados
+        ])->find($idEmpleados);
         $roles = roles::all()->where('Eliminar', 0);
         // Retornar la vista de detalle-usuario con los datos del empleado
         return view('pages.usuarios.detalle-usuario', ['empleado' => $empleado, 'roles' => $roles]);
@@ -101,10 +106,28 @@ class UsuariosController
 
     public function update($idEmpleados, Request $request)
     {
+        $request->validate([
+            'Nombre_Empleado' => 'required|string',
+            'Apellidos' => 'required|string',
+            'Email' => 'required|email',
+            'Telefono' => 'required|numeric',
+            'DUI' => 'required|string',
+            'Nombre_Usuario' => 'required|string',
+            'Nombre' => 'required|string',
+        ], [
+            'Nombre_Empleado.required' => 'El campo del nombre del empleado no debe estar vacío.',
+            'Apellidos.required' => 'El campo de los apellidos del empleado no debe estar vacío.',
+            'Email.required' => 'El campo del correo electrónico no debe estar vacío.',
+            'Email.email' => 'El correo electrónico no tiene un formato válido.',
+            'Telefono.required' => 'El campo del teléfono no debe estar vacío.',
+            'Telefono.numeric' => 'El teléfono debe ser un número.',
+            'DUI.required' => 'El campo del DUI no debe estar vacío.',
+            'Nombre_Usuario.required' => 'El campo del nombre de usuario no debe estar vacío.',
+            'Nombre.required' => 'El campo del rol no debe estar vacío.',
+        ]);
         $empleadoData = $request->only(['Nombre_Empleado', 'Apellidos', 'Email', 'Telefono', 'DUI']);
         $usuarioData = $request->only(['Nombre_Usuario']);
         $nombreRol = $request->input('Nombre');
-        $permisos = $request->input('opcion', []);
         //dd($empleado, $usuario, $nombreRol, $permisos);
         $empleadoUpdate = empleados::find($idEmpleados);
         $usuarioUpdate = usuarios::where('idUsuarios', $empleadoUpdate->ID_Usuarios)->first();

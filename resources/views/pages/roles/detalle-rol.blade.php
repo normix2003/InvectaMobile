@@ -12,6 +12,53 @@
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
     <link rel="stylesheet" href="{{ asset('css/app.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/roles/detalle-rol.css') }}" />
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const todosCheckbox = document.getElementById('todosCheckbox');
+            const checkboxes = document.querySelectorAll('.permiso-checkbox');
+
+            // Función para desmarcar todas las opciones excepto "Todos"
+            todosCheckbox.addEventListener('change', function () {
+                if (todosCheckbox.checked) {
+                    checkboxes.forEach(function (checkbox) {
+                        checkbox.checked = false;
+                        checkbox.disabled = true; // Deshabilita los otros checkboxes
+                    });
+                } else {
+                    checkboxes.forEach(function (checkbox) {
+                        checkbox.disabled = false; // Habilita los otros checkboxes cuando "Todos" se desmarca
+                    });
+                }
+            });
+
+            // Función para desmarcar "Todos" si cualquier otro checkbox es marcado
+            checkboxes.forEach(function (checkbox) {
+                checkbox.addEventListener('change', function () {
+                    if (checkbox.checked) {
+                        todosCheckbox.checked = false;
+                        todosCheckbox.disabled = false; // Habilita "Todos" si otro checkbox es marcado
+                    }
+                });
+            });
+            function habilitarInputs() {
+                // Selecciona todos los inputs dentro del formulario
+                const inputs = document.querySelectorAll('#userForm input, #userForm select , #userForm button');
+                inputs.forEach(input => {
+                    if (input.disabled) {
+                        input.removeAttribute('disabled');
+                        location.reload();
+                    } else {
+                        input.setAttribute('disabled', 'disabled');
+                        location.reload();
+                    }
+                });
+            }
+
+            // Agregar evento al botón de editar
+            const editButton = document.getElementById('editButton');
+            editButton.addEventListener('click', habilitarInputs);
+        });
+    </script>
 </head>
 
 <body>
@@ -37,25 +84,75 @@
         </div>
     </header>
     <main>
-        <form action="">
+        @if ($errors->any())
+            <div class="alert alert-danger" id="alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+        <form id="userForm" action="{{route('roles.update', $idRoles)}}" method="post">
             <div class="detalle-rol-container">
                 <h1 class="title">A continuacion puede ver la informacion del rol seleccionado</h1>
                 <div class="detalle-rol-input">
-
-                    <p><strong>Nombre:</strong> {{ $roles->Nombre}}</p>
-                    <span class="permisos-section">
-                        <p><strong>Permisos:</strong></p>
+                    @csrf
+                    @method('PUT')
+                    <input placeholder="Nombre rol" name="Nombre" value="{{ $roles->Nombre}}" disabled Required></input>
+                    <div class="permisos-section">
+                        <p>Seleccionar Permisos</p>
                         <span class="permisos-container">
-                            <ul>
-                                @foreach ($roles->detallesroles->pluck('permisos.Nombre') as $rol)
-                                    <li>{{ $rol}}</li>
-                                @endforeach
-                            </ul>
+                            @php
+                                $permisosArray = $roles->detallesroles->pluck('permisos.Nombre')->toArray();
+                                //dd($permisosArray);
+                                $permisoCrear = in_array('Crear', $permisosArray);
+                                $permisoModificar = in_array('Modificar', $permisosArray);
+                                $permisoEliminar = in_array('Eliminar', $permisosArray);
+                                $permisoVer = in_array('Ver', $permisosArray);
+                                $marcarTodos = in_array('Crear', $permisosArray) && in_array('Modificar', $permisosArray) && in_array('Eliminar', $permisosArray) && in_array('Ver', $permisosArray);
+                            @endphp
+                            <label>
+                                <input type="checkbox" name="opcion[]" value="Ver" {{ !$marcarTodos && $permisoVer ? 'checked' : ''}} disabled class="permiso-checkbox">
+                                Ver
+                            </label>
+                            <label>
+                                <input type="checkbox" name="opcion[]" value="Modificar" {{ !$marcarTodos && $permisoModificar ? 'checked' : ''}} disabled class="permiso-checkbox">
+                                Modificar
+                            </label>
+
+                            <label>
+                                <input type="checkbox" name="opcion[]" value="Todos" {{ $marcarTodos ? 'checked' : ''}}
+                                    disabled id="todosCheckbox">
+                                Todos
+                            </label>
+                            <label>
+                                <input type="checkbox" name="opcion[]" value="Crear" {{ !$marcarTodos && $permisoCrear ? 'checked' : ''}} disabled class="permiso-checkbox">
+                                Crear
+                            </label>
+                            <label>
+                                <input type="checkbox" name="opcion[]" value="Eliminar" {{ !$marcarTodos && $permisoEliminar ? 'checked' : ''}} disabled class="permiso-checkbox">
+                                Eliminar
+                            </label>
+
                         </span>
-                    </span>
+                    </div>
 
                 </div>
             </div>
+            @if ($roles->Nombre !== 'Administrador')
+                <button type="button" id="editButton">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                        <g fill="none" stroke="#18e747" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                            <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                            <path
+                                d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z" />
+                        </g>
+                    </svg>
+                </button>
+                <button class="btn-actualizar" type="submit" disabled>Actualizar</button>
+            @endif
+
         </form>
         <span class="btn-container-regresar">
             <a class="btn-regresar" href="{{route('roles.roles')}}">

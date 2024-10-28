@@ -16,7 +16,7 @@
     flex-direction: column;
     width: 400px;
 }
-.detalle-rol-input p,
+.detalle-rol-input input,
 select {
     margin-bottom: 15px; /* Ajusta el espacio entre los inputs */
     padding: 8px;
@@ -64,17 +64,69 @@ select option:checked {
     background: #d9d9d9;
     margin-bottom: 8px;
 
-    border-radius: 8px;
+    border-radius: 4px;
 }
 .permisos-section p {
     font-weight: 600;
-    margin-bottom: -2px;
+    margin-top: 10px;
+    margin-left: 15px;
+    margin-bottom: 10px;
 }
 
 .permisos-container {
     display: grid;
-    border-radius: 8px;
+    padding: 8px 30px 10px 45px;
     grid-template-columns: repeat(3, 1fr); /* Crea 2 columnas de igual ancho */
-    padding: 1px 20px;
     width: 400px; /* Ajusta el ancho general del contenedor */
+}
+
+#editButton {
+    position: absolute;
+    top: 290px;
+    right: 450px;
+    font-size: 32px;
+    background-color: white;
+    border-radius: 8px;
+    border-style: none;
+    padding: 1px 10px;
+    text-align: center;
+    transition: transform 0.1s ease, background-color 0.3s ease;
+    cursor: pointer;
+}
+#editButton:hover {
+    background-color: #babbbb69;
+}
+#editButton:active {
+    transform: scale(0.95);
+}
+#editButton svg {
+    margin-bottom: 8px;
+}
+.btn-actualizar {
+    position: absolute;
+    bottom: 200px;
+    left: 660px;
+    display: inline-block;
+    padding: 10px 20px;
+    background: #0784dd;
+    border: none;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: transform 0.1s ease, background-color 0.3s ease;
+    cursor: pointer;
+}
+.btn-actualizar:active {
+    transform: scale(0.95);
+}
+.btn-actualizar:hover {
+    background: #90ccf7;
+}
+
+.btn-actualizar:disabled {
+    background-color: #ccc; /* Cambia el color de fondo */
+    color: #666; /* Cambia el color del texto */
+    cursor: not-allowed; /* Cambia el cursor a "no permitido" */
+    opacity: 0.7; /* Reduce la opacidad para dar un efecto desactivado */
 }
