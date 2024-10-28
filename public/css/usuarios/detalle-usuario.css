@@ -16,7 +16,7 @@
     flex-direction: column;
     width: 400px;
 }
-.detalle-usuario-input p,
+.detalle-usuario-input input,
 select {
     margin-bottom: 9px; /* Ajusta el espacio entre los inputs */
     padding: 8px;
@@ -30,7 +30,7 @@ select:focus {
     border-color: #1e72c5; /* Color del borde cuando el <select> está en foco */
 }
 select:enabled {
-    color: #5e5d5d;
+    color: #0f0f0f;
     font: normal;
 }
 select option:checked {
@@ -68,13 +68,63 @@ select option:checked {
 }
 .permisos-section p {
     font-weight: 600;
-    margin-bottom: -2px;
+    margin-bottom: 2px;
+    padding-left: 15px;
+    padding-top: 10px;
+}
+.permisos-container {
+    border-radius: 8px;
+    width: 400px; /* Ajusta el ancho general del contenedor */
+}
+.permisos-lista {
+    display: grid;
+    width: 280px;
+    margin-left: 25px;
+    grid-template-columns: repeat(2, 2fr); /* Divide en 2 columnas */
+    padding: 10px 20px;
+    gap: 2px;
 }
 
-.permisos-container {
-    display: grid;
+#editButton {
+    position: absolute;
+    top: 160px;
+    right: 450px;
+    font-size: 32px;
+    background-color: white;
     border-radius: 8px;
-    grid-template-columns: repeat(3, 1fr); /* Crea 2 columnas de igual ancho */
-    padding: 1px 20px;
-    width: 400px; /* Ajusta el ancho general del contenedor */
+    border-style: none;
+    padding: 1px 10px;
+    text-align: center;
+    transition: transform 0.1s ease, background-color 0.3s ease;
+    cursor: pointer;
+}
+#editButton:hover {
+    background-color: #babbbb69;
+}
+#editButton:active {
+    transform: scale(0.95);
+}
+#editButton svg {
+    margin-bottom: 8px;
+}
+.btn-actualizar {
+    position: absolute;
+    bottom: 80px;
+    left: 660px;
+    display: inline-block;
+    padding: 10px 20px;
+    background: #0784dd;
+    border: none;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: transform 0.1s ease, background-color 0.3s ease;
+    cursor: pointer;
+}
+.btn-actualizar:active {
+    transform: scale(0.95);
+}
+.btn-actualizar:hover {
+    background: #90ccf7;
 }

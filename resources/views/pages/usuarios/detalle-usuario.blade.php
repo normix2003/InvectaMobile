@@ -12,6 +12,29 @@
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
     <link rel="stylesheet" href="{{ asset('css/app.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/usuarios/detalle-usuario.css') }}" />
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            function habilitarInputs() {
+                // Selecciona todos los inputs dentro del formulario
+                const inputs = document.querySelectorAll('#userForm input, #userForm select');
+                inputs.forEach(input => {
+                    if (input.disabled) {
+                        input.removeAttribute('disabled');
+                        location.reload();
+                    } else {
+                        input.setAttribute('disabled', 'disabled');
+                        location.reload();
+                    }
+                });
+            }
+
+            // Agregar evento al botón de editar
+            const editButton = document.getElementById('editButton');
+            editButton.addEventListener('click', habilitarInputs);
+        });
+    </script>
+
 </head>
 
 <body>
@@ -37,30 +60,55 @@
         </div>
     </header>
     <main>
-        <form action="">
+        <form action="{{route('usuario.update', $empleado->idEmpleados)}}" id="userForm" method="post">
             <div class="detalle-usuario-container">
                 <h2 class="title">A continuacion puede ver la informacion del usuario seleccionado</h2>
                 <div class="detalle-usuario-input">
-                    <p><strong>Apellido:</strong> {{ $empleado->Apellidos }}</p>
-                    <p><strong>Nombres:</strong> {{ $empleado->Nombre_Empleado}}</p>
-                    <p><strong>Numero de celular:</strong> {{ $empleado->Telefono }}</p>
-                    <p><strong>DUI:</strong> {{ $empleado->DUI }}</p>
-                    <p><strong>Email:</strong> {{ $empleado->Email }}</p>
-                    <p><strong>Rol:</strong> {{ $empleado->usuario->rol->Nombre }}</p>
-                    <span class="permisos-section">
-                        <p><strong>Permisos:</strong></p>
+                    @csrf
+                    <input placeholder="Apellido" value="{{ $empleado->Apellidos }}" name="Apellidos" disabled></input>
+                    <input placeholder="Nombre" value="{{ $empleado->Nombre_Empleado}}" name="Nombre_Empleado"
+                        disabled></input>
+                    <input placeholder="Nombre usuario" value="{{ $empleado->usuario->Nombre_Usuario }}"
+                        name="Nombre_Usuario" disabled></input>
+                    <input placeholder="Telefono" value="{{ $empleado->Telefono }}" name="Telefono" disabled></input>
+                    <input placeholder="DUI" value=" {{ $empleado->DUI }}" name="DUI" disabled></input>
+                    <input placeholder="Email" value="{{ $empleado->Email }}" name="Email" disabled></input>
+                    <select id="rol" name="Nombre" Required disabled>
+                        <option value="" disabled>Seleccionar Rol</option>
+                        @foreach ($roles as $rol)
+                            @if ($rol->Nombre == $empleado->usuario->rol->Nombre)
+                                <option value="{{$rol->Nombre}}" selected>{{$rol->Nombre}}</option>
+                            @endif
+                            @if ($rol->Nombre != $empleado->usuario->rol->Nombre)
+                                <option value="{{$rol->Nombre}}">{{$rol->Nombre}}</option>
+                            @endif
+                        @endforeach
+                    </select>
+                    <div class="permisos-section">
+                        <p>Permisos</p>
                         <span class="permisos-container">
-                            <ul>
-                                @foreach ($empleado->usuario->rol->detallesroles->pluck('permisos.Nombre') as $permiso)
-                                    <li>{{ $permiso}}</li>
+                            <ul class="permisos-lista">
+                                @foreach ($empleado->usuario->rol->detallesroles->pluck('permisos.Nombre') as $rol)
+                                    <li>{{ $rol}}</li>
                                 @endforeach
                             </ul>
                         </span>
-                    </span>
-                    <p><strong>Nombre de usuario:</strong> {{ $empleado->usuario->Nombre_Usuario }}</p>
-
+                        </span>
+                    </div>
                 </div>
             </div>
+
+
+            <button type="button" id="editButton">
+                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                    <g fill="none" stroke="#18e747" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                        <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                        <path
+                            d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z" />
+                    </g>
+                </svg>
+            </button>
+            <button class="btn-actualizar" type="submit">Actualizar</button>
         </form>
         <span class="btn-container-regresar">
             <a class="btn-regresar" href="{{route('usuarios')}}">

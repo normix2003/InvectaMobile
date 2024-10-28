@@ -18,6 +18,7 @@ Route::middleware(['auth', 'checkAdministrador'])->group(function () {
 
     Route::get('/usuarios', [UsuariosController::class, 'index'])->name('usuarios');
     Route::delete('/usuarios/{idEmpleados}', [UsuariosController::class, 'destroy'])->name('usuario.destroy');
+    Route::post('/usuarios/{idEmpleados}', [UsuariosController::class, 'update'])->name('usuario.update');
     Route::get('/detalle-usuario/{idEmpleados}', [UsuariosController::class, 'detalleUsuario'])->name('detalle-usuario');
 
     Route::get('/roles', [RolesController::class, 'index'])->name('roles.roles');

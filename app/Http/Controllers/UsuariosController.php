@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\detallesroles;
 use App\Models\empleados;
 use App\Models\usuarios;
 use App\Models\roles;
+use App\Models\permisos;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 
@@ -33,9 +35,9 @@ class UsuariosController
     {
         // Obtener un empleado en específico con su usuario y rol
         $empleado = empleados::with('usuario.rol.detallesroles.permisos')->find($idEmpleados);
-
+        $roles = roles::all()->where('Eliminar', 0);
         // Retornar la vista de detalle-usuario con los datos del empleado
-        return view('pages.usuarios.detalle-usuario', ['empleado' => $empleado]);
+        return view('pages.usuarios.detalle-usuario', ['empleado' => $empleado, 'roles' => $roles]);
     }
 
     // Función para almacenar un nuevo usuario en la base de datos
@@ -97,6 +99,29 @@ class UsuariosController
         return redirect()->route('usuarios');
     }
 
+    public function update($idEmpleados, Request $request)
+    {
+        $empleadoData = $request->only(['Nombre_Empleado', 'Apellidos', 'Email', 'Telefono', 'DUI']);
+        $usuarioData = $request->only(['Nombre_Usuario']);
+        $nombreRol = $request->input('Nombre');
+        $permisos = $request->input('opcion', []);
+        //dd($empleado, $usuario, $nombreRol, $permisos);
+        $empleadoUpdate = empleados::find($idEmpleados);
+        $usuarioUpdate = usuarios::where('idUsuarios', $empleadoUpdate->ID_Usuarios)->first();
+        $idRolUpdate = roles::where('Nombre', $nombreRol)->first();
+
+        if ($empleadoUpdate) {
+            $empleadoUpdate->update($empleadoData);
+        }
+
+        if ($usuarioUpdate) {
+            if ($nombreRol) {
+                $usuarioUpdate->ID_Rol = $idRolUpdate->idRoles;
+            }
+            $usuarioUpdate->update($usuarioData);
+        }
+        return redirect()->route('detalle-usuario', ['idEmpleados' => $idEmpleados]);
+    }
 
     // Función para eliminar un empleado de la base de datos
     public function destroy($idEmpleados)
