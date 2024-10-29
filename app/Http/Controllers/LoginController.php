@@ -22,8 +22,10 @@ class LoginController
         $this->crearRoles();
 
         // Verifica si existe un usuario con rol de administrador
-        $adminRole = roles::where('Nombre', 'Administrador')->first();
-        $adminExists = usuarios::where('ID_Rol', $adminRole->idRoles ?? 0)->exists();
+        $adminExists = usuarios::whereHas('rol', function ($query) {
+            $query->where('Nombre', 'Administrador');
+        })->exists();
+        
 
         // Si no existe un usuario con rol de administrador, redirige a la vista de creación de administrador
         if (!$adminExists) {
@@ -38,14 +40,14 @@ class LoginController
     {
         // Verifica si existe un usuario con rol de administrador
         $adminRole = roles::where('Nombre', 'Administrador')->first();
-
         // Si no existe el rol de administrador, redirige con un error
         if (!$adminRole) {
             return back()->withErrors(['error' => 'El rol de Administrador no existe.']);
         }
 
-        // Verifica si existe un usuario con rol de administrador
-        $adminExists = usuarios::where('ID_Rol', $adminRole->idRoles ?? 0)->exists();
+        $adminExists = usuarios::whereHas('rol', function ($query) {
+            $query->where('Nombre', 'Administrador');
+        })->exists();
 
         // Si existe un usuario con rol de administrador, redirige a la vista de login
         if ($adminExists) {
@@ -57,7 +59,7 @@ class LoginController
 
         //Asignar el rol de administrador al usuario
         $admin['ID_Rol'] = $adminRole->idRoles;
-
+        $admin['Eliminar'] = 0;
         //Obtener los datos del empleado de la vista
         $adminEmpleado = $request->only(['Nombre_Empleado', 'Apellidos', 'Email', 'Telefono', 'DUI']);
 
@@ -67,6 +69,7 @@ class LoginController
         //Si el usuario se creó correctamente, crear un empleado con los datos del administrador
         if ($usuario) {
             $adminEmpleado['ID_Usuarios'] = $usuario->idUsuarios;
+            $adminEmpleado['Eliminar'] = 0;
             empleados::create($adminEmpleado);
         }
 
@@ -92,7 +95,7 @@ class LoginController
 
         } else {
             // Si la autenticación falla, redirige al login con un error
-            return back()->withErrors(provider: ['login_error' => 'Credenciales incorrectas']);
+            return back()->withErrors(['login_error' => 'Credenciales incorrectas']);
         }
     }
 
@@ -107,12 +110,14 @@ class LoginController
     //Funcion para crear los permisos
     private function crearPermisos()
     {
+        
         //Permisos a crear en la base de datos
         $permisos = ['Ver', 'Crear', 'Modificar', 'Eliminar'];
-
+        
         //Crear los permisos en la base de datos si no existen
         foreach ($permisos as $permiso) {
             permisos::firstOrCreate(['Nombre' => $permiso]);
+            
         }
     }
 
@@ -121,12 +126,13 @@ class LoginController
     {
         //Rol a crear en la base de datos si no existe
         $roles = 'Administrador';
-
+        ;
         //Crear el rol en la base de datos si no existe
-        $rol = roles::firstOrCreate(['Nombre' => $roles, ['Eliminar' => 0]]);
+        $rol = roles::firstOrCreate(['Nombre' => $roles,'Eliminar' => 0]);
         //Si el rol fue creado en este momento, asignarle los permisos
         if ($rol->wasRecentlyCreated) {
             // Asignar permisos al rol
+            
             $this->asignarPermisos();
         }
 
