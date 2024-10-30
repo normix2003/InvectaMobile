@@ -58,6 +58,11 @@
             <div class="header-divider"></div>
             <h1 class="header-title">Detalles de usuario</h1>
         </div>
+        @if (session('success'))
+            <div class="alert alert-success" id="alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
     </header>
     <main>
         @if ($errors->any())
@@ -71,7 +76,7 @@
         @endif
         <form action="{{route('usuario.update', $empleado->idEmpleados)}}" id="userForm" method="post">
             <div class="detalle-usuario-container">
-                <h2 class="title">A continuacion puede ver la informacion del usuario seleccionado</h2>
+                <h2 class="title">Informacion del usuario</h2>
                 <div class="detalle-usuario-input">
                     @csrf
                     @method('PUT')

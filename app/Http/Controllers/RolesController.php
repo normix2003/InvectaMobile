@@ -68,11 +68,22 @@ class RolesController
 
         $permisosAll = permisos::all()->pluck('Nombre')->toArray();
 
-        if (!empty($permisos)) {
+            if ($nombreRol != $rolUpdate->Nombre) {
+                $rolUpdate->update(['Nombre' => $nombreRol, 'Eliminar' => 0]);
+                $permisosFaltantes = array_diff($permisos, $permisosNombres);
+                if (count($permisosFaltantes) == 0) {
+                    return redirect()->route('roles.detalles-roles', $idRoles)->with('success', 'Rol actualizado exitosamente.');
+                }
+            }
+
             if (is_array($permisos) && in_array('Todos', $permisos)) {
 
                 $permisosFaltantes = array_diff($permisosAll, $permisosNombres);
                 //dd($permisosFaltantes);
+                if (count($permisosFaltantes) == 0) {
+                    return redirect()->route('roles.detalles-roles', $idRoles)->with('success', 'El rol ya tiene todos los permisos.');
+                }
+
                 foreach ($permisosFaltantes as $permisoRol) {
                     $permiso = permisos::where('Nombre', $permisoRol)->first();
                     $buscarDetalleRol = detallesroles::where('ID_Roles', $rolUpdate->idRoles)
@@ -92,7 +103,6 @@ class RolesController
 
             if (count($permisosNombres) > count($permisos)) {
                 $permisosEliminar = array_diff($permisosNombres, $permisos);
-
                 foreach ($permisosEliminar as $permisoRol) {
                     $permiso = permisos::where('Nombre', $permisoRol)->first();
                     $detalleRol = detallesroles::where('ID_Roles', $rolUpdate->idRoles)
@@ -106,11 +116,14 @@ class RolesController
                     }
 
                 }
-                return redirect()->route('roles.roles');
+                return redirect()->route('roles.detalles-roles', $idRoles)->with('success', 'Rol actualizado exitosamente.');
 
             } else if (count($permisosNombres) <= count($permisos)) {
 
                 $permisosAgregar = array_diff($permisos, $permisosNombres);
+                if (count($permisosAgregar) == 0) {
+                    return redirect()->route('roles.detalles-roles', $idRoles)->with('success', 'El rol no tiene permisos para agregar.');
+                }
                 foreach ($permisosAgregar as $permisoRol) {
                     $permiso = permisos::where('Nombre', $permisoRol)->first();
                     $detalleRol = detallesroles::where('ID_Roles', $rolUpdate->idRoles)
@@ -120,20 +133,13 @@ class RolesController
 
                     if (!$detalleRol) {
                         detallesroles::create(['ID_Roles' => $rolUpdate->idRoles, 'ID_Permisos' => $permiso->idPermisos, 'Eliminar' => 0]);
-
-                        return redirect()->route('roles.roles');
                     }
                     $detalleRol['Eliminar'] = 0;
                     $detalleRol->save();
                 }
-                return redirect()->route('roles.roles');
+                return redirect()->route('roles.detalles-roles', $idRoles)->with('success', 'Rol actualizado exitosamente.');
             }
-
-        }
-        if ($rolUpdate) {
-            $rolUpdate->update(['Nombre' => $nombreRol, 'Eliminar' => 0]);
-            return redirect()->route('roles.roles');
-        }
+      
     }
 
     //Funcion para guardar un rol

@@ -104,8 +104,8 @@ select option:checked {
 }
 .btn-actualizar {
     position: absolute;
-    bottom: 200px;
-    left: 660px;
+    bottom: 160px;
+    left: 710px;
     display: inline-block;
     padding: 10px 20px;
     background: #0784dd;

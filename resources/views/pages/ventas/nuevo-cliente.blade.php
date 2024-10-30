@@ -35,6 +35,8 @@
             <div class="header-divider"></div>
             <h1 class="header-title">Nuevo Cliente</h1>
         </div>
+    </header>
+    <main>
         @if ($errors->any())
             <div class="alert alert-danger" id="alert-danger">
                 <ul>
@@ -44,8 +46,6 @@
                 </ul>
             </div>
         @endif
-    </header>
-    <main>
         <form action="{{route('cliente.store')}}" method="post">
 
             <div class="nuevo-rol-container">

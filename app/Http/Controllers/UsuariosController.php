@@ -74,16 +74,13 @@ class UsuariosController
         $usuario = $request->only(['Nombre_Usuario', 'Contrasenia']);
         $rol = $request->input('Nombre');
 
-        // Verificar si los datos están vacíos
-        if (empty($rol) || empty($usuario) || empty($empleado)) {
-            return redirect()->route('usuarios');
-        }
-
         // Obtener el id del rol
         $idRol = roles::where('Nombre', $rol)->first()->idRoles;
+         
+        if (empty($idRol)) {
+            return redirect()->route('usuarios')->withErrors(['error' => 'No se encontró el rol especificado.']);
+        }
 
-        // Verificar si el id del rol existe
-        if ($idRol) {
             // Crear un nuevo usuario con los datos del usuario y el id del rol
             $usuario['ID_Rol'] = $idRol;
             // Encriptar la contraseña del usuario
@@ -96,13 +93,12 @@ class UsuariosController
                 $empleado['ID_Usuarios'] = $usuario->idUsuarios;
                 $empleado['Eliminar'] = 0;
                 empleados::create($empleado);
-
+                // Redireccionar a la vista de usuarios
+             return redirect()->route('usuarios')->with('success', 'Usuario creado exitosamente.');
             }
-        }
 
-        // Redireccionar a la vista de usuarios
-        return redirect()->route('usuarios');
-    }
+        return redirect()->route('usuarios')->withErrors(['error' => 'No se pudo crear el usuario.']);
+        }
 
     public function update($idEmpleados, Request $request)
     {
@@ -143,7 +139,7 @@ class UsuariosController
             }
             $usuarioUpdate->update($usuarioData);
         }
-        return redirect()->route('detalle-usuario', ['idEmpleados' => $idEmpleados]);
+        return redirect()->route('detalle-usuario', ['idEmpleados' => $idEmpleados])->with('success', 'Usuario actualizado exitosamente.');
     }
 
     // Función para eliminar un empleado de la base de datos

@@ -82,6 +82,11 @@
             <div class="header-divider"></div>
             <h1 class="header-title">Detalles de Rol</h1>
         </div>
+        @if (session('success'))
+            <div class="alert alert-success" id="alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
     </header>
     <main>
         @if ($errors->any())
@@ -95,7 +100,7 @@
         @endif
         <form id="userForm" action="{{route('roles.update', $idRoles)}}" method="post">
             <div class="detalle-rol-container">
-                <h1 class="title">A continuacion puede ver la informacion del rol seleccionado</h1>
+                <h1 class="title">Informacion del rol</h1>
                 <div class="detalle-rol-input">
                     @csrf
                     @method('PUT')
@@ -137,22 +142,21 @@
 
                         </span>
                     </div>
+                    @if ($roles->Nombre !== 'Administrador')
+                    <button type="button" id="editButton">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                            <g fill="none" stroke="#18e747" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                                <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                                <path
+                                d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z" />
+                            </g>
+                        </svg>
+                    </button>
+                    <button class="btn-actualizar" type="submit" disabled>Actualizar</button>
+                    @endif
 
                 </div>
             </div>
-            @if ($roles->Nombre !== 'Administrador')
-                <button type="button" id="editButton">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-                        <g fill="none" stroke="#18e747" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
-                            <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                            <path
-                                d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z" />
-                        </g>
-                    </svg>
-                </button>
-                <button class="btn-actualizar" type="submit" disabled>Actualizar</button>
-            @endif
-
         </form>
         <span class="btn-container-regresar">
             <a class="btn-regresar" href="{{route('roles.roles')}}">

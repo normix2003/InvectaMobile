@@ -61,7 +61,7 @@ class ClienteController
 
         //Se almacena el cliente en la sesión
         session(['cliente' => $cliente]);
-
+        session()->flash('status', 'Cliente creado exitosamente.');
         //Se retorna la vista de factura con los productos totales, el total de la venta y el cliente
         return view('pages.ventas.factura', ['productos' => $productosTotales, 'total' => $totalVenta, 'cliente' => $cliente]);
     }

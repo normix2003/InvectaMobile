@@ -47,9 +47,9 @@
             <div class="header-divider"></div>
             <h1 class="header-title">Factura</h1>
         </div>
-        @if (session('success'))
+        @if (session('status'))
             <div class="alert alert-success" id="alert-success">
-                {{ session('success') }}
+                {{ session('status') }}
             </div>
         @endif
     </header>
