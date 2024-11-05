@@ -13,7 +13,7 @@ class InventarioController
     public function index()
     {
         // Se obtienen todos los productos con la relación de marca y categoría
-        $inventario = producto::with(['marca', 'categoria'])->where('Eliminar', 0)->get();
+        $inventario = producto::with(['marca', 'categoria'])->where('Eliminar', 0)->paginate(5);
         // Se retorna la vista de inventario con los productos
         return view('pages.inventario.inventario', ['inventario' => $inventario]);
     }
