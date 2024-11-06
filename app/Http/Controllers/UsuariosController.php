@@ -16,7 +16,7 @@ class UsuariosController
     public function index()
     {
         // Obtener todos los empleados con sus usuarios y roles
-        $empleados = empleados::with('usuario.rol')->where('Eliminar', 0)->get();
+        $empleados = empleados::with('usuario.rol')->where('Eliminar', 0)->paginate(6);
         // Retornar la vista de usuarios con los empleados 
         return view('pages.usuarios.usuarios', ['empleados' => $empleados]);
     }
@@ -76,29 +76,29 @@ class UsuariosController
 
         // Obtener el id del rol
         $idRol = roles::where('Nombre', $rol)->first()->idRoles;
-         
+
         if (empty($idRol)) {
             return redirect()->route('usuarios')->withErrors(['error' => 'No se encontró el rol especificado.']);
         }
 
-            // Crear un nuevo usuario con los datos del usuario y el id del rol
-            $usuario['ID_Rol'] = $idRol;
-            // Encriptar la contraseña del usuario
-            $usuario['Contrasenia'] = Hash::make($usuario['Contrasenia']);
-            $usuario['Eliminar'] = 0;
-            $usuario = usuarios::create($usuario);
-            // Verificar si el usuario se creó
-            if ($usuario) {
-                // Crear un nuevo empleado con los datos del empleado y el id del usuario
-                $empleado['ID_Usuarios'] = $usuario->idUsuarios;
-                $empleado['Eliminar'] = 0;
-                empleados::create($empleado);
-                // Redireccionar a la vista de usuarios
-             return redirect()->route('usuarios')->with('success', 'Usuario creado exitosamente.');
-            }
+        // Crear un nuevo usuario con los datos del usuario y el id del rol
+        $usuario['ID_Rol'] = $idRol;
+        // Encriptar la contraseña del usuario
+        $usuario['Contrasenia'] = Hash::make($usuario['Contrasenia']);
+        $usuario['Eliminar'] = 0;
+        $usuario = usuarios::create($usuario);
+        // Verificar si el usuario se creó
+        if ($usuario) {
+            // Crear un nuevo empleado con los datos del empleado y el id del usuario
+            $empleado['ID_Usuarios'] = $usuario->idUsuarios;
+            $empleado['Eliminar'] = 0;
+            empleados::create($empleado);
+            // Redireccionar a la vista de usuarios
+            return redirect()->route('usuarios')->with('success', 'Usuario creado exitosamente.');
+        }
 
         return redirect()->route('usuarios')->withErrors(['error' => 'No se pudo crear el usuario.']);
-        }
+    }
 
     public function update($idEmpleados, Request $request)
     {

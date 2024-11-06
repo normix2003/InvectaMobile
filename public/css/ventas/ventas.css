@@ -123,10 +123,6 @@ main {
     background: #90ccf7;
 }
 
-.ver-ventas-container {
-    position: absolute;
-    left: 690px;
-}
 .btn-ver-ventas {
     display: inline-block;
     padding: 8px 15px;

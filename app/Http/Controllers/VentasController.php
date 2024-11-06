@@ -128,7 +128,7 @@ class VentasController
                     ->whereHas('venta', function ($query) {
                         $query->whereDate('Fecha', date('Y-m-d'));
                     })
-                    ->get();
+                    ->paginate(6);
                 break;
             case 'Semana':
                 //Obtener las ventas de la semana
@@ -136,7 +136,7 @@ class VentasController
                     ->whereHas('venta', function ($query) {
                         $query->whereBetween('Fecha', [date('Y-m-d', strtotime('-7 days')), date('Y-m-d')]);
                     })
-                    ->get();
+                    ->paginate(6);
                 break;
             case 'Mes':
                 //Obtener las ventas del mes
@@ -144,7 +144,7 @@ class VentasController
                     ->whereHas('venta', function ($query) {
                         $query->whereMonth('Fecha', date('m'));
                     })
-                    ->get();
+                    ->paginate(6);
                 break;
 
             case 'Trimestre':
@@ -153,7 +153,7 @@ class VentasController
                     ->whereHas('venta', function ($query) {
                         $query->whereBetween('Fecha', [date('Y-m-d', strtotime('-3 months')), date('Y-m-d')]);
                     })
-                    ->get();
+                    ->paginate(6);
                 break;
             case 'Anio':
                 //Obtener las ventas del año
@@ -161,12 +161,12 @@ class VentasController
                     ->whereHas('venta', function ($query) {
                         $query->whereYear('Fecha', date('Y'));
                     })
-                    ->get();
+                    ->paginate(6);
                 break;
             default:
                 //Obtener todas las ventas
                 $ventas = detallesventas::with(['producto', 'venta.empleado', 'venta.cliente'])
-                    ->get();
+                    ->paginate(6);
                 break;
         }
         //Retornar la vista de ventas realizadas

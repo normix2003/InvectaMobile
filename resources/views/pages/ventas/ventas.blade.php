@@ -57,19 +57,20 @@
     <main>
 
         <div class="inventario-container ">
-            @if (Auth::user() && Auth::user()->rol->Nombre == 'Administrador')
-                <span class="ver-ventas-container">
-                    <a class="btn-ver-ventas" href="{{route('ver-ventas')}}">Ver Ventas</a>
-                </span>
-            @endif
+
             <form action="{{route('buscar-producto')}}" method="GET">
                 <div class="buscar-container">
                     @csrf
-                    <input type="text" name="Data" value="{{ request('Data') }}" class=" input-buscar"
+                    <input type="text" name="Data" value="{{ request('Data') }}" class="input-buscar"
                         placeholder="Buscar producto" Required>
                     <button type="submit" class="btn-buscar">
                         Buscar
                     </button>
+                    @if (Auth::user() && Auth::user()->rol->Nombre == 'Administrador')
+                        <span class="ver-ventas-container">
+                            <a class="btn-ver-ventas" href="{{route('ver-ventas')}}">Ver Ventas</a>
+                        </span>
+                    @endif
                 </div>
             </form>
 

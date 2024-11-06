@@ -22,13 +22,14 @@
         }
 
         .header-container {
-            background-color: #e2dede;
+            background-color: #003459;
         }
 
         .header-title {
             text-align: start;
             padding: 5px;
             margin-left: 25px;
+            color: #f8f9fa;
             font-family: 'Courier New';
             font: bold;
         }

@@ -12,7 +12,25 @@
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
     <link rel="stylesheet" href="{{ asset('css/app.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/ventas/detalles-ventas.css') }}" />
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const select = document.getElementById('tiempo');
+            const tiempoSelect = document.getElementById('tiempo');
 
+            // Verifica si hay una opción seleccionada en localStorage
+            const selectedOption = localStorage.getItem('tiempoSeleccionado');
+
+            if (selectedOption) {
+                // Si existe, establece el valor en el select
+                tiempoSelect.value = selectedOption;
+            }
+
+            // Guarda la opción seleccionada en localStorage cuando el usuario selecciona una opción
+            tiempoSelect.addEventListener('change', function () {
+                localStorage.setItem('tiempoSeleccionado', this.value);
+            });
+        });
+    </script>
 </head>
 
 <body>
@@ -41,7 +59,7 @@
         <div class="inventario-container ">
             <div class="tiempo-container">
                 <form action="{{route('ver-ventas')}}" method="GET">
-                    <select name="tiempo" class="tiempo-seleccionado" aria-label="Default select example">
+                    <select name="tiempo" id="tiempo" class="tiempo-seleccionado">
                         <option value="Dia">Hoy</option>
                         <option value="Semana">7 Dias</option>
                         <option value="Mes">1 Mes</option>
@@ -79,6 +97,9 @@
                         @endforeach
                     </tbody>
                 </table>
+                <div class="paginacion">
+                    {{ $ventas->appends(request()->query())->links('pagination::bootstrap-4') }}
+                </div>
             </div>
             <span class="btn-container-regresar">
                 <a class="btn-regresar" href="{{route('ventas')}}">

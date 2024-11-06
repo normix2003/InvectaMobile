@@ -110,6 +110,9 @@
 
                     </tbody>
                 </table>
+                <div class="paginacion">
+                    {{ $empleados->links('pagination::bootstrap-4') }}
+                </div>
             </div>
             <span class="btn-container-regresar">
                 <a class="btn-regresar" href="{{route('home')}}">

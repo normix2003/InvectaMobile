@@ -68,3 +68,9 @@
     padding: 4px 10px;
     border-radius: 8px;
 }
+.paginacion {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}

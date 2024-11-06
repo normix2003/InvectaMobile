@@ -15,23 +15,48 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
 
-            function habilitarInputs() {
-                // Selecciona todos los inputs dentro del formulario
-                const inputs = document.querySelectorAll('#userForm input, #userForm select, #userForm button');
+            // Verifica si 'edit' está en localStorage, si no, lo establece en 'false'
+            let isEdit = localStorage.getItem('editUser');
+            if (isEdit === null) {
+                localStorage.setItem('editUser', 'false');
+            }
+
+            // Deshabilitar o habilitar inputs según el valor de 'edit' en localStorage
+            const inputs = document.querySelectorAll('#userForm input, #userForm select , #userForm button');
+            if (localStorage.getItem('editUser') === 'false') {
                 inputs.forEach(input => {
-                    if (input.disabled) {
-                        input.removeAttribute('disabled');
-                        location.reload();
-                    } else {
-                        input.setAttribute('disabled', 'disabled');
-                        location.reload();
-                    }
+                    input.setAttribute('disabled', 'disabled');
+                });
+            } else {
+                inputs.forEach(input => {
+                    input.removeAttribute('disabled');
                 });
             }
 
-            // Agregar evento al botón de editar
+            // Evento de submit del formulario
+            const form = document.getElementById('userForm');
+            form.addEventListener('submit', function (event) {
+                event.preventDefault(); // Prevenir el envío del formulario para que puedas hacer algo antes
+
+                // Si necesitas hacer algo al enviar el formulario, lo haces aquí
+                localStorage.removeItem('editUser'); // Limpiar el valor de 'edit' en localStorage
+
+                // Si deseas enviar el formulario después de hacer algo, puedes hacerlo de esta manera:
+                form.submit(); // Esto enviará el formulario
+            });
+
+            // Evento del botón de editar
             const editButton = document.getElementById('editButton');
-            editButton.addEventListener('click', habilitarInputs);
+
+            // Comprobar si el botón existe en el DOM
+            if (editButton) {
+                console.log("Botón encontrado"); // Verifica si el botón está siendo detectado
+                editButton.addEventListener('click', function (event) {
+                    // Cambia el valor de 'edit' en localStorage
+                    localStorage.setItem('editUser', true);
+                    location.reload();
+                });
+            }
         });
     </script>
 
@@ -74,24 +99,22 @@
                 </ul>
             </div>
         @endif
-        <form action="{{route('usuario.update', $empleado->idEmpleados)}}" id="userForm" method="post">
+        <form action="{{route('detalle-usuario.update', $empleado->idEmpleados)}}" id="userForm" method="post">
             <div class="detalle-usuario-container">
                 <h2 class="title">Informacion del usuario</h2>
                 <div class="detalle-usuario-input">
                     @csrf
                     @method('PUT')
-                    <input placeholder="Apellido" value="{{ $empleado->Apellidos }}" name="Apellidos" disabled
-                        Required></input>
-                    <input placeholder="Nombre" value="{{ $empleado->Nombre_Empleado}}" name="Nombre_Empleado" disabled
+                    <input placeholder="Apellido" value="{{ $empleado->Apellidos }}" name="Apellidos" Required></input>
+                    <input placeholder="Nombre" value="{{ $empleado->Nombre_Empleado}}" name="Nombre_Empleado"
                         Required></input>
                     <input placeholder="Nombre usuario" value="{{ $empleado->usuario->Nombre_Usuario }}"
-                        name="Nombre_Usuario" disabled Required></input>
-                    <input placeholder="Telefono" value="{{ $empleado->Telefono }}" name="Telefono" disabled
-                        Required></input>
-                    <input placeholder="DUI" value=" {{ $empleado->DUI }}" name="DUI" disabled Required></input>
-                    <input placeholder="Email" value="{{ $empleado->Email }}" name="Email" disabled Required></input>
-                    <select id="rol" name="Nombre" Required disabled>
-                        <option value="" disabled>Seleccionar Rol</option>
+                        name="Nombre_Usuario" Required></input>
+                    <input placeholder="Telefono" value="{{ $empleado->Telefono }}" name="Telefono" Required></input>
+                    <input placeholder="DUI" value=" {{ $empleado->DUI }}" name="DUI" Required></input>
+                    <input placeholder="Email" value="{{ $empleado->Email }}" name="Email" Required></input>
+                    <select id="rol" name="Nombre" Required>
+                        <option value="">Seleccionar Rol</option>
                         @foreach ($roles as $rol)
                             @if ($rol->Nombre == $empleado->usuario->rol->Nombre)
                                 <option value="{{$rol->Nombre}}" selected>{{$rol->Nombre}}</option>
@@ -113,20 +136,19 @@
                         </span>
                     </div>
                 </div>
+                <button class="btn-actualizar" type="submit">Actualizar</button>
             </div>
 
-
-            <button type="button" id="editButton">
-                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-                    <g fill="none" stroke="#18e747" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
-                        <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                        <path
-                            d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z" />
-                    </g>
-                </svg>
-            </button>
-            <button class="btn-actualizar" type="submit" disabled>Actualizar</button>
         </form>
+        <button type="button" id="editButton">
+            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                <g fill="none" stroke="#18e747" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                    <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                    <path
+                        d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z" />
+                </g>
+            </svg>
+        </button>
         <span class="btn-container-regresar">
             <a class="btn-regresar" href="{{route('usuarios')}}">
                 Regresar

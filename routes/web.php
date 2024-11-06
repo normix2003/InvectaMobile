@@ -14,19 +14,25 @@ use App\Http\Controllers\LoginController;
 Route::middleware(['auth', 'checkAdministrador'])->group(function () {
 
     Route::get('/nuevo-usuario', [UsuariosController::class, 'nuevoUsuario'])->name('nuevo-usuario');
+
     Route::post('/nuevo-usuario', [UsuariosController::class, 'store'])->name('usuario.store');
 
     Route::get('/usuarios', [UsuariosController::class, 'index'])->name('usuarios');
+
     Route::delete('/usuarios/{idEmpleados}', [UsuariosController::class, 'destroy'])->name('usuario.destroy');
-    Route::put('/usuarios/{idEmpleados}', [UsuariosController::class, 'update'])->name('usuario.update');
+
     Route::get('/detalle-usuario/{idEmpleados}', [UsuariosController::class, 'detalleUsuario'])->name('detalle-usuario');
+    Route::put('/detalle-usuario/{idEmpleados}', [UsuariosController::class, 'update'])->name('detalle-usuario.update');
 
     Route::get('/roles', [RolesController::class, 'index'])->name('roles.roles');
     Route::delete('/roles/{idRoles}', [RolesController::class, 'destroy'])->name('roles.destroy');
+
     Route::get('/nuevo-rol', [RolesController::class, 'nuevoRol'])->name('roles.nuevo-rol');
+    Route::post('/nuevo-rol', [RolesController::class, 'store'])->name('roles.store');
+
     Route::get('/detalle-roles/{idRoles}', [RolesController::class, 'detallesRoles'])->name('roles.detalles-roles');
     Route::put('/detalle-roles/{idRoles}', [RolesController::class, 'update'])->name('roles.update');
-    Route::post('/nuevo-rol', [RolesController::class, 'store'])->name('roles.store');
+
 
     Route::delete('/inventario/{idProductos}', [InventarioController::class, 'destroy'])->name('inventario.destroy');
     Route::get('/detalles-ventas', [VentasController::class, 'detallesVentas'])->name('ver-ventas');
