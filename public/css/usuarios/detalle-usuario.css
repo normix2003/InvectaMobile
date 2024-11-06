@@ -85,9 +85,9 @@ select option:checked {
 }
 
 #editButton {
-    position: absolute;
-    top: 21vh;
-    right: 56vh;
+    position: fixed;
+    top: 20vh;
+    right: 57vh;
     font-size: 32px;
     background-color: white;
     border-radius: 8px;
