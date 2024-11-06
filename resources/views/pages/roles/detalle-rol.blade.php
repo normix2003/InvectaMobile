@@ -125,7 +125,7 @@
         @endif
         <form id="userForm" action="{{route('roles.update', $idRoles)}}" method="post">
             <div class="detalle-rol-container">
-                <h1 class="title">Informacion del rol</h1>
+                <h1 class="title">Informacion del rol seleccionado</h1>
                 <div class="detalle-rol-input">
                     @csrf
                     @method('PUT')
@@ -168,7 +168,9 @@
                         </span>
                     </div>
                     @if ($roles->Nombre !== 'Administrador')
-                        <button class="btn-actualizar" type="submit" disabled>Actualizar</button>
+                        <div class="actualizar-container">
+                            <button class="btn-actualizar" type="submit">Actualizar</button>
+                        </div>
                     @endif
 
                 </div>

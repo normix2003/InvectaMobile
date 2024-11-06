@@ -82,8 +82,8 @@ select option:checked {
 
 #editButton {
     position: absolute;
-    top: 290px;
-    right: 450px;
+    top: 40vh;
+    right: 68vh;
     font-size: 32px;
     background-color: white;
     border-radius: 8px;
@@ -102,10 +102,14 @@ select option:checked {
 #editButton svg {
     margin-bottom: 8px;
 }
+.actualizar-container {
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    align-items: center;
+    margin-top: 10px;
+}
 .btn-actualizar {
-    position: absolute;
-    bottom: 160px;
-    left: 710px;
     display: inline-block;
     padding: 10px 20px;
     background: #0784dd;

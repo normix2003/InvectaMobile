@@ -101,7 +101,7 @@
         @endif
         <form action="{{route('detalle-usuario.update', $empleado->idEmpleados)}}" id="userForm" method="post">
             <div class="detalle-usuario-container">
-                <h2 class="title">Informacion del usuario</h2>
+                <h2 class="title">Informacion del usuario seleccionado</h2>
                 <div class="detalle-usuario-input">
                     @csrf
                     @method('PUT')
@@ -136,7 +136,9 @@
                         </span>
                     </div>
                 </div>
-                <button class="btn-actualizar" type="submit">Actualizar</button>
+                <div class="actualizar-container">
+                    <button class="btn-actualizar" type="submit">Actualizar</button>
+                </div>
             </div>
 
         </form>

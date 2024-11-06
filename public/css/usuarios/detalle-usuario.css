@@ -2,7 +2,7 @@
     font-size: 1.5rem;
     font-weight: bold;
     color: #003459;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
 }
 .detalle-usuario-container {
     display: flex;
@@ -86,8 +86,8 @@ select option:checked {
 
 #editButton {
     position: absolute;
-    top: 160px;
-    right: 450px;
+    top: 21vh;
+    right: 68vh;
     font-size: 32px;
     background-color: white;
     border-radius: 8px;
@@ -106,11 +106,14 @@ select option:checked {
 #editButton svg {
     margin-bottom: 8px;
 }
+.actualizar-container {
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    align-items: center;
+    margin-top: 0px;
+}
 .btn-actualizar {
-    position: absolute;
-    bottom: 85px;
-    left: 50%;
-    transform: translateX(-50%);
     display: inline-block;
     padding: 10px 20px;
     background: #0784dd;
