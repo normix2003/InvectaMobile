@@ -92,6 +92,7 @@ select option:checked {
 
 #editButton {
     margin-bottom: 400px;
+    margin-left: -20px;
     font-size: 32px;
     background-color: white;
     border-radius: 8px;
