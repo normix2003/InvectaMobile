@@ -1,3 +1,9 @@
+main {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
 .title {
     font-size: 1.5rem;
     font-weight: bold;
@@ -85,9 +91,7 @@ select option:checked {
 }
 
 #editButton {
-    position: fixed;
-    top: 20vh;
-    right: 57vh;
+    margin-bottom: 400px;
     font-size: 32px;
     background-color: white;
     border-radius: 8px;
