@@ -49,12 +49,24 @@
     <main>
 
         <div class="inventario-container ">
-            <span class="btn-container-nuevo">
-                <a class="btn-nuevo-producto" href="{{route('nuevo-producto')}}">
-                    Nuevo Producto
-                </a>
-            </span>
+            <div class="container-buttons">
+                <span class="btn-container-nuevo">
+                    <a class="btn-nuevo-producto" href="{{route('nuevo-producto')}}">
+                        Nuevo Producto
+                    </a>
+                </span>
+                <span class="btn-container-categorias">
+                    <a class="btn-ver-categorias" href="{{route('categorias')}}">
+                        Ver Categorias
+                    </a>
+                </span>
+                <span class="btn-container-marcas">
+                    <a class="btn-ver-marcas" href="{{route('marcas')}}">
+                        Ver Marcas
+                    </a>
+                </span>
 
+            </div>
             <div class="table-responsive w-100">
                 <table class="table table-striped  ">
                     <thead class="table-dark">

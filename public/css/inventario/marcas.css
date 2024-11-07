@@ -1,4 +1,4 @@
-.inventario-container {
+.marcas-container {
     display: flex;
     flex-direction: column;
     align-items: start;
@@ -17,7 +17,7 @@
     margin-left: 20px;
 }
 
-.btn-nuevo-producto {
+.btn-nuevo-marca {
     display: inline-block;
     padding: 10px;
     background: #003459;
@@ -29,10 +29,10 @@
     cursor: pointer;
 }
 
-.btn-nuevo-producto:active {
+.btn-nuevo-rol:active {
     transform: scale(0.95);
 }
-.btn-container-nuevo :hover {
+.btn-container-rol :hover {
     background: #90ccf7;
 }
 
@@ -53,13 +53,13 @@
 .btn-container-regresar :hover {
     background: #90ccf7;
 }
-
-.btn-stock {
+.btn-detalle {
     background: #0784dd;
     border: none;
     color: white;
     padding: 4px 10px;
     border-radius: 8px;
+    text-decoration: none;
 }
 .btn-eliminar {
     background: #a71805;
@@ -73,55 +73,4 @@
     justify-content: center;
     align-items: center;
     margin-top: 20px;
-}
-.btn-container-categorias {
-    margin-bottom: 50px;
-}
-
-.btn-ver-categorias {
-    display: inline-block;
-    padding: 10px;
-    background: #003459;
-    color: white;
-    font-weight: bold;
-    text-decoration: none;
-    border-radius: 8px;
-    transition: transform 0.1s ease, background-color 0.3s ease;
-    cursor: pointer;
-}
-
-.btn-ver-categorias:active {
-    transform: scale(0.95);
-}
-.btn-container-categorias :hover {
-    background: #90ccf7;
-}
-.btn-container-marcas {
-    margin-bottom: 50px;
-}
-.btn-ver-marcas {
-    display: inline-block;
-    padding: 10px;
-    background: #003459;
-    color: white;
-    font-weight: bold;
-    text-decoration: none;
-    border-radius: 8px;
-    transition: transform 0.1s ease, background-color 0.3s ease;
-    cursor: pointer;
-}
-
-.btn-ver-marcas:active {
-    transform: scale(0.95);
-}
-.btn-container-marcas :hover {
-    background: #90ccf7;
-}
-
-.container-buttons {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 20px;
-    gap: 20px;
 }

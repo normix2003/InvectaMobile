@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Detalles Rol</title>
+    <title>Detalles Categoria</title>
     <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -11,44 +11,18 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
     <link rel="stylesheet" href="{{ asset('css/app.css') }}" />
-    <link rel="stylesheet" href="{{ asset('css/roles/detalle-rol.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/inventario/detalle-marca.css') }}" />
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const todosCheckbox = document.getElementById('todosCheckbox');
-            const checkboxes = document.querySelectorAll('.permiso-checkbox');
-
-            // Función para desmarcar todas las opciones excepto "Todos"
-            todosCheckbox.addEventListener('change', function () {
-                if (todosCheckbox.checked) {
-                    checkboxes.forEach(function (checkbox) {
-                        checkbox.checked = false;
-                        checkbox.disabled = true; // Deshabilita los otros checkboxes
-                    });
-                } else {
-                    checkboxes.forEach(function (checkbox) {
-                        checkbox.disabled = false; // Habilita los otros checkboxes cuando "Todos" se desmarca
-                    });
-                }
-            });
-
-            // Función para desmarcar "Todos" si cualquier otro checkbox es marcado
-            checkboxes.forEach(function (checkbox) {
-                checkbox.addEventListener('change', function () {
-                    if (checkbox.checked) {
-                        todosCheckbox.checked = false;
-                        todosCheckbox.disabled = false; // Habilita "Todos" si otro checkbox es marcado
-                    }
-                });
-            });
             // Verifica si 'edit' está en localStorage, si no, lo establece en 'false'
-            let isEdit = localStorage.getItem('editRol');
+            let isEdit = localStorage.getItem('editMarca');
             if (isEdit === null) {
-                localStorage.setItem('editRol', 'false');
+                localStorage.setItem('editMarca', 'false');
             }
 
             // Deshabilitar o habilitar inputs según el valor de 'edit' en localStorage
             const inputs = document.querySelectorAll('#userForm input, #userForm select , #userForm button');
-            if (localStorage.getItem('editRol') === 'false') {
+            if (localStorage.getItem('editMarca') === 'false') {
                 inputs.forEach(input => {
                     input.setAttribute('disabled', 'disabled');
                 });
@@ -64,7 +38,7 @@
                 event.preventDefault(); // Prevenir el envío del formulario para que puedas hacer algo antes
 
                 // Si necesitas hacer algo al enviar el formulario, lo haces aquí
-                localStorage.removeItem('editRol'); // Limpiar el valor de 'edit' en localStorage
+                localStorage.removeItem('editMarca'); // Limpiar el valor de 'edit' en localStorage
 
                 // Si deseas enviar el formulario después de hacer algo, puedes hacerlo de esta manera:
                 form.submit(); // Esto enviará el formulario
@@ -77,7 +51,7 @@
             if (editButton) {
                 editButton.addEventListener('click', function (event) {
                     // Cambia el valor de 'edit' en localStorage
-                    localStorage.setItem('editRol', true);
+                    localStorage.setItem('editMarca', true);
                     location.reload();
                 });
             }
@@ -104,7 +78,7 @@
             </i>
             <h2 class="header-subtitle">InvectaMobile</h2>
             <div class="header-divider"></div>
-            <h1 class="header-title">Detalles de Rol</h1>
+            <h1 class="header-title">Detalles de marca</h1>
         </div>
         @if (session('success'))
             <div class="alert alert-success" id="alert-success">
@@ -122,72 +96,32 @@
                 </ul>
             </div>
         @endif
-        <form id="userForm" action="{{route('roles.update', $idRoles)}}" method="post">
-            <div class="detalle-rol-container">
-                <h1 class="title">Informacion del rol seleccionado</h1>
-                <div class="detalle-rol-input">
+        <form id="userForm" action="{{route('marca.update', $marca->idMarcas)}}" method="post">
+            <div class="detalle-marca-container">
+                <h1 class="title">Informacion de la marca seleccionada</h1>
+                <div class="detalle-marca-input">
                     @csrf
                     @method('PUT')
-                    <input placeholder="Nombre rol" name="Nombre" value="{{ $roles->Nombre}}" disabled Required></input>
-                    <div class="permisos-section">
-                        <p>Seleccionar Permisos</p>
-                        <span class="permisos-container">
-                            @php
-                                $permisosArray = $roles->detallesroles->pluck('permisos.Nombre')->toArray();
-                                //dd($permisosArray);
-                                $permisoCrear = in_array('Crear', $permisosArray);
-                                $permisoModificar = in_array('Modificar', $permisosArray);
-                                $permisoEliminar = in_array('Eliminar', $permisosArray);
-                                $permisoVer = in_array('Ver', $permisosArray);
-                                $marcarTodos = in_array('Crear', $permisosArray) && in_array('Modificar', $permisosArray) && in_array('Eliminar', $permisosArray) && in_array('Ver', $permisosArray);
-                            @endphp
-                            <label>
-                                <input type="checkbox" name="opcion[]" value="Ver" {{ !$marcarTodos && $permisoVer ? 'checked' : ''}} disabled class="permiso-checkbox">
-                                Ver
-                            </label>
-                            <label>
-                                <input type="checkbox" name="opcion[]" value="Modificar" {{ !$marcarTodos && $permisoModificar ? 'checked' : ''}} disabled class="permiso-checkbox">
-                                Modificar
-                            </label>
-
-                            <label>
-                                <input type="checkbox" name="opcion[]" value="Todos" {{ $marcarTodos ? 'checked' : ''}}
-                                    disabled id="todosCheckbox">
-                                Todos
-                            </label>
-                            <label>
-                                <input type="checkbox" name="opcion[]" value="Crear" {{ !$marcarTodos && $permisoCrear ? 'checked' : ''}} disabled class="permiso-checkbox">
-                                Crear
-                            </label>
-                            <label>
-                                <input type="checkbox" name="opcion[]" value="Eliminar" {{ !$marcarTodos && $permisoEliminar ? 'checked' : ''}} disabled class="permiso-checkbox">
-                                Eliminar
-                            </label>
-
-                        </span>
+                    <input placeholder="Nombre marca" name="Nombre_Marca" value="{{ $marca->Nombre_Marca}}" disabled
+                        Required></input>
+                    <div class="actualizar-container">
+                        <button class="btn-actualizar" type="submit">Actualizar</button>
                     </div>
-                    @if ($roles->Nombre !== 'Administrador')
-                        <div class="actualizar-container">
-                            <button class="btn-actualizar" type="submit">Actualizar</button>
-                        </div>
-                    @endif
 
                 </div>
             </div>
         </form>
-        @if ($roles->Nombre !== 'Administrador')
-            <button type="button" id="editButton">
-                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-                    <g fill="none" stroke="#18e747" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
-                        <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                        <path
-                            d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z" />
-                    </g>
-                </svg>
-            </button>
-        @endif
+        <button type="button" id="editButton">
+            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                <g fill="none" stroke="#18e747" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                    <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                    <path
+                        d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z" />
+                </g>
+            </svg>
+        </button>
         <span class="btn-container-regresar">
-            <a class="btn-regresar" href="{{route('roles.roles')}}">
+            <a class="btn-regresar" href="{{route('marcas')}}">
                 Regresar
             </a>
         </span>

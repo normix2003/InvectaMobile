@@ -44,10 +44,10 @@
                 </ul>
             </div>
         @endif
-    
+
     </header>
     <main>
-        <form action="{{route('marca.store')}}" method="post">
+        <form action="{{route('marca.store', ['source' => $source])}}" method="post">
 
             <div class="nuevo-rol-container">
                 <h1 class="title">Ingrese el nombre de la nueva marca</h1>
@@ -61,7 +61,7 @@
             </div>
         </form>
         <span class="btn-container-regresar">
-            <a class="btn-regresar" href="{{route('nuevo-producto')}}">
+            <a class="btn-regresar" href="{{route($source == 'nuevo-producto' ? 'nuevo-producto' : 'marcas')}}">
                 Regresar
             </a>
         </span>

@@ -50,7 +50,6 @@
 
             // Comprobar si el botón existe en el DOM
             if (editButton) {
-                console.log("Botón encontrado"); // Verifica si el botón está siendo detectado
                 editButton.addEventListener('click', function (event) {
                     // Cambia el valor de 'edit' en localStorage
                     localStorage.setItem('editUser', true);

@@ -11,6 +11,6 @@ class categorias extends Model
     protected $table = 'categorias';
     protected $primaryKey = 'idCategorias';
     public $incrementing = true;
-    protected $fillable = ['Nombre_Categoria', ' Descripcion'];
+    protected $fillable = ['Nombre_Categoria', ' Descripcion', 'Eliminar'];
     public $timestamps = false;
 }

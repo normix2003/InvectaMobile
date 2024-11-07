@@ -47,21 +47,21 @@
         @endif
     </header>
     <main>
-        <form action="{{route('categoria.store')}}" method="post">
+        <form action="{{route('categoria.store', ['source' => $source])}}" method="post">
             <div class="nuevo-rol-container">
                 <h1 class="title">Ingrese los datos de la nueva categoria</h1>
 
                 <div class="nuevo-rol-input">
                     @csrf
                     <input type="text" name="Nombre_Categoria" placeholder="Categoria" Required>
-                    <input type="text" name="Descripcion" placeholder="Descripcion" Required>
+                    <input type="text" name="Descripcion" placeholder="Descripcion">
                 </div>
                 <button class="btn-crear" type="submit">Crear</button>
 
             </div>
         </form>
         <span class="btn-container-regresar">
-            <a class="btn-regresar" href="{{route('nuevo-producto')}}">
+            <a class="btn-regresar" href="{{route($source == 'nuevo-producto' ? 'nuevo-producto' : 'categorias')}}">
                 Regresar
             </a>
         </span>

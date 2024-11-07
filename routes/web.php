@@ -58,6 +58,7 @@ Route::middleware(['auth', 'checkPermisos:Ver,Crear'])->group(function () {
     Route::post('/nueva-factura', [FacturaController::class, 'nuevaFactura'])->name('nueva-factura');
 
     Route::get('buscar-cliente', [ClienteController::class, 'buscarCliente'])->name('buscar-cliente');
+
     Route::get('/nuevo-cliente', [ClienteController::class, 'index'])->name('nuevo-cliente');
     Route::post('/nuevo-cliente', [ClienteController::class, 'store'])->name('cliente.store');
 
@@ -71,11 +72,19 @@ Route::middleware(['auth', 'checkPermisos:Crear,Modificar'])->group(function () 
     Route::get('/nuevo-producto', [InventarioController::class, 'nuevoProducto'])->name('nuevo-producto');
     Route::post('/nuevo-producto', [InventarioController::class, 'store'])->name('nuevo-producto.store');
 
-    Route::get('/nueva-marca', [MarcaController::class, 'index'])->name('inventario.marca');
+    Route::get('/marcas', [MarcaController::class, 'index'])->name('marcas');
+    Route::get('/nueva-marca', [MarcaController::class, 'nuevaMarca'])->name('inventario.marca');
+    Route::get('/detalle-marca/{idMarcas}', [MarcaController::class, 'detalleMarca'])->name('marca.detalles-marca');
     Route::post('/nueva-marca', [MarcaController::class, 'store'])->name('marca.store');
+    Route::delete('/marcas/{idMarcas}', [MarcaController::class, 'destroy'])->name('marca.destroy');
+    Route::put('/detalle-marca/{idMarcas}', [MarcaController::class, 'update'])->name('marca.update');
 
-    Route::get('/nueva-categoria', [CategoriaController::class, 'index'])->name('inventario.categoria');
+    Route::get('/categorias', [CategoriaController::class, 'index'])->name('categorias');
+    Route::get('/nueva-categoria', [CategoriaController::class, 'nuevaCategoria'])->name('inventario.categoria');
     Route::post('/nueva-categoria', [CategoriaController::class, 'store'])->name('categoria.store');
+    Route::get('/detalle-categoria/{idCateogria}', [CategoriaController::class, 'detalleCategoria'])->name('categoria.detalles-categoria');
+    Route::delete('/categorias/{idCategorias}', [CategoriaController::class, 'destroy'])->name('categoria.destroy');
+    Route::put('/detalle-categoria/{idCateogria}', [CategoriaController::class, 'update'])->name('categoria.update');
 
 });
 Route::middleware(['auth', 'checkPermisos:Modificar'])->group(function () {

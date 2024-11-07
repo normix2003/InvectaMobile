@@ -64,7 +64,7 @@
                                 <option value="{{$marca->Nombre_Marca}}">{{$marca->Nombre_Marca}}</option>
                             @endforeach
                         </select>
-                        <a class="btn-marca" href="{{route('inventario.marca')}}">
+                        <a class="btn-marca" href="{{route('inventario.marca', ['source' => 'nuevo-producto'])}}">
                             +
                         </a>
                     </div>
@@ -75,7 +75,8 @@
                                 <option value="{{$categoria->Nombre_Categoria}}">{{$categoria->Nombre_Categoria}}</option>
                             @endforeach
                         </select>
-                        <a class="btn-categoria" href="{{route('inventario.categoria')}}">
+                        <a class="btn-categoria"
+                            href="{{route('inventario.categoria', ['source' => 'nuevo-producto'])}}">
                             +
                         </a>
                     </div>
