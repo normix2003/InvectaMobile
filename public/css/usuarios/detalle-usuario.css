@@ -16,6 +16,7 @@ main {
     justify-items: center;
     align-items: center;
     margin: 22px;
+    margin-right: 10px;
 }
 .detalle-usuario-input {
     display: flex;
@@ -92,7 +93,6 @@ select option:checked {
 
 #editButton {
     margin-bottom: 400px;
-    margin-left: -20px;
     font-size: 32px;
     background-color: white;
     border-radius: 8px;

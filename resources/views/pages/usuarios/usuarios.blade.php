@@ -12,7 +12,15 @@
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
     <link rel="stylesheet" href="{{ asset('css/app.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/usuarios/usuarios.css') }}" />
-
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const cerrar = document.getElementById('btncerrar');
+            cerrar.addEventListener('click', () => {
+                localStorage.removeItem('productos');
+                localStorage.removeItem('tiempoSeleccionado');
+            });
+        });
+    </script>
 
 </head>
 

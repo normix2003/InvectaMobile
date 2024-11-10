@@ -119,15 +119,13 @@ class VentasController
     public function detallesVentas(Request $request)
     {
         //Obtener el tiempo de busqueda
-        $tiempo = $request->query('tiempo') ?? 'Hoy';
+        $tiempoSelect = $request->query('tiempoSelect');
+        $tiempo = $request->query('tiempo') ?? $tiempoSelect;
         //Obtener las ventas segun el tiempo de busqueda
         switch ($tiempo) {
-            case 'Dia':
-                //Obtener las ventas del dia
+            case 'Todo':
+                //Obtener todas las ventas
                 $ventas = detallesventas::with(['producto', 'venta.empleado', 'venta.cliente'])
-                    ->whereHas('venta', function ($query) {
-                        $query->whereDate('Fecha', date('Y-m-d'));
-                    })
                     ->paginate(6);
                 break;
             case 'Semana':
@@ -164,8 +162,11 @@ class VentasController
                     ->paginate(6);
                 break;
             default:
-                //Obtener todas las ventas
+                //Obtener las ventas del dia
                 $ventas = detallesventas::with(['producto', 'venta.empleado', 'venta.cliente'])
+                    ->whereHas('venta', function ($query) {
+                        $query->whereDate('Fecha', date('Y-m-d'));
+                    })
                     ->paginate(6);
                 break;
         }

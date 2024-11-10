@@ -12,7 +12,15 @@
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
     <link rel="stylesheet" href="{{ asset('css/app.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/inventario/inventario.css') }}" />
-
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const cerrar = document.getElementById('btncerrar');
+            cerrar.addEventListener('click', () => {
+                localStorage.removeItem('productos');
+                localStorage.removeItem('tiempoSeleccionado');
+            });
+        });
+    </script>
 </head>
 
 <body>
@@ -51,9 +59,14 @@
         <div class="inventario-container ">
             <div class="container-buttons">
                 <span class="btn-container-nuevo">
-                    <a class="btn-nuevo-producto" href="{{route('nuevo-producto')}}">
-                        Nuevo Producto
-                    </a>
+                    @php
+                        $userPermisos = Auth::user()->rol->detallesroles->where('Eliminar', 0)->pluck('permisos.Nombre')->toArray();
+                    @endphp
+                    @if (in_array('Crear', $userPermisos) && in_array('Modificar', $userPermisos))
+                        <a class="btn-nuevo-producto" href="{{route('nuevo-producto')}}">
+                            Nuevo Producto
+                        </a>
+                    @endif
                 </span>
                 <span class="btn-container-categorias">
                     <a class="btn-ver-categorias" href="{{route('categorias')}}">
@@ -77,8 +90,10 @@
                             <th class="text-center" scope="col">CATEGORIA</th>
                             <th class="text-center" scope="col">STOCK ACTUAL</th>
                             <th class="text-center" scope="col">PRECIO</th>
-                            <th class="text-center" scope="col"></th>
-                            <th class="text-center" scope="col"></th>
+                            @if (in_array('Crear', haystack: $userPermisos) && in_array('Modificar', $userPermisos))
+                                <th class="text-center" scope="col"></th>
+                                <th class="text-center" scope="col"></th>
+                            @endif
                             <th class="text-center" scope="col"></th>
                         </tr>
                     </thead>
@@ -92,24 +107,26 @@
                                 <td class="px-3 text-center">{{$producto->categoria->Nombre_Categoria}}</td>
                                 <td class="px-3 text-center">{{$producto->Cantidad}}</td>
                                 <td class="px-3 text-center">{{$producto->Precio}}</td>
-                                <td class="px-3 text-center">
-                                    <form action="{{route('stock', ['idProductos' => $producto->idProductos])}}"
-                                        method="get">
-                                        @csrf
-                                        <button class="btn-stock" type="submit">
-                                            + Stock
-                                        </button>
-                                    </form>
-                                </td>
-                                <td class="px-3 text-center">
-                                    <form action="{{route('inventario.destroy', $producto->idProductos)}}" method="post">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn-eliminar">
-                                            Eliminar
-                                        </button>
-                                    </form>
-                                </td>
+                                @if (in_array('Crear', haystack: $userPermisos) && in_array('Modificar', $userPermisos))
+                                    <td class="px-3 text-center">
+                                        <form action="{{route('stock', ['idProductos' => $producto->idProductos])}}"
+                                            method="get">
+                                            @csrf
+                                            <button class="btn-stock" type="submit">
+                                                + Stock
+                                            </button>
+                                        </form>
+                                    </td>
+                                    <td class="px-3 text-center">
+                                        <form action="{{route('inventario.destroy', $producto->idProductos)}}" method="post">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn-eliminar">
+                                                Eliminar
+                                            </button>
+                                        </form>
+                                    </td>
+                                @endif
                                 <td class="px-3 text-center">
                                     <a class="btn-detalle"
                                         href="{{route('inventario.detalle-producto', $producto->idProductos)}}">

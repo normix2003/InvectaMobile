@@ -55,6 +55,11 @@
                     location.reload();
                 });
             }
+            const regresar = document.getElementById('regresar');
+            regresar.addEventListener('click', function (event) {
+                localStorage.removeItem('editCategoria');
+                location.href = "{{ route('categorias') }}";
+            });
         });
     </script>
 </head>
@@ -123,7 +128,7 @@
             </svg>
         </button>
         <span class="btn-container-regresar">
-            <a class="btn-regresar" href="{{route('categorias')}}">
+            <a id="regresar" class="btn-regresar">
                 Regresar
             </a>
         </span>

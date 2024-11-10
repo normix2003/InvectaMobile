@@ -28,9 +28,18 @@ document.addEventListener("DOMContentLoaded", function () {
             };
 
             let productos = JSON.parse(localStorage.getItem("productos")) || [];
+
+            // Verificar si el producto ya está en la lista
+            const existe = productos.find((p) => p.id === producto.id);
+            if (existe) {
+                existe.cantidad++;
+                localStorage.setItem("productos", JSON.stringify(productos));
+                toggleBoton();
+                location.reload();
+                return;
+            }
             productos.push(producto);
             localStorage.setItem("productos", JSON.stringify(productos));
-
             toggleBoton();
             location.reload();
         });

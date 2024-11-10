@@ -11,7 +11,15 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ asset('css/home.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/app.css') }}" />
-
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const cerrar = document.getElementById('btncerrar');
+            cerrar.addEventListener('click', () => {
+                localStorage.removeItem('productos');
+                localStorage.removeItem('tiempoSeleccionado');
+            });
+        });
+    </script>
 </head>
 
 <body>

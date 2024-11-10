@@ -46,9 +46,14 @@
     <main>
         <div class="categorias-container ">
             <span class="btn-container-nuevo">
-                <a class="btn-nuevo-categoria" href="{{route('inventario.categoria', ['source' => 'categorias'])}}">
-                    Nueva Categoria
-                </a>
+                @php
+                    $userPermisos = Auth::user()->rol->detallesroles->where('Eliminar', 0)->pluck('permisos.Nombre')->toArray();
+                @endphp
+                @if (in_array('Crear', haystack: $userPermisos) && in_array('Modificar', $userPermisos))
+                    <a class="btn-nuevo-categoria" href="{{route('inventario.categoria', ['source' => 'categorias'])}}">
+                        Nueva Categoria
+                    </a>
+                @endif
             </span>
 
             <div class="table-responsive w-100">
@@ -56,9 +61,10 @@
                     <thead class="table-dark">
                         <tr>
                             <th class="px-3 text-center" scope="col">ID</th>
-                            <th class="px-3 text-center" scope="col"></th>
                             <th class="px-3 text-center" scope="col">NOMBRE</th>
-                            <th class="px-3 text-center" scope="col"></th>
+                            @if (in_array('Crear', haystack: $userPermisos) && in_array('Modificar', $userPermisos))
+                                <th class="px-3 text-center" scope="col"></th>
+                            @endif
                             <th class="px-3 text-center" scope="col"></th>
                         </tr>
                     </thead>
@@ -66,18 +72,19 @@
                         @foreach ($categorias as $categoria)
                             <tr class=" table-rows">
                                 <td class="px-3 text-center" scope="row">{{$categoria->idCategorias}}</td>
-                                <td class="px-3 text-center"></td>
                                 <td class="px-3 text-center">{{$categoria->Nombre_Categoria}}</td>
-                                <td class="px-3 text-center">
-                                    <form action="{{route('categoria.destroy', $categoria->idCategorias)}}" method="post">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn-eliminar">
-                                            Eliminar
-                                        </button>
-                                    </form>
+                                @if (in_array('Crear', haystack: $userPermisos) && in_array('Modificar', $userPermisos))
+                                    <td class="px-3 text-center">
+                                        <form action="{{route('categoria.destroy', $categoria->idCategorias)}}" method="post">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn-eliminar">
+                                                Eliminar
+                                            </button>
+                                        </form>
 
-                                </td>
+                                    </td>
+                                @endif
                                 <td class="px-3 text-center">
                                     <a class="btn-detalle"
                                         href="{{route('categoria.detalles-categoria', $categoria->idCategorias)}}">

@@ -81,6 +81,11 @@
                     location.reload();
                 });
             }
+            const regresar = document.getElementById('regresar');
+            regresar.addEventListener('click', function (event) {
+                localStorage.removeItem('editRol');
+                location.href = "{{ route('roles.roles') }}";
+            });
         });
     </script>
 </head>
@@ -187,7 +192,7 @@
             </button>
         @endif
         <span class="btn-container-regresar">
-            <a class="btn-regresar" href="{{route('roles.roles')}}">
+            <a id="regresar" class="btn-regresar">
                 Regresar
             </a>
         </span>

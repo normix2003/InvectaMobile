@@ -115,6 +115,10 @@ class LoginController
     {
         //Cerrar la sesion del usuario y redirigir al login
         Auth::logout();
+        session()->forget('productosBuscados');
+        session()->forget('productosTotales');
+        session()->forget('total');
+        session()->forget('cliente');
         return redirect()->route('login');
     }
 

@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="{{ asset('css/inventario/detalle-producto.css') }}" />
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+
             // Verifica si 'edit' está en localStorage, si no, lo establece en 'false'
             let isEdit = localStorage.getItem('editProducto');
             if (isEdit === null) {
@@ -55,6 +56,12 @@
                     location.reload();
                 });
             }
+
+            const regresar = document.getElementById('regresar');
+            regresar.addEventListener('click', function (event) {
+                localStorage.removeItem('editProducto');
+                location.href = "{{ route('inventario') }}";
+            });
         });
     </script>
 </head>
@@ -97,9 +104,9 @@
             </div>
         @endif
         <form id="userForm" action="{{route('inventario.update', $producto->idProductos)}}" method="post">
-            <div class="detalle-marca-container">
+            <div class="detalle-producto-container">
                 <h1 class="title">Informacion del producto seleccionado</h1>
-                <div class="detalle-marca-input">
+                <div class="detalle-producto-input">
                     @csrf
                     @method('PUT')
                     <input placeholder="Nombre producto" name="Nombre_Producto" value="{{ $producto->Nombre_Producto}}"
@@ -148,14 +155,14 @@
             </svg>
         </button>
         <span class="btn-container-regresar">
-            <a class="btn-regresar" href="{{route('inventario')}}">
+            <a id="regresar" class="btn-regresar">
                 Regresar
             </a>
         </span>
     </main>
     <footer>
         <!-- place footer here -->
-        <div class="footer-container">
+        <div class=" footer-container">
             <div class="footer-legal">
                 <p>InvectaMobile 2024 &copy; Todos los derechos reservados.</p>
             </div>

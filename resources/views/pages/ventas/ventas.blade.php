@@ -11,6 +11,20 @@
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
     <link rel="stylesheet" href="{{ asset('css/app.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/ventas/ventas.css') }}" />
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const verVentas = document.getElementById('ver-ventas');
+            const selectOption = localStorage.getItem('tiempoSeleccionado');
+            verVentas.addEventListener('click', () => {
+                window.location.href = "{{route('ver-ventas', ['tiempoSelect' => 'tiempoOption'])}}".replace('tiempoOption', selectOption);
+            });
+            const cerrar = document.getElementById('btncerrar');
+            cerrar.addEventListener('click', () => {
+                localStorage.removeItem('productos');
+                localStorage.removeItem('tiempoSeleccionado');
+            });
+        });
+    </script>
 </head>
 
 <body>
@@ -68,7 +82,7 @@
                     </button>
                     @if (Auth::user() && Auth::user()->rol->Nombre == 'Administrador')
                         <span class="ver-ventas-container">
-                            <a class="btn-ver-ventas" href="{{route('ver-ventas')}}">Ver Ventas</a>
+                            <a id="ver-ventas" class="btn-ver-ventas">Ver Ventas</a>
                         </span>
                     @endif
                 </div>

@@ -23,6 +23,7 @@
             if (selectedOption) {
                 // Si existe, establece el valor en el select
                 tiempoSelect.value = selectedOption;
+                //document.getElementById('formVentas').submit();
             }
 
             // Guarda la opción seleccionada en localStorage cuando el usuario selecciona una opción
@@ -58,7 +59,7 @@
     <main>
         <div class="inventario-container ">
             <div class="tiempo-container">
-                <form action="{{route('ver-ventas')}}" method="GET">
+                <form id="formVentas" action="{{route('ver-ventas')}}" method="GET">
                     <select name="tiempo" id="tiempo" class="tiempo-seleccionado">
                         <option value="Dia">Hoy</option>
                         <option value="Semana">7 Dias</option>

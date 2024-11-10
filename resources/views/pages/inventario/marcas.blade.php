@@ -46,9 +46,14 @@
     <main>
         <div class="marcas-container ">
             <span class="btn-container-nuevo">
-                <a class="btn-nuevo-marca" href="{{route('inventario.marca', ['source' => 'marcas'])}}">
-                    Nueva Marca
-                </a>
+                @php
+                    $userPermisos = Auth::user()->rol->detallesroles->where('Eliminar', 0)->pluck('permisos.Nombre')->toArray();
+                @endphp
+                @if (in_array('Crear', haystack: $userPermisos) && in_array('Modificar', $userPermisos))
+                    <a class="btn-nuevo-marca" href="{{route('inventario.marca', ['source' => 'marcas'])}}">
+                        Nueva Marca
+                    </a>
+                @endif
             </span>
 
             <div class="table-responsive w-100">
@@ -56,9 +61,10 @@
                     <thead class="table-dark">
                         <tr>
                             <th class="px-3 text-center" scope="col">ID</th>
-                            <th class="px-3 text-center" scope="col"></th>
                             <th class="px-3 text-center" scope="col">NOMBRE</th>
-                            <th class="px-3 text-center" scope="col"></th>
+                            @if (in_array('Crear', haystack: $userPermisos) && in_array('Modificar', $userPermisos))
+                                <th class="px-3 text-center" scope="col"></th>
+                            @endif
                             <th class="px-3 text-center" scope="col"></th>
                         </tr>
                     </thead>
@@ -66,18 +72,19 @@
                         @foreach ($marcas as $marca)
                             <tr class=" table-rows">
                                 <td class="px-3 text-center" scope="row">{{$marca->idMarcas}}</td>
-                                <td class="px-3 text-center"></td>
                                 <td class="px-3 text-center">{{$marca->Nombre_Marca}}</td>
-                                <td class="px-3 text-center">
-                                    <form action="{{route('marca.destroy', $marca->idMarcas)}}" method="post">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn-eliminar">
-                                            Eliminar
-                                        </button>
-                                    </form>
+                                @if (in_array('Crear', haystack: $userPermisos) && in_array('Modificar', $userPermisos))
+                                    <td class="px-3 text-center">
+                                        <form action="{{route('marca.destroy', $marca->idMarcas)}}" method="post">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn-eliminar">
+                                                Eliminar
+                                            </button>
+                                        </form>
 
-                                </td>
+                                    </td>
+                                @endif
                                 <td class="px-3 text-center">
                                     <a class="btn-detalle" href="{{route('marca.detalles-marca', $marca->idMarcas)}}">
                                         Detalle

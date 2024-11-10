@@ -125,3 +125,11 @@
     margin-top: 20px;
     gap: 20px;
 }
+.btn-detalle {
+    background: #0784dd;
+    border: none;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 8px;
+    text-decoration: none;
+}

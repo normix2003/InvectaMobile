@@ -55,6 +55,11 @@
                     location.reload();
                 });
             }
+            const regresar = document.getElementById('regresar');
+            regresar.addEventListener('click', function (event) {
+                localStorage.removeItem('editMarca');
+                location.href = "{{ route('marcas') }}";
+            });
         });
     </script>
 </head>
@@ -121,7 +126,7 @@
             </svg>
         </button>
         <span class="btn-container-regresar">
-            <a class="btn-regresar" href="{{route('marcas')}}">
+            <a id="regresar" class="btn-regresar">
                 Regresar
             </a>
         </span>
