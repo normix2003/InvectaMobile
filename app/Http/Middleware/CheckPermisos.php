@@ -17,7 +17,9 @@ class CheckPermisos
     public function handle(Request $request, Closure $next, ...$permisos): Response
     {
         if (Auth::check()) {
-            $userPermisos = Auth::user()->rol->detallesroles->pluck('permisos.Nombre')->toArray();
+            //$userPermisos = Auth::user()->rol->detallesroles->pluck('permisos.Nombre')->toArray();
+            $userPermisos = Auth::user()->rol->detallesroles->where('Eliminar', 0)->pluck('permisos.Nombre')->toArray();
+            //dd($userPermisos);
             if (collect($permisos)->every(fn($permiso) => in_array($permiso, $userPermisos))) {
                 return $next($request);
             }

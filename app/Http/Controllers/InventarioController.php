@@ -18,13 +18,25 @@ class InventarioController
         return view('pages.inventario.inventario', ['inventario' => $inventario]);
     }
 
+    public function detalleProducto($idProductos)
+    {
+        $producto = producto::with(['marca', 'categoria'])->where('idProductos', $idProductos)->first();
+        $marcas = marcas::all()->where('Eliminar', 0);
+        ;
+        $categorias = categorias::all()->where('Eliminar', 0);
+        ;
+        return view('pages.inventario.detalle-producto', ['producto' => $producto, 'marcas' => $marcas, 'categorias' => $categorias]);
+    }
+
     // Función para mostrar la vista de nuevo-producto y las marcas y categorías registradas en la base de datos
     public function nuevoProducto()
     {
         // Se obtienen todas las marcas y categorías
-        $marcas = marcas::all();
+        $marcas = marcas::all()->where('Eliminar', 0);
+        ;
         // Se obtienen todas las categorías
-        $categorias = categorias::all();
+        $categorias = categorias::all()->where('Eliminar', 0);
+        ;
         // Se retorna la vista de nuevo-producto con las marcas y categorías
         return view('pages.inventario.nuevo-producto', ['marcas' => $marcas, 'categorias' => $categorias]);
     }
@@ -105,8 +117,45 @@ class InventarioController
         return view('pages.inventario.stock', ['idProductos' => $idProductos]);
     }
 
+    public function update($idProductos, Request $request)
+    {
+        $request->validate([
+            'Nombre_Producto' => 'required|string',
+            'Descripcion' => 'required|string',
+            'Precio' => 'required|numeric|min:0',
+            'Cantidad' => 'required|integer|min:1',
+        ], [
+            'Nombre_Producto.required' => 'El campo del producto no debe estar vacío.',
+            'Descripcion.required' => 'La descripción no debe estar vacía.',
+            'Precio.required' => 'El precio es obligatorio y debe ser un número.',
+            'Precio.numeric' => 'El precio debe ser un valor numérico.',
+            'Cantidad.required' => 'La cantidad es obligatoria y debe ser un número entero.',
+            'Cantidad.integer' => 'La cantidad debe ser un número entero.',
+            'Cantidad.min' => 'La cantidad debe ser al menos 1.',
+        ]);
+
+        // Se obtiene el nombre del producto, la descripción, el precio y la cantidad del formulario en la vista
+        $producto = $request->only(['Nombre_Producto', 'Descripcion', 'Precio', 'Cantidad']);
+        $nombreMarca = $request->input('Nombre_Marca');
+        $nombreCategoria = $request->input('Nombre_Categoria');
+        // Se obtiene un producto en específico por medio de su idProductos
+        $productoActual = producto::findOrFail($idProductos);
+        $marca = marcas::where('Nombre_Marca', $nombreMarca)->first();
+        $categoria = categorias::where('Nombre_Categoria', $nombreCategoria)->first();
+        // Si se obtiene el producto, se actualiza
+        if (!empty($productoActual)) {
+            $producto['Precio'] = (float) str_replace(',', '', $producto['Precio']);
+            $producto['ID_Marca'] = $marca->idMarcas;
+            $producto['ID_Categoria'] = $categoria->idCategorias;
+            $productoActual->update($producto);
+            return redirect()->route('inventario')->with('success', 'Producto actualizado exitosamente.');
+        }
+
+        // Se redirecciona a la vista de inventario
+        return redirect()->route('inventario')->withErrors(['error' => 'No se encontró el producto especificado.']);
+    }
     // Función para actualizar el stock de un producto en la base de datos
-    public function update(Request $request, $idProductos)
+    public function stockUpdate(Request $request, $idProductos)
     {
         $request->validate([
             'Cantidad' => 'required|integer|min:1',

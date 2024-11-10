@@ -119,7 +119,7 @@ class VentasController
     public function detallesVentas(Request $request)
     {
         //Obtener el tiempo de busqueda
-        $tiempo = $request->query('tiempo');
+        $tiempo = $request->query('tiempo') ?? 'Hoy';
         //Obtener las ventas segun el tiempo de busqueda
         switch ($tiempo) {
             case 'Dia':

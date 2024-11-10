@@ -49,7 +49,13 @@ Route::middleware(['auth', 'checkPermisos:Ver'])->group(function () {
     Route::get('/buscar-producto', [VentasController::class, 'buscarProducto'])->name('buscar-producto');
 
     Route::get('/inventario', [InventarioController::class, 'index'])->name('inventario');
+    Route::get('/detalle-producto/{idProductos}', [InventarioController::class, 'detalleProducto'])->name('inventario.detalle-producto');
 
+    Route::get('/marcas', [MarcaController::class, 'index'])->name('marcas');
+    Route::get('/detalle-marca/{idMarcas}', [MarcaController::class, 'detalleMarca'])->name('marca.detalles-marca');
+
+    Route::get('/categorias', [CategoriaController::class, 'index'])->name('categorias');
+    Route::get('/detalle-categoria/{idCateogria}', [CategoriaController::class, 'detalleCategoria'])->name('categoria.detalles-categoria');
 });
 
 Route::middleware(['auth', 'checkPermisos:Ver,Crear'])->group(function () {
@@ -71,18 +77,17 @@ Route::middleware(['auth', 'checkPermisos:Crear,Modificar'])->group(function () 
 
     Route::get('/nuevo-producto', [InventarioController::class, 'nuevoProducto'])->name('nuevo-producto');
     Route::post('/nuevo-producto', [InventarioController::class, 'store'])->name('nuevo-producto.store');
+    Route::put('/detalle-producto/{idProductos}', [InventarioController::class, 'update'])->name('inventario.update');
 
-    Route::get('/marcas', [MarcaController::class, 'index'])->name('marcas');
+
     Route::get('/nueva-marca', [MarcaController::class, 'nuevaMarca'])->name('inventario.marca');
-    Route::get('/detalle-marca/{idMarcas}', [MarcaController::class, 'detalleMarca'])->name('marca.detalles-marca');
     Route::post('/nueva-marca', [MarcaController::class, 'store'])->name('marca.store');
     Route::delete('/marcas/{idMarcas}', [MarcaController::class, 'destroy'])->name('marca.destroy');
     Route::put('/detalle-marca/{idMarcas}', [MarcaController::class, 'update'])->name('marca.update');
 
-    Route::get('/categorias', [CategoriaController::class, 'index'])->name('categorias');
+
     Route::get('/nueva-categoria', [CategoriaController::class, 'nuevaCategoria'])->name('inventario.categoria');
     Route::post('/nueva-categoria', [CategoriaController::class, 'store'])->name('categoria.store');
-    Route::get('/detalle-categoria/{idCateogria}', [CategoriaController::class, 'detalleCategoria'])->name('categoria.detalles-categoria');
     Route::delete('/categorias/{idCategorias}', [CategoriaController::class, 'destroy'])->name('categoria.destroy');
     Route::put('/detalle-categoria/{idCateogria}', [CategoriaController::class, 'update'])->name('categoria.update');
 
@@ -91,7 +96,7 @@ Route::middleware(['auth', 'checkPermisos:Modificar'])->group(function () {
 
     Route::get('/stock/{idProductos}', [InventarioController::class, 'stock'])->name('stock');
 
-    Route::put('/stock/{idProductos}', [InventarioController::class, 'update'])->name('stock.update');
+    Route::put('/stock/{idProductos}', [InventarioController::class, 'stockUpdate'])->name('stock.update');
 
 });
 

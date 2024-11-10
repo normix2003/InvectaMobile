@@ -36,6 +36,15 @@
         </div>
     </header>
     <main>
+        @if ($errors->any())
+            <div class="alert alert-danger" id="alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <form action="{{route('login.login')}}" method="post">
             <div class="login-container">
                 <div class="title-container">
@@ -45,8 +54,8 @@
 
                 <div class="login-input">
                     @csrf
-                    <input type="text" name="Nombre_Usuario" placeholder="Usuario">
-                    <input type="password" name="Contrasenia" placeholder="Contraseñá ">
+                    <input type="text" name="Nombre_Usuario" placeholder="Usuario" Required>
+                    <input type="password" name="Contrasenia" placeholder="Contraseñá" Required>
                 </div>
                 <button class="btn-login" type="submit">Iniciar Sesion</button>
             </div>

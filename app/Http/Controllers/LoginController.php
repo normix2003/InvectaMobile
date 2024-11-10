@@ -25,7 +25,7 @@ class LoginController
         $adminExists = usuarios::whereHas('rol', function ($query) {
             $query->where('Nombre', 'Administrador');
         })->exists();
-        
+
 
         // Si no existe un usuario con rol de administrador, redirige a la vista de creación de administrador
         if (!$adminExists) {
@@ -74,15 +74,26 @@ class LoginController
         }
 
         //Redirigir a la vista de login
-        return redirect()->route('login')->withErrors(['login_error' => 'Credenciales incorrectas']);
+        return redirect()->route('login');
     }
 
     //Funcion para autenticar un usuario
     public function login(Request $request)
     {
+        $request->validate([
+            'Nombre_Usuario' => 'required|string',
+            'Contrasenia' => 'required|string'
+        ], [
+            'Nombre_Usuario.required' => 'El campo de usuario no debe estar vacío.',
+            'Contrasenia.required' => 'El campo de contraseña no debe estar vacío.'
+        ]);
         //Obtener las credenciales del usuario de la vista
         $credentials = $request->only(['Nombre_Usuario', 'Contrasenia']);
+        $usuario = usuarios::where('Nombre_Usuario', $credentials['Nombre_Usuario'])->where('Eliminar', 0)->first();
 
+        if (!$usuario) {
+            return back()->withErrors(['error' => 'Credenciales incorrectas']);
+        }
         //Verificar si las credenciales son correctas
         if (
             Auth::attempt([
@@ -95,7 +106,7 @@ class LoginController
 
         } else {
             // Si la autenticación falla, redirige al login con un error
-            return back()->withErrors(['login_error' => 'Credenciales incorrectas']);
+            return back()->withErrors(['error' => 'Credenciales incorrectas']);
         }
     }
 
@@ -110,14 +121,14 @@ class LoginController
     //Funcion para crear los permisos
     private function crearPermisos()
     {
-        
+
         //Permisos a crear en la base de datos
         $permisos = ['Ver', 'Crear', 'Modificar', 'Eliminar'];
-        
+
         //Crear los permisos en la base de datos si no existen
         foreach ($permisos as $permiso) {
             permisos::firstOrCreate(['Nombre' => $permiso]);
-            
+
         }
     }
 
@@ -128,11 +139,11 @@ class LoginController
         $roles = 'Administrador';
         ;
         //Crear el rol en la base de datos si no existe
-        $rol = roles::firstOrCreate(['Nombre' => $roles,'Eliminar' => 0]);
+        $rol = roles::firstOrCreate(['Nombre' => $roles, 'Eliminar' => 0]);
         //Si el rol fue creado en este momento, asignarle los permisos
         if ($rol->wasRecentlyCreated) {
             // Asignar permisos al rol
-            
+
             $this->asignarPermisos();
         }
 

@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Inventario</title>
+    <title>Detalles Producto</title>
     <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -11,8 +11,52 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
     <link rel="stylesheet" href="{{ asset('css/app.css') }}" />
-    <link rel="stylesheet" href="{{ asset('css/inventario/inventario.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/inventario/detalle-producto.css') }}" />
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Verifica si 'edit' está en localStorage, si no, lo establece en 'false'
+            let isEdit = localStorage.getItem('editProducto');
+            if (isEdit === null) {
+                localStorage.setItem('editProducto', 'false');
+            }
 
+            // Deshabilitar o habilitar inputs según el valor de 'edit' en localStorage
+            const inputs = document.querySelectorAll('#userForm input, #userForm select , #userForm button');
+            if (localStorage.getItem('editProducto') === 'false') {
+                inputs.forEach(input => {
+                    input.setAttribute('disabled', 'disabled');
+                });
+            } else {
+                inputs.forEach(input => {
+                    input.removeAttribute('disabled');
+                });
+            }
+
+            // Evento de submit del formulario
+            const form = document.getElementById('userForm');
+            form.addEventListener('submit', function (event) {
+                event.preventDefault(); // Prevenir el envío del formulario para que puedas hacer algo antes
+
+                // Si necesitas hacer algo al enviar el formulario, lo haces aquí
+                localStorage.removeItem('editProducto'); // Limpiar el valor de 'edit' en localStorage
+
+                // Si deseas enviar el formulario después de hacer algo, puedes hacerlo de esta manera:
+                form.submit(); // Esto enviará el formulario
+            });
+
+            // Evento del botón de editar
+            const editButton = document.getElementById('editButton');
+
+            // Comprobar si el botón existe en el DOM
+            if (editButton) {
+                editButton.addEventListener('click', function (event) {
+                    // Cambia el valor de 'edit' en localStorage
+                    localStorage.setItem('editProducto', true);
+                    location.reload();
+                });
+            }
+        });
+    </script>
 </head>
 
 <body>
@@ -34,11 +78,7 @@
             </i>
             <h2 class="header-subtitle">InvectaMobile</h2>
             <div class="header-divider"></div>
-            <h1 class="header-title">Inventario</h1>
-            <form action="{{route('login.logout')}}" method="post">
-                @csrf
-                <button id="btncerrar" type="submit" class="btn">Cerrar session</button>
-            </form>
+            <h1 class="header-title">Detalles de producto</h1>
         </div>
         @if (session('success'))
             <div class="alert alert-success" id="alert-success">
@@ -47,90 +87,71 @@
         @endif
     </header>
     <main>
-
-        <div class="inventario-container ">
-            <div class="container-buttons">
-                <span class="btn-container-nuevo">
-                    <a class="btn-nuevo-producto" href="{{route('nuevo-producto')}}">
-                        Nuevo Producto
-                    </a>
-                </span>
-                <span class="btn-container-categorias">
-                    <a class="btn-ver-categorias" href="{{route('categorias')}}">
-                        Ver Categorias
-                    </a>
-                </span>
-                <span class="btn-container-marcas">
-                    <a class="btn-ver-marcas" href="{{route('marcas')}}">
-                        Ver Marcas
-                    </a>
-                </span>
-
+        @if ($errors->any())
+            <div class="alert alert-danger" id="alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
             </div>
-            <div class="table-responsive w-100">
-                <table class="table table-striped  ">
-                    <thead class="table-dark">
-                        <tr>
-                            <th class="text-center" scope="col">CODIGO</th>
-                            <th class="text-center" scope="col">NOMBRE</th>
-                            <th class="text-center" scope="col">MARCA</th>
-                            <th class="text-center" scope="col">CATEGORIA</th>
-                            <th class="text-center" scope="col">STOCK ACTUAL</th>
-                            <th class="text-center" scope="col">PRECIO</th>
-                            <th class="text-center" scope="col"></th>
-                            <th class="text-center" scope="col"></th>
-                            <th class="text-center" scope="col"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($inventario as $producto)
-                            <tr class="table-rows">
-
-                                <td class="px-3 text-center" scope="row">{{$producto->idProductos}}</td>
-                                <td class="px-3 text-center">{{$producto->Nombre_Producto}}</td>
-                                <td class="px-3 text-center">{{$producto->marca->Nombre_Marca}}</td>
-                                <td class="px-3 text-center">{{$producto->categoria->Nombre_Categoria}}</td>
-                                <td class="px-3 text-center">{{$producto->Cantidad}}</td>
-                                <td class="px-3 text-center">{{$producto->Precio}}</td>
-                                <td class="px-3 text-center">
-                                    <form action="{{route('stock', ['idProductos' => $producto->idProductos])}}"
-                                        method="get">
-                                        @csrf
-                                        <button class="btn-stock" type="submit">
-                                            + Stock
-                                        </button>
-                                    </form>
-                                </td>
-                                <td class="px-3 text-center">
-                                    <form action="{{route('inventario.destroy', $producto->idProductos)}}" method="post">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn-eliminar">
-                                            Eliminar
-                                        </button>
-                                    </form>
-                                </td>
-                                <td class="px-3 text-center">
-                                    <a class="btn-detalle"
-                                        href="{{route('inventario.detalle-producto', $producto->idProductos)}}">
-                                        Detalle
-                                    </a>
-                                </td>
-                            </tr>
+        @endif
+        <form id="userForm" action="{{route('inventario.update', $producto->idProductos)}}" method="post">
+            <div class="detalle-marca-container">
+                <h1 class="title">Informacion del producto seleccionado</h1>
+                <div class="detalle-marca-input">
+                    @csrf
+                    @method('PUT')
+                    <input placeholder="Nombre producto" name="Nombre_Producto" value="{{ $producto->Nombre_Producto}}"
+                        disabled Required></input>
+                    <select id="marca" name="Nombre_Marca" Required>
+                        <option value="">Seleccionar Marca</option>
+                        @foreach ($marcas as $marca)
+                            @if ($marca->Nombre_Marca == $producto->marca->Nombre_Marca)
+                                <option value="{{$marca->Nombre_Marca}}" selected>{{$marca->Nombre_Marca}}</option>
+                            @else
+                                <option value="{{$marca->Nombre_Marca}}">{{$marca->Nombre_Marca}}</option>
+                            @endif
                         @endforeach
-                    </tbody>
-                </table>
-                <div class="paginacion">
-                    {{ $inventario->links('pagination::bootstrap-4') }}
+                    </select>
+                    <select id="categoria" name="Nombre_Categoria" Required>
+                        <option value="">Seleccionar Categoria</option>
+                        @foreach ($categorias as $categoria)
+                            @if ($categoria->Nombre_Categoria == $producto->categoria->Nombre_Categoria)
+                                <option value="{{$categoria->Nombre_Categoria}}" selected>{{$categoria->Nombre_Categoria}}
+                                </option>
+                            @else
+                                <option value="{{$categoria->Nombre_Categoria}}" selected>{{$categoria->Nombre_Categoria}}
+                                </option>
+                            @endif
+                        @endforeach
+                    </select>
+                    <input placeholder="Descripcion producto" name="Descripcion" value="{{$producto->Descripcion}}"
+                        disabled Required></input>
+                    <input placeholder="Precio" name="Precio" value="{{$producto->Precio}}" disabled Required></input>
+                    <input type="number" placeholder="Stock" min="1" name="Cantidad" value="{{$producto->Cantidad}}"
+                        disabled Required></input>
+                    <div class="actualizar-container">
+                        <button class="btn-actualizar" type="submit">Actualizar</button>
+                    </div>
+
                 </div>
             </div>
-            <span class="btn-container-regresar">
-                <a class="btn-regresar" href="{{route('home')}}">
-                    Regresar
-                </a>
-            </span>
-
-        </div>
+        </form>
+        <button type="button" id="editButton">
+            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                <g fill="none" stroke="#18e747" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                    <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                    <path
+                        d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z" />
+                </g>
+            </svg>
+        </button>
+        <span class="btn-container-regresar">
+            <a class="btn-regresar" href="{{route('inventario')}}">
+                Regresar
+            </a>
+        </span>
     </main>
     <footer>
         <!-- place footer here -->

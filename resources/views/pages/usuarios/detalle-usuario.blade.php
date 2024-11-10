@@ -117,8 +117,7 @@
                         @foreach ($roles as $rol)
                             @if ($rol->Nombre == $empleado->usuario->rol->Nombre)
                                 <option value="{{$rol->Nombre}}" selected>{{$rol->Nombre}}</option>
-                            @endif
-                            @if ($rol->Nombre != $empleado->usuario->rol->Nombre)
+                            @else
                                 <option value="{{$rol->Nombre}}">{{$rol->Nombre}}</option>
                             @endif
                         @endforeach
