@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\producto;
 use Illuminate\Http\Request;
 
 class FacturaController
@@ -13,7 +14,7 @@ class FacturaController
         $productosTotales = session('productosTotales', []);
         $totalVenta = session('total', 0);
         $cliente = session('cliente', []);
-
+        dd($productosTotales);
         // Se retorna la vista de factura con los productos totales, el total de la venta y el cliente
         return view('pages.ventas.factura', ['productos' => $productosTotales, 'total' => $totalVenta, 'cliente' => $cliente]);
     }
@@ -31,6 +32,11 @@ class FacturaController
 
         // Se recorren los productos seleccionados para obtener los datos de cada producto
         foreach ($productosSeleccionados as $producto) {
+            $productoBD = producto::find($producto['id']);
+
+            if ($productoBD->Cantidad < $producto['cantidad']) {
+                return back()->withErrors(['error' => 'No hay suficiente cantidad de ' . $productoBD->Nombre_Producto . ' en el inventario.']);
+            }
             // Se almacenan los datos de cada producto en un array
             $productosTotales[] = [
                 'idProductos' => $producto['id'],

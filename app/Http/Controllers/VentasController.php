@@ -16,7 +16,27 @@ class VentasController
     public function index()
     {
         //Obtener los productos buscados en la sesion
-        $productos = session('productosBuscados', []);
+        $data = session('searchData', null);
+
+        // Si no hay criterio de búsqueda, retornar todos los productos paginados
+        if ($data === null) {
+            $productos = producto::where('Eliminar', 0)->paginate(4);
+        } else {
+            //Buscar un producto por el nombre del producto, nombre de la marca o nombre de la categoria
+            $productos = producto::with(['marca', 'categoria'])
+                ->where('Eliminar', 0)
+                ->where(function ($query) use ($data) {
+                    $query->where('Nombre_Producto', 'like', '%' . $data . '%')
+                        ->orWhereHas('marca', function ($q) use ($data) {
+                            $q->where('Nombre_Marca', 'like', '%' . $data . '%');
+                        })
+                        ->orWhereHas('categoria', function ($q) use ($data) {
+                            $q->where('Nombre_Categoria', 'like', '%' . $data . '%');
+                        });
+                })
+                ->paginate(4);
+        }
+
         //Retornar la vista de ventas con los productos
         return view('pages.ventas.ventas', ['productos' => $productos]);
     }
@@ -24,33 +44,13 @@ class VentasController
     //Funcion para buscar un producto
     public function buscarProducto(Request $request)
     {
-        $request->validate([
-            'Data' => 'required|string'
-        ], [
-            'Data.required' => 'El campo de busqueda es requerido.'
-        ]);
-
-        //Obtener el dato a buscar (Nombre del producto, Nombre de la marca o Nombre de la categoria)
+        // Obtener el dato a buscar (Nombre del producto, Nombre de la marca o Nombre de la categoría)
         $data = $request->input('Data');
 
-        //Buscar un producto por el nombre del producto, nombre de la marca o nombre de la categoria
-        $producto = producto::with(['marca', 'categoria'])
-            ->where('Eliminar', 0)
-            ->where(function ($query) use ($data) {
-                $query->where('Nombre_Producto', 'like', '%' . $data . '%')
-                    ->orWhereHas('marca', function ($q) use ($data) {
-                        $q->where('Nombre_Marca', 'like', '%' . $data . '%');
-                    })
-                    ->orWhereHas('categoria', function ($q) use ($data) {
-                        $q->where('Nombre_Categoria', 'like', '%' . $data . '%');
-                    });
-            })
-            ->get();
+        // Guardar el criterio de búsqueda en la sesión
+        session()->put('searchData', $data);
 
-        //Guardar los productos buscados en la sesion
-        session()->put('productosBuscados', $producto);
-
-        //Redireccionar a la vista de ventas
+        // Redireccionar a la vista de ventas
         return redirect()->route('ventas');
     }
 
@@ -112,6 +112,7 @@ class VentasController
         session()->forget('productosTotales');
         session()->forget('total');
         session()->forget('cliente');
+        session()->forget('searchData');
         return $pdf->stream('Factura' . '-' . $cliente['Nombres'] . '-' . $fecha . '' . '.pdf');
     }
 

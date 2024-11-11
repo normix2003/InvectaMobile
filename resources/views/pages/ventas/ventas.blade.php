@@ -69,14 +69,13 @@
         @endif
     </header>
     <main>
-
         <div class="inventario-container ">
 
             <form action="{{route('buscar-producto')}}" method="GET">
                 <div class="buscar-container">
                     @csrf
                     <input type="text" name="Data" value="{{ request('Data') }}" class="input-buscar"
-                        placeholder="Buscar producto" Required>
+                        placeholder="Buscar producto">
                     <button type="submit" class="btn-buscar">
                         Buscar
                     </button>
@@ -136,6 +135,9 @@
 
                         </tbody>
                     </table>
+                    <div class="paginacion">
+                        {{ $productos->links('pagination::bootstrap-4') }}
+                    </div>
                 </div>
                 <h1 class="table-title">Productos Agregados</h1>
                 <div id="productos" class="table-responsive ">

@@ -139,11 +139,16 @@ class InventarioController
         $nombreMarca = $request->input('Nombre_Marca');
         $nombreCategoria = $request->input('Nombre_Categoria');
         // Se obtiene un producto en específico por medio de su idProductos
-        $productoActual = producto::findOrFail($idProductos);
+        $productoActual = producto::find($idProductos);
         $marca = marcas::where('Nombre_Marca', $nombreMarca)->first();
         $categoria = categorias::where('Nombre_Categoria', $nombreCategoria)->first();
         // Si se obtiene el producto, se actualiza
         if (!empty($productoActual)) {
+
+            if ((int) $producto['Cantidad'] < $productoActual->Cantidad) {
+                return back()->withErrors(['error' => 'El Stock no puede ser menor al actual']);
+            }
+
             $producto['Precio'] = (float) str_replace(',', '', $producto['Precio']);
             $producto['ID_Marca'] = $marca->idMarcas;
             $producto['ID_Categoria'] = $categoria->idCategorias;

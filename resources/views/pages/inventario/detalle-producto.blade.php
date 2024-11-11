@@ -105,6 +105,9 @@
         @endif
         <form id="userForm" action="{{route('inventario.update', $producto->idProductos)}}" method="post">
             <div class="detalle-producto-container">
+                @php
+                    $userPermisos = Auth::user()->rol->detallesroles->where('Eliminar', 0)->pluck('permisos.Nombre')->toArray();
+                @endphp
                 <h1 class="title">Informacion del producto seleccionado</h1>
                 <div class="detalle-producto-input">
                     @csrf
@@ -138,22 +141,26 @@
                     <input placeholder="Precio" name="Precio" value="{{$producto->Precio}}" disabled Required></input>
                     <input type="number" placeholder="Stock" min="1" name="Cantidad" value="{{$producto->Cantidad}}"
                         disabled Required></input>
-                    <div class="actualizar-container">
-                        <button class="btn-actualizar" type="submit">Actualizar</button>
-                    </div>
+                    @if (in_array('Crear', $userPermisos) && in_array('Modificar', $userPermisos))
+                        <div class="actualizar-container">
+                            <button class="btn-actualizar" type="submit">Actualizar</button>
+                        </div>
+                    @endif
 
                 </div>
             </div>
         </form>
-        <button type="button" id="editButton">
-            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-                <g fill="none" stroke="#18e747" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
-                    <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                    <path
-                        d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z" />
-                </g>
-            </svg>
-        </button>
+        @if (in_array('Crear', $userPermisos) && in_array('Modificar', $userPermisos))
+            <button type="button" id="editButton">
+                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                    <g fill="none" stroke="#18e747" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                        <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                        <path
+                            d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z" />
+                    </g>
+                </svg>
+            </button>
+        @endif
         <span class="btn-container-regresar">
             <a id="regresar" class="btn-regresar">
                 Regresar

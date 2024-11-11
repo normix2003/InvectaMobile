@@ -23,7 +23,6 @@ class ClienteController
         //Se obtienen los productos totales y el total de la venta de la sesión
         $productosTotales = session('productosTotales', []);
         $totalVenta = session('total', 0);
-
         //Se almacena el cliente en la sesión
         session()->put('cliente', $cliente);
 

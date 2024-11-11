@@ -119,6 +119,7 @@ class LoginController
         session()->forget('productosTotales');
         session()->forget('total');
         session()->forget('cliente');
+        session()->forget('searchData');
         return redirect()->route('login');
     }
 
