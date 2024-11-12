@@ -38,20 +38,24 @@ class ClienteController
             'Nombres' => 'required|string',
             'Apellidos' => 'required|string',
             'DUI' => 'required|string',
-            'Telefono' => 'required|numeric',
+            'Telefono' => 'required|string',
             'Email' => 'required|email'
         ], [
             'Nombres.required' => 'El campo de nombres es requerido.',
             'Apellidos.required' => 'El campo de apellidos es requerido.',
             'DUI.required' => 'El campo de DUI es requerido.',
             'Telefono.required' => 'El campo del teléfono no debe estar vacío.',
-            'Telefono.numeric' => 'El teléfono debe ser un número.',
             'Email.required' => 'El campo de correo electrónico es requerido.',
             'Email.email' => 'El correo electrónico no tiene un formato válido.'
         ]);
 
         //Se obtienen los datos del cliente del formulario en la vista
         $clienteData = $request->only('Nombres', 'Apellidos', 'DUI', 'Telefono', 'Email');
+
+        $clienteBD = clientes::where('DUI', $clienteData['DUI'])->first();
+        if ($clienteBD) {
+            return redirect()->route('nuevo-cliente')->withErrors(['error' => 'El cliente ya existe en la base de datos.']);
+        }
         //Se crea un nuevo cliente en la base de datos
         $cliente = clientes::create($clienteData);
         //Se obtienen los productos totales y el total de la venta de la sesión

@@ -12,6 +12,32 @@
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
     <link rel="stylesheet" href="{{ asset('css/app.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/ventas/nuevo-cliente.css') }}" />
+    <script>
+        function formatDUI(input) {
+            // Eliminar cualquier carácter que no sea un número
+            let value = input.value.replace(/\D/g, "");
+
+            // Aplicar el formato 00000000-0
+            if (value.length > 8) {
+                value = value.slice(0, 8) + "-" + value.slice(8, 9);
+            }
+
+            input.value = value;
+        }
+    </script>
+    <script>
+        function formatTelefono(input) {
+            // Eliminar cualquier carácter que no sea un número
+            let value = input.value.replace(/\D/g, "");
+
+            // Aplicar el formato 0000-0000
+            if (value.length > 4) {
+                value = value.slice(0, 4) + "-" + value.slice(4, 8);
+            }
+
+            input.value = value;
+        }
+    </script>
 </head>
 
 <body>
@@ -55,8 +81,10 @@
                     <input type="text" name="Nombres" placeholder="Nombres" Required>
                     <input type="text" name="Apellidos" placeholder="Apellidos" Required>
                     <input type="email" name="Email" placeholder="Email" Required>
-                    <input type="tel" name="Telefono" placeholder="Telefono" Required>
-                    <input type="text" name="DUI" placeholder="DUI" Required>
+                    <input type="tel" name="Telefono" placeholder="Teléfono (0000-0000)" maxlength="9"
+                        oninput="formatTelefono(this)" Required>
+                    <input type="text" name="DUI" placeholder="DUI (00000000-0)" maxlength="10"
+                        oninput="formatDUI(this)" Required>
                 </div>
 
 

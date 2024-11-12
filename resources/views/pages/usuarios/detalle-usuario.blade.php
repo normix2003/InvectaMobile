@@ -63,6 +63,32 @@
             });
         });
     </script>
+    <script>
+        function formatDUI(input) {
+            // Eliminar cualquier carácter que no sea un número
+            let value = input.value.replace(/\D/g, "");
+
+            // Aplicar el formato 00000000-0
+            if (value.length > 8) {
+                value = value.slice(0, 8) + "-" + value.slice(8, 9);
+            }
+
+            input.value = value;
+        }
+    </script>
+    <script>
+        function formatTelefono(input) {
+            // Eliminar cualquier carácter que no sea un número
+            let value = input.value.replace(/\D/g, "");
+
+            // Aplicar el formato 0000-0000
+            if (value.length > 4) {
+                value = value.slice(0, 4) + "-" + value.slice(4, 8);
+            }
+
+            input.value = value;
+        }
+    </script>
 
 </head>
 
@@ -114,8 +140,10 @@
                         Required></input>
                     <input placeholder="Nombre usuario" value="{{ $empleado->usuario->Nombre_Usuario }}"
                         name="Nombre_Usuario" Required></input>
-                    <input placeholder="Telefono" value="{{ $empleado->Telefono }}" name="Telefono" Required></input>
-                    <input placeholder="DUI" value=" {{ $empleado->DUI }}" name="DUI" Required></input>
+                    <input placeholder="Teléfono (0000-0000)" maxlength="9" oninput="formatTelefono(this)"
+                        value="{{ $empleado->Telefono }}" name="Telefono" Required></input>
+                    <input placeholder="DUI (00000000-0)" maxlength="10" oninput="formatDUI(this)"
+                        value="{{ $empleado->DUI }}" name="DUI" Required></input>
                     <input placeholder="Email" value="{{ $empleado->Email }}" name="Email" Required></input>
                     <select id="rol" name="Nombre" Required>
                         <option value="">Seleccionar Rol</option>

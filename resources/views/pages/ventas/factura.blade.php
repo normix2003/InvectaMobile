@@ -24,6 +24,19 @@
         });
 
     </script>
+    <script>
+        function formatDUI(input) {
+            // Eliminar cualquier carácter que no sea un número
+            let value = input.value.replace(/\D/g, "");
+
+            // Aplicar el formato 00000000-0
+            if (value.length > 8) {
+                value = value.slice(0, 8) + "-" + value.slice(8, 9);
+            }
+
+            input.value = value;
+        }
+    </script>
 </head>
 
 <body>
@@ -61,7 +74,8 @@
                     <form action="{{route('buscar-cliente')}}" method="GET">
                         @csrf
                         <input type="text" class="input-buscar" name="duiCliente" value="{{ request('duiCliente') }}"
-                            placeholder="DUI del cliente" Required>
+                            placeholder="DUI del cliente (00000000-0)" maxlength="10" oninput="formatDUI(this)"
+                            Required>
                         <button class="btn-buscar" type="submit">
                             Buscar
                         </button>
